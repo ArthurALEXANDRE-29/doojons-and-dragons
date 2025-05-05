@@ -1,0 +1,150 @@
+@startuml JeuDeRole
+
+skinparam classAttributeIconSize 0
+
+' ===== CLASSES PRINCIPALES =====
+class Jeu {
+  - donjons: List<Donjon>
+  - joueurs: List<Personnage>
+  - maitreDuJeu: MaitreDuJeu
+  + demarrer()
+  + finPartie()
+}
+
+class MaitreDuJeu {
+  + narrer()
+  + decrireContexte()
+  + creerMonstres()
+  + positionnerElements()
+}
+
+class Donjon {
+  - carte: Carte
+  - monstres: List<Monstre>
+  - equipements: List<Equipement>
+  - joueurs: List<Personnage>
+  + miseEnPlace()
+  + deroulerCombat()
+  + finDonjon()
+}
+package carteDuJeu{
+    class Carte {
+      - largeur: int
+      - hauteur: int
+      - cases: Case[][]
+      + afficherCarte()
+    }
+
+    class Case {
+      - x: int
+      - y: int
+      - estObstacle: bool
+      - contient: List<Object>
+    }
+
+    package PERSONNAGES {
+        class Personnage {
+            - nom: String
+            - race: Race
+            - classe: Classe
+            - pointsDeVie: int
+            - pointsDeVieMax: int
+            - force: int
+            - dexterite: int
+            - vitesse: int
+            - initiative: int
+            - inventaire: List<Equipement>
+            - armeEquipee: Arme
+            - armureEquipee: Armure
+            + attaquer(cible: Monstre)
+            + seDeplacer(vers: Case)
+            + regenererFullHP()
+            + sEquiper(equipement: Equipement)
+            + ramasser(equipement: Equipement)
+        }
+
+        enum Race {
+            Humain
+            Nain
+            Elfe
+            Halfelin
+        }
+
+        enum Classe {
+            Guerrier
+            Clerc
+            Magicien
+            Roublard
+        }
+
+        ' ==== Equipements =====
+        package equipements{
+            abstract class Equipement {
+                - nom: String
+            }
+
+            class Arme extends Equipement {
+                - degats: String
+                - portee: int
+                - estLourde: bool
+                + calculerBonus(force: int, dexterite: int): int
+            }
+
+            class Armure extends Equipement {
+                - classeArmure: int
+                - estLourde: bool
+            }
+        }
+    }
+
+    ' ===== MONSTRES =====
+    package Monstres {
+        class Monstre {
+          - espece: String
+          - numero: int
+          - pointsDeVie: int
+          - force: int
+          - dexterite: int
+          - classeArmure: int
+          - initiative: int
+          - attaque: Attaque
+          + attaquer(cible: Personnage)
+        }
+
+        class Attaque {
+          - degats: String
+          - portee: int
+        }
+    }
+}
+
+
+' ===== RELATIONS =====
+Jeu --> Donjon
+Jeu --> Personnage
+Jeu --> MaitreDuJeu
+
+Donjon --> Carte
+Donjon --> Monstre
+Donjon --> Equipement
+Donjon --> Personnage
+
+Carte --> Case
+Case --> Equipement
+Case --> Monstre
+Case --> Personnage
+
+
+
+Personnage o-> "\n 0..* \n- possède dans l'inventaire" Equipement : < peut être mis dans l'inventaire
+Personnage o-> "\n 0..1 \n- porte" Arme : < portée par
+Personnage o-> "\n 0..1 \n- porte" Armure : < portée par
+
+Personnage --> "\n 0..1 \n- possède"  Race
+Personnage --> "\n 0..1 \n- possède" Classe
+
+Monstre --> Attaque
+
+
+
+@enduml
