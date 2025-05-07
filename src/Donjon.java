@@ -7,17 +7,17 @@ import java.util.List;
 public class Donjon {
 
     // Attributs privés
-    private Carte carte;
-    private List<Monstre> monstres;
-    private List<Equipement> equipements;
-    private List<Personnage> joueurs;
+    private Carte m_carte;
+    private List<Monstre> m_monstres;
+    private List<Equipement> m_equipements;
+    private List<Personnage> m_joueurs;
 
     // Constructeur
     public Donjon(Carte carte, List<Monstre> monstres, List<Equipement> equipements, List<Personnage> joueurs) {
-        this.carte = carte;
-        this.monstres = monstres;
-        this.equipements = equipements;
-        this.joueurs = joueurs;
+        this.m_carte = carte;
+        this.m_monstres = monstres;
+        this.m_equipements = equipements;
+        this.m_joueurs = joueurs;
     }
 
     // Méthode pour la mise en place du donjon
@@ -46,34 +46,34 @@ public class Donjon {
 
     // Getters et setters
     public Carte getCarte() {
-        return carte;
+        return m_carte;
     }
 
     public void setCarte(Carte carte) {
-        this.carte = carte;
+        this.m_carte = carte;
     }
 
     public List<Monstre> getMonstres() {
-        return monstres;
+        return m_monstres;
     }
 
     public void setMonstres(List<Monstre> monstres) {
-        this.monstres = monstres;
+        this.m_monstres = monstres;
     }
 
     public List<Equipement> getEquipements() {
-        return equipements;
+        return m_equipements;
     }
 
     public void setEquipements(List<Equipement> equipements) {
-        this.equipements = equipements;
+        this.m_equipements = equipements;
     }
 
     public List<Personnage> getJoueurs() {
-        return joueurs;
+        return m_joueurs;
     }
 
     public void setJoueurs(List<Personnage> joueurs) {
-        this.joueurs = joueurs;
+        this.m_joueurs = joueurs;
     }
 }
