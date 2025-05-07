@@ -1,37 +1,37 @@
 package carteDuJeu.personnages.equipements;
 
 public class Armure extends Equipement {
-    private ArmureType type;  // Le type d'armure
-    private int classeArmure;  // La classe d'armure (par exemple, 9, 10, etc.)
-    private boolean estLourde; // Si l'armure est lourde ou non
+    private ArmureType m_type;  // Le type d'armure
+    private int m_classeArmure;  // La classe d'armure (par exemple, 9, 10, etc.)
+    private boolean m_estLourde; // Si l'armure est lourde ou non
 
     // Constructeur
     public Armure(ArmureType type) {
         super(type.getNom());
-        this.type = type;
-        this.estLourde = type.estLourde();
-        this.classeArmure = type.getClasseArmure();
+        this.m_type = type;
+        this.m_estLourde = type.estLourde();
+        this.m_classeArmure = type.getClasseArmure();
     }
 
     // Accesseurs (getters)
     public ArmureType getType() {
-        return type;
+        return m_type;
     }
 
     public int getClasseArmure() {
-        return classeArmure;
+        return m_classeArmure;
     }
 
     public boolean estLourde() {
-        return estLourde;
+        return m_estLourde;
     }
 
     @Override
     public String toString() {
         return "Armure{" +
-                "nom='" + type.getNom() + '\'' +
-                ", classeArmure=" + classeArmure +
-                ", estLourde=" + estLourde +
+                "nom='" + m_type.getNom() + '\'' +
+                ", classeArmure=" + m_classeArmure +
+                ", estLourde=" + m_estLourde +
                 '}';
     }
 }

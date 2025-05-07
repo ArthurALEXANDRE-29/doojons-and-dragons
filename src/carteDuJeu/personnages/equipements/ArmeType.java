@@ -9,20 +9,20 @@ public enum ArmeType {
     FRONDE("Fronde", "1d4", 6, false),
     ARC_COURT("Arc court", "1d6", 16, false);
 
-    private final String nom;
-    private final String degats;
-    private final int portee;
-    private final boolean estLourde;
+    private final String m_nom;
+    private final String m_degats;
+    private final int m_portee;
+    private final boolean m_estLourde;
 
     ArmeType(String nom, String degats, int portee, boolean estLourde) {
-        this.nom = nom;
-        this.degats = degats;
-        this.portee = portee;
-        this.estLourde = estLourde;
+        this.m_nom = nom;
+        this.m_degats = degats;
+        this.m_portee = portee;
+        this.m_estLourde = estLourde;
     }
 
-    public String getNom() { return nom; }
-    public String getDegats() { return degats; }
-    public int getPortee() { return portee; }
-    public boolean isLourde() { return estLourde; }
+    public String getNom() { return m_nom; }
+    public String getDegats() { return m_degats; }
+    public int getPortee() { return m_portee; }
+    public boolean isLourde() { return m_estLourde; }
 }

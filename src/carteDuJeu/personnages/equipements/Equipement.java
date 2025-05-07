@@ -2,13 +2,13 @@ package carteDuJeu.personnages.equipements;
 
 
 public abstract class Equipement {
-    protected String nom;
+    protected String m_nom;
 
     public Equipement(String nom) {
-        this.nom = nom;
+        this.m_nom = nom;
     }
 
     public String getNom() {
-        return nom;
+        return m_nom;
     }
 }

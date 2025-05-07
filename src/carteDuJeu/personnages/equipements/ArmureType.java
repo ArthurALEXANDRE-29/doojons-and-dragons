@@ -6,27 +6,27 @@ public enum ArmureType {
     COTTE_DE_MAILLES("Cotte de mailles", 11, true),
     HARNOIS("Harnois", 12, true);
 
-    private final String nom;           // Le nom de l'armure
-    private final int classeArmure;     // Classe d'armure
-    private final boolean estLourde;    // Si l'armure est lourde ou non
+    private final String m_nom;           // Le nom de l'armure
+    private final int m_classeArmure;     // Classe d'armure
+    private final boolean m_estLourde;    // Si l'armure est lourde ou non
 
     // Constructeur de l'énumération
     ArmureType(String nom, int classeArmure, boolean estLourde) {
-        this.nom = nom;
-        this.classeArmure = classeArmure;
-        this.estLourde = estLourde;
+        this.m_nom = nom;
+        this.m_classeArmure = classeArmure;
+        this.m_estLourde = estLourde;
     }
 
     // Méthodes pour accéder aux valeurs
     public String getNom() {
-        return nom;
+        return m_nom;
     }
 
     public int getClasseArmure() {
-        return classeArmure;
+        return m_classeArmure;
     }
 
     public boolean estLourde() {
-        return estLourde;
+        return m_estLourde;
     }
 }

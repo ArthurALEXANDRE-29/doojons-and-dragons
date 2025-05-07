@@ -1,5 +1,7 @@
-import carteDuJeu.Carte;
-
+import carteDuJeu.*;
+import carteDuJeu.*;
+import carteDuJeu.personnages.equipements.*;
+import carteDuJeu.personnages.*;
 import java.util.List;
 
 public class Donjon {
