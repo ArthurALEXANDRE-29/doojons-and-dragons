@@ -80,20 +80,48 @@ package carteDuJeu{
         ' ==== Equipements =====
         package equipements{
             abstract class Equipement {
-                - nom: String
+                 nom: String
+                 + getNom(): String
             }
 
             class Arme extends Equipement {
                 - degats: String
                 - portee: int
                 - estLourde: bool
-                + calculerBonus(force: int, dexterite: int): int
+                + getDegats(): String
+                + getPortee(): int
+                + estLourde(): bool
+                + toString(): String
             }
 
             class Armure extends Equipement {
+                - type: ArmureType
                 - classeArmure: int
                 - estLourde: bool
+                + Armure(type: ArmureType)
+                + getType(): ArmureType
+                + getClasseArmure(): int
+                + estLourde(): bool
+                + toString(): String
             }
+            enum ArmeType {
+                            - nom: String
+                            - degats: String
+                            - portee: int
+                            - estLourde: bool
+                            + getNom(): String
+                            + getDegats(): String
+                            + getPortee(): int
+                            + isLourde(): bool
+                        }
+            enum ArmureType {
+                            - nom: String
+                            - classeArmure: int
+                            - estLourde: bool
+                            + getNom(): String
+                            + getClasseArmure(): int
+                            + estLourde(): bool
+                        }
         }
     }
 
@@ -135,6 +163,8 @@ Case --> Monstre
 Case --> Personnage
 
 
+ArmeType --> Arme : < type de l'arme
+ArmureType --> Armure : < type de l'armure
 
 Personnage o-> "\n 0..* \n- possède dans l'inventaire" Equipement : < peut être mis dans l'inventaire
 Personnage o-> "\n 0..1 \n- porte" Arme : < portée par
