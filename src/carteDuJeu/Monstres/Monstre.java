@@ -100,32 +100,3 @@ public class Monstre {
     }
 }
 
-class Attaque {
-
-    // Attributs privés
-    private String degats;
-    private int portee;
-
-    // Constructeur
-    public Attaque(String degats, int portee) {
-        this.degats = degats;
-        this.portee = portee;
-    }
-
-    // Getters et setters
-    public String getDegats() {
-        return degats;
-    }
-
-    public void setDegats(String degats) {
-        this.degats = degats;
-    }
-
-    public int getPortee() {
-        return portee;
-    }
-
-    public void setPortee(int portee) {
-        this.portee = portee;
-    }
-}
