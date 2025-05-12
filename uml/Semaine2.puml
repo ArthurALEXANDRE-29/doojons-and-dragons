@@ -30,12 +30,8 @@ package carteDuJeu{
         + finDonjon()
     }
     class Des{
-    private static final Random random = new Random();
-
-
-        public static int lancer(String notation)
-
-            return lancer(nbDes, nbFaces);
+        - {static} final random : Random
+        + {static}  lancer( notation : String) : Integer
         + {static}  lancer( nbFaces : Integer) : Integer
         + {static} lancer( nbDes : Integer,  nbFaces: int) : Integer
     }
@@ -252,6 +248,8 @@ ArmureType --> Armure : < type de l'armure
 Personnage o-> "\n 0..* \n- possède dans l'inventaire" Equipement : < peut être mis dans l'inventaire
 Personnage o-> "\n 0..1 \n- porte" Arme : < portée par
 Personnage o-> "\n 0..1 \n- porte" Armure : < portée par
+
+Personnage ..> Des : <<uses>>
 
 Personnage --> "\n 0..1 \n- possède"  Race
 Personnage --> "\n 0..1 \n- possède" Classe
