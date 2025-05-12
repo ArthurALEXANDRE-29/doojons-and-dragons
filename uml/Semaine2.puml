@@ -18,16 +18,27 @@ class MaitreDuJeu {
   + positionnerElements()
 }
 
-class Donjon {
-  - carte: Carte
-  - monstres: List<Monstre>
-  - equipements: List<Equipement>
-  - joueurs: List<Personnage>
-  + miseEnPlace()
-  + deroulerCombat()
-  + finDonjon()
-}
 package carteDuJeu{
+
+    class Donjon {
+        - carte: Carte
+        - monstres: List<Monstre>
+        - equipements: List<Equipement>
+        - joueurs: List<Personnage>
+        + miseEnPlace()
+        + deroulerCombat()
+        + finDonjon()
+    }
+    class Des{
+    private static final Random random = new Random();
+
+
+        public static int lancer(String notation)
+
+            return lancer(nbDes, nbFaces);
+        + {static}  lancer( nbFaces : Integer) : Integer
+        + {static} lancer( nbDes : Integer,  nbFaces: int) : Integer
+    }
     class Carte {
       - largeur: Integer
       - hauteur: Integer
