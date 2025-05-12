@@ -1,7 +1,8 @@
 package carteDuJeu.personnages;
-
+import carteDuJeu.Des;
 
 import carteDuJeu.personnages.equipements.*;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +37,11 @@ public class Personnage {
         // Calcul des autres attributs en fonction de la race et de la classe
         // pour chaque base : faire un jet de dés
 
-        this.force = base + race.getForceBonus() + classe.getForceBonus();
-        this.dexterite = base + race.getDexteriteBonus() + classe.getDexteriteBonus();
-        this.vitesse = base + race.getVitesseBonus();
-        this.initiative = base + race.getInitiativeBonus() + classe.getInitiativeBonus();
+
+        this.force = Des.lancer(4, 4) + 3+ race.getForceBonus() + classe.getForceBonus() ;
+        this.dexterite = Des.lancer(4, 4) + 3+ race.getDexteriteBonus() + classe.getDexteriteBonus();
+        this.vitesse = Des.lancer(4, 4) + 3 + race.getVitesseBonus();
+        this.initiative = Des.lancer(4, 4) + 3 + race.getInitiativeBonus() + classe.getInitiativeBonus();
 
 
         this.inventaire = new ArrayList<>();

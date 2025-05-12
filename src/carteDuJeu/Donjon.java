@@ -1,3 +1,5 @@
+package carteDuJeu;
+
 import carteDuJeu.*;
 import carteDuJeu.*;
 import carteDuJeu.personnages.equipements.*;

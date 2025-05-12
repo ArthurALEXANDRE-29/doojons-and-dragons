@@ -1,3 +1,5 @@
+package carteDuJeu;
+
 import java.util.Random;
 
 public class Des {

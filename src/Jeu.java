@@ -1,15 +1,19 @@
 import java.util.List;
+import carteDuJeu.*;
+import carteDuJeu.personnages.*;
+import carteDuJeu.Monstres.*;
+import carteDuJeu.*;
 
 public class Jeu {
 
-    // Attributs privés
-    private List<Donjon> m_donjons;
+    /* Attributs privés
+    //private List<Donjon> m_donjons;
     private List<Personnage> m_joueurs;
     private MaitreDuJeu m_maitreDuJeu;
 
     // Constructeur
     public Jeu(List<Donjon> donjons, List<Personnage> joueurs, MaitreDuJeu maitreDuJeu) {
-        this.m_donjons = donjons;
+        //this.m_donjons = donjons;
         this.m_joueurs = joueurs;
         this.m_maitreDuJeu = maitreDuJeu;
     }
@@ -31,11 +35,11 @@ public class Jeu {
     }
 
     // Getters et setters
-    public List<Donjon> getDonjons() {
+   /* public List<Donjon> getDonjons() {
         return m_donjons;
     }
 
-    public void setDonjons(List<Donjon> donjons) {
+ /*   public void setDonjons(List<Donjon> donjons) {
         this.m_donjons = donjons;
     }
 
@@ -54,4 +58,5 @@ public class Jeu {
     public void setMaitreDuJeu(MaitreDuJeu maitreDuJeu) {
         this.m_maitreDuJeu = maitreDuJeu;
     }
+*/
 }
