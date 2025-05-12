@@ -1,0 +1,252 @@
+@startuml JeuDeRole
+
+skinparam classAttributeIconSize 0
+
+' ===== CLASSES PRINCIPALES =====
+class Jeu {
+  - donjons: List<Donjon>
+  - joueurs: List<Personnage>
+  - maitreDuJeu: MaitreDuJeu
+  + demarrer()
+  + finPartie()
+}
+
+class MaitreDuJeu {
+  + narrer()
+  + decrireContexte()
+  + creerMonstres()
+  + positionnerElements()
+}
+
+class Donjon {
+  - carte: Carte
+  - monstres: List<Monstre>
+  - equipements: List<Equipement>
+  - joueurs: List<Personnage>
+  + miseEnPlace()
+  + deroulerCombat()
+  + finDonjon()
+}
+package carteDuJeu{
+    class Carte {
+      - largeur: Integer
+      - hauteur: Integer
+      - cases: Case[][]
+      + afficherCarte()
+    }
+
+    class Case {
+      - x: Integer
+      - y: Integer
+      - estObstacle: Boolean
+      - contient: List<Object>
+    }
+
+    package PERSONNAGES {
+        class Personnage {
+            - nom : String
+            - race : Race
+            - classe : Classe
+            - armeEquipee : Arme
+            - armureEquipee : Armure
+            - inventaire : List<Equipement>
+            - pointsDeVie : Integer
+            - pointsDeVieMax : Integer
+            - force : Integer
+            - dexterite : Integer
+            - vitesse : Integer
+            - initiative : Integer
+            + getNom() : String
+            + getRace() : Race
+            + getClasse() : Classe
+            + getPointsDeVie() : Integer
+            + getPointsDeVieMax() : Integer
+            + getForce() : Integer
+            + getDexterite() : Integer
+            + getVitesse() : Integer
+            + getInitiative() : Integer
+            + getInventaire() : List<Equipement>
+            + getArmeEquipee() : Arme
+            + getArmureEquipee() : Armure
+            + attaquer(cible: Monstre)
+            + seDeplacer(vers: Case)
+            + regenererFullHP()
+            + SeEquiper(equipement: Equipement)
+            + ramasser(equipement: Equipement)
+        }
+
+        enum Race {
+          HUMAIN
+          NAIN
+          ELFE
+          HALFELIN
+          - m_forceBonus : Integer
+          - m_dexteriteBonus : Integer
+          - m_vitesseBonus : Integer
+          - m_initiativeBonus : Integer
+
+          + getForceBonus() : Integer
+          + getDexteriteBonus() : Integer
+          + getVitesseBonus() : Integer
+          + getInitiativeBonus() : Integer
+        }
+
+        enum Classe {
+            GUERRIER
+            CLERC
+            MAGICIEN
+            ROUBLARD
+            - m_poIntegersDeVie : Integer
+            - m_forceBonus : Integer
+            - m_dexteriteBonus : Integer
+            - m_initiativeBonus : Integer
+
+            + getPoIntegersDeVie() : Integer
+            + getForceBonus() : Integer
+            + getDexteriteBonus() : Integer
+            + getInitiativeBonus() : Integer
+            + getEquipementInitial() : List<Equipement>
+        }
+
+        ' ==== Equipements =====
+        package equipements{
+            abstract class Equipement {
+                - m_nom : String
+
+                + Equipement(nom : String)
+                + getNom() : String
+            }
+            class Arme extends Equipement {
+                - m_degats : String
+                - m_portee : Integer
+                - m_estLourde : Boolean
+
+                + Arme(type : ArmeType)
+                + getDegats() : String
+                + getPortee() : Integer
+                + estLourde() : Boolean
+                + toString() : String
+            }
+
+            class Armure extends Equipement {
+                - m_type : ArmureType
+                - m_classeArmure : Integer
+                - m_estLourde : Boolean
+
+                + Armure(type : ArmureType)
+                + getType() : ArmureType
+                + getClasseArmure() : Integer
+                + estLourde() : Boolean
+                + toString() : String
+            }
+            enum ArmeType {
+              BATON
+              MASSE_DARMES
+              EPEE_LONGUE
+              RAPIERE
+              ARBALETE_LEGERE
+              FRONDE
+              ARC_COURT
+
+              - m_nom : String
+              - m_degats : String
+              - m_portee : Integer
+              - m_estLourde : Boolean
+
+              + getNom() : String
+              + getDegats() : String
+              + getPortee() : Integer
+              + isLourde() : Boolean
+            }
+            enum ArmureType {
+                ARMURE_ECAILLES
+                DEMI_PLATE
+                COTTE_DE_MAILLES
+                HARNOIS
+
+                - m_nom : String
+                - m_classeArmure : Integer
+                - m_estLourde : Boolean
+
+                + getNom() : String
+                + getClasseArmure() : Integer
+                + estLourde() : Boolean
+            }
+        }
+    }
+
+    ' ===== MONSTRES =====
+    package Monstres {
+        class Monstre {
+          - espece : String
+            - numero : Integer
+            - attaque : Attaque
+            - pointsDeVie : Integer
+            - force : Integer
+            - dexterite : Integer
+            - classeArmure : Integer
+            - initiative : Integer
+            + Monstre(espece : String, numero : Integer, attaque : Attaque, pointsDeVie : Integer, force : Integer, dexterite : Integer, classeArmure : Integer, initiative : Integer)
+            + attaquer(cible : Personnage)
+            + getEspece() : String
+            + setEspece(espece : String)
+            + getNumero() : Integer
+            + setNumero(numero : Integer)
+            + getAttaque() : Attaque
+            + setAttaque(attaque : Attaque)
+            + getPointsDeVie() : Integer
+            + setPointsDeVie(pointsDeVie : Integer)
+            + getForce() : Integer
+            + setForce(force : Integer)
+            + getDexterite() : Integer
+            + setDexterite(dexterite : Integer)
+            + getClasseArmure() : Integer
+            + setClasseArmure(classeArmure : Integer)
+            + getInitiative() : Integer
+            + setInitiative(initiative : Integer)
+        }
+
+        class Attaque {
+          - m_degats : String
+            - m_portee : Integer
+            + Attaque(degats : String, portee : Integer)
+            + getDegats() : String
+            + getPortee() : Integer
+            + estCorpsACorps() : Boolean
+            + toString() : String
+        }
+    }
+}
+
+
+' ===== RELATIONS =====
+Jeu --> Donjon
+Jeu --> Personnage
+Jeu --> MaitreDuJeu
+
+Donjon --> Carte
+Donjon --> Monstre
+Donjon --> Equipement
+Donjon --> Personnage
+
+Carte --> Case
+Case --> Equipement
+Case --> Monstre
+Case --> Personnage
+
+
+ArmeType --> Arme : < type de l'arme
+ArmureType --> Armure : < type de l'armure
+
+Personnage o-> "\n 0..* \n- possède dans l'inventaire" Equipement : < peut être mis dans l'inventaire
+Personnage o-> "\n 0..1 \n- porte" Arme : < portée par
+Personnage o-> "\n 0..1 \n- porte" Armure : < portée par
+
+Personnage --> "\n 0..1 \n- possède"  Race
+Personnage --> "\n 0..1 \n- possède" Classe
+
+Monstre --> Attaque
+
+
+
+@enduml
