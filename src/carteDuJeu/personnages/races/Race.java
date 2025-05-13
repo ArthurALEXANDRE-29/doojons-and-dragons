@@ -1,11 +1,7 @@
-package carteDuJeu.personnages;
+package carteDuJeu.personnages.races;
 
 
-public enum Race {
-    HUMAIN(2, 2, 2, 2),    // Humain : bonus de base
-    NAIN(6, 0, 0, 0),      // Nain : +6 en Force
-    ELFE(0, 6, 0, 0),      // Elfe : +6 en Dextérité
-    HALFELIN(0, 4, 2, 0);  // Halfelin : +4 en Dextérité et +2 en Vitesse
+public abstract class Race {
 
     private final int m_forceBonus;
     private final int m_dexteriteBonus;

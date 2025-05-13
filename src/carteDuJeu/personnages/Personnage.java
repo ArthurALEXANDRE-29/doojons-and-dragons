@@ -1,7 +1,11 @@
 package carteDuJeu.personnages;
 import carteDuJeu.Des;
 
+import carteDuJeu.personnages.classes.Classe;
 import carteDuJeu.personnages.equipements.*;
+import carteDuJeu.personnages.equipements.armes.Arme;
+import carteDuJeu.personnages.equipements.armures.Armure;
+import carteDuJeu.personnages.races.Race;
 
 
 import java.util.ArrayList;
