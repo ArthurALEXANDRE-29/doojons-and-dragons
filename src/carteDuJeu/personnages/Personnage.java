@@ -9,103 +9,160 @@ import java.util.List;
 
 public class Personnage {
     // attributs initialisés en fonction du joueur et ses choix / choix de la classe + race
-    private String nom;
-    private Race race;
-    private Classe classe;
-    private Arme armeEquipee;
-    private Armure armureEquipee;
-    private List<Equipement> inventaire;
+    private String m_nom;
+    private Race m_race;
+    private Classe m_classe;
+    private Arme m_armeEquipee;
+    private Armure m_armureEquipee;
+    private List<Equipement> m_inventaire;
 
     // caractéristiques du personnage
-    private int pointsDeVie;
-    private int pointsDeVieMax;
-    private int force;
-    private int dexterite;
-    private int vitesse;
-    private int initiative;
+    private int m_pointsDeVie;
+    private int m_pointsDeVieMax;
+    private int m_forceBase;
+    private int m_forceCurrent;
+    private int m_dexteriteBase;
+    private int m_vitesseBase;
+    private int m_vitesseCurrent;
+    private int m_initiativeBase;
 
     public Personnage(String nom, Race race, Classe classe) {
         // initialisation des attributs choisis / liés à la classe ou race + armes/ armures de base
-        this.nom = nom;
-        this.race = race;
-        this.classe = classe;
+        this.m_nom = nom;
+        this.m_race = race;
+        this.m_classe = classe;
 
         // Initialisation des attributs de base du personnage
-        this.pointsDeVieMax = classe.getPointsDeVie();
-        this.pointsDeVie = this.pointsDeVieMax;
+        this.m_pointsDeVieMax = classe.getPointsDeVie();
+        this.m_pointsDeVie = this.m_pointsDeVieMax;
 
         // Calcul des autres attributs en fonction de la race et de la classe
         // pour chaque base : faire un jet de dés
 
 
-        this.force = Des.lancer(4, 4) + 3+ race.getForceBonus() + classe.getForceBonus() ;
-        this.dexterite = Des.lancer(4, 4) + 3+ race.getDexteriteBonus() + classe.getDexteriteBonus();
-        this.vitesse = Des.lancer(4, 4) + 3 + race.getVitesseBonus();
-        this.initiative = Des.lancer(4, 4) + 3 + race.getInitiativeBonus() + classe.getInitiativeBonus();
+        this.m_forceBase = Des.lancer(4, 4) + 3+ race.getForceBonus() + classe.getForceBonus() ;
+        this.m_dexteriteBase = Des.lancer(4, 4) + 3+ race.getDexteriteBonus() + classe.getDexteriteBonus();
+        this.m_vitesseBase = Des.lancer(4, 4) + 3 + race.getVitesseBonus();
+        this.m_initiativeBase = Des.lancer(4, 4) + 3 + race.getInitiativeBonus() + classe.getInitiativeBonus();
+        m_forceCurrent = m_forceBase;
+        m_vitesseCurrent = m_vitesseBase;
 
-
-        this.inventaire = new ArrayList<>();
+        this.m_inventaire = new ArrayList<>();
 
         // Ajouter l'équipement de classe (armes/armures) à l'inventaire ( initialisation)
 
         for (Equipement eq : classe.getEquipementInitial()) {
-            inventaire.add(eq);
+            m_inventaire.add(eq);
             // parcours l'inventaire et ajoute la première arme rencontrée / armue aussi
             // si il commence avec plusieurs armes / armures => à modifier
-            if (eq instanceof Arme && armeEquipee == null) {
-                armeEquipee = (Arme) eq;
+            if (eq instanceof Arme && m_armeEquipee == null) {
+                m_armeEquipee = (Arme) eq;
             }
-            if (eq instanceof Armure && armureEquipee == null) {
-                armureEquipee = (Armure) eq;
+            if (eq instanceof Armure && m_armureEquipee == null) {
+                m_armureEquipee = (Armure) eq;
             }
         }
+        if(m_armeEquipee.estLourde())
+        {
+            m_forceCurrent = m_forceCurrent + 4;
+            m_vitesseCurrent = m_vitesseCurrent - 2;
+        }
+        if(m_armureEquipee.estLourde())
+        {
+            m_vitesseCurrent = m_vitesseCurrent - 4;
+        }
+
     }
     public String getNom() {
-        return nom;
+        return m_nom;
     }
 
     public Race getRace() {
-        return race;
+        return m_race;
     }
 
     public Classe getClasse() {
-        return classe;
+        return m_classe;
     }
 
     public int getPointsDeVie() {
-        return pointsDeVie;
+        return m_pointsDeVie;
     }
 
     public int getPointsDeVieMax() {
-        return pointsDeVieMax;
+        return m_pointsDeVieMax;
     }
 
     public int getForce() {
-        return force;
+        return m_forceCurrent;
     }
 
     public int getDexterite() {
-        return dexterite;
+        return m_dexteriteBase;
     }
 
     public int getVitesse() {
-        return vitesse;
+        return m_vitesseCurrent;
     }
 
     public int getInitiative() {
-        return initiative;
+        return m_initiativeBase;
     }
 
     public List<Equipement> getInventaire() {
-        return inventaire;
+        return m_inventaire;
     }
 
     public Arme getArmeEquipee() {
-        return armeEquipee;
+        return m_armeEquipee;
     }
 
+
     public Armure getArmureEquipee() {
-        return armureEquipee;
+        return m_armureEquipee;
+    }
+    public boolean setArmeEquipee(int index) {
+        if (index < 0 || index >= m_inventaire.size()) {
+            return false; // index invalide
+        }
+
+        Equipement equipement = m_inventaire.get(index);
+        if (equipement instanceof Arme) {
+            this.m_armeEquipee = (Arme) equipement;
+            if(m_armeEquipee.estLourde())
+            {
+                m_forceCurrent = m_forceCurrent + 4;
+                m_vitesseCurrent = m_vitesseCurrent - 2;
+            }
+            else
+            {
+                m_forceCurrent = m_forceBase;
+                m_vitesseCurrent = m_vitesseBase;
+            }
+            return true; // arme correctement équipée
+        }
+
+        return false; // l'équipement à cet index n'est pas une arme
+    }
+    public boolean setArmureEquipee(int index) {
+        if (index < 0 || index >= m_inventaire.size()) {
+            return false; // index invalide
+        }
+
+        Equipement equipement = m_inventaire.get(index);
+        if (equipement instanceof Armure) {
+            this.m_armureEquipee = (Armure) equipement;
+            if(m_armureEquipee.estLourde())
+            {
+                m_vitesseCurrent = m_vitesseCurrent - 4;
+            }
+            else {
+                m_vitesseCurrent = m_vitesseBase;
+            }
+            return true; // arme correctement équipée
+        }
+
+        return false; // l'équipement à cet index n'est pas une arme
     }
 }
 
