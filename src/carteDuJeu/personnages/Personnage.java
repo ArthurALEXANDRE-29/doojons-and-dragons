@@ -81,12 +81,12 @@ public class Personnage {
         return m_nom;
     }
 
-    public Race getRace() {
-        return m_race;
+    public String getRace() {
+        return m_race.getNomRace();
     }
 
-    public Classe getClasse() {
-        return m_classe;
+    public String getClasse() {
+        return m_classe.getNomClasse();
     }
 
     public int getPointsDeVie() {
@@ -167,6 +167,11 @@ public class Personnage {
         }
 
         return false; // l'équipement à cet index n'est pas une arme
+    }
+    public int getCasesMaxDeplacement()
+    {
+        int casesMax = m_vitesseCurrent /3;
+        return casesMax;
     }
 }
 

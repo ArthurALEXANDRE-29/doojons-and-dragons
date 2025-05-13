@@ -27,6 +27,9 @@ public abstract class Classe {
     // À redéfinir dans chaque type de classe
     public abstract List<Equipement> getEquipementInitial();
 
+    public String getNomClasse(){
+        return m_nomClasse;
+    }
     // Getters
     public int getPointsDeVie() {
         return m_pointsDeVie;
