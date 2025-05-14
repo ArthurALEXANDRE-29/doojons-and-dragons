@@ -6,12 +6,13 @@ import carteDuJeu.personnages.equipements.*;
 import carteDuJeu.personnages.equipements.armes.Arme;
 import carteDuJeu.personnages.equipements.armures.Armure;
 import carteDuJeu.personnages.races.Race;
+import carteDuJeu.ElementCarte;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Personnage {
+public class Personnage implements ElementCarte {
     // attributs initialisés en fonction du joueur et ses choix / choix de la classe + race
     private String m_nom;
     private Race m_race;
@@ -172,6 +173,13 @@ public class Personnage {
     {
         int casesMax = m_vitesseCurrent /3;
         return casesMax;
+    }
+
+    @Override
+    public String getSymbole() {
+        // Le symbole pour représenter un personnage sur la carte
+        return "P";
+
     }
 }
 

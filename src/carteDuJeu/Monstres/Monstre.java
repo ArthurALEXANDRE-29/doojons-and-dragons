@@ -1,8 +1,10 @@
-package Monstres;
+package carteDuJeu.Monstres;
 
 import carteDuJeu.personnages.Personnage;
 
-public class Monstre {
+import carteDuJeu.ElementCarte;
+
+public class Monstre implements ElementCarte {
 
     // Attributs privés
     private String espece;
@@ -98,5 +100,23 @@ public class Monstre {
     public void setInitiative(int initiative) {
         this.initiative = initiative;
     }
+
+    @Override
+    public String getSymbole() {
+        // Un symbole par défaut ou basé sur l'espèce
+        switch(espece.toLowerCase()) {
+            case "gobelin": return "G";
+            case "orc": return "O";
+            case "troll": return "T";
+            case "dragon": return "D";
+            default: return "M";
+        }
+    }
+
+    @Override
+    public String getNom() {
+        return espece + " #" + numero;
+    }
+
 }
 

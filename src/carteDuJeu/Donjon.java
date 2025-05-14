@@ -1,9 +1,9 @@
 package carteDuJeu;
 
-import carteDuJeu.*;
-import carteDuJeu.*;
+
 import carteDuJeu.personnages.equipements.*;
 import carteDuJeu.personnages.*;
+import carteDuJeu.Monstres.*;
 import java.util.List;
 
 public class Donjon {

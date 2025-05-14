@@ -42,7 +42,7 @@ public class Carte {
         m_cases[y][x] = uneCase; // attention à l'ordre
     }
 
-    public void ajouterContenu(int x, int y, Object element) {
+    public void ajouterContenu(int x, int y, ElementCarte element) {  // Changé de Object à ElementCarte
         if (x < 0 || x >= m_largeur || y < 0 || y >= m_hauteur) {
             throw new IndexOutOfBoundsException("Coordonnées en dehors de la carte");
         }
@@ -51,10 +51,10 @@ public class Carte {
 
     public void afficher() {
         // Affiche les coordonnées X
-        List<String> tabAlphabétique = new ArrayList<>();
+        List<String> tabAlphabetique = new ArrayList<>();
         System.out.print("    ");
         for (int i = 0; i < m_largeur; i++) {
-            tabAlphabétique.add(String.valueOf((char) ('A' + i)));
+            tabAlphabetique.add(String.valueOf((char) ('A' + i)));
             System.out.printf("%2c ", 'A' + i);
         }
         System.out.println();

@@ -1,6 +1,5 @@
 package carteDuJeu;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +7,7 @@ public class Case {
     private final int m_x;
     private final int m_y;
     private boolean m_estObstacle;
-    private List<Object> m_contenu;
+    private List<ElementCarte> m_contenu;  // Changé de Object à ElementCarte
 
     public Case(int x, int y, boolean estObstacle) {
         this.m_x = x;
@@ -37,13 +36,13 @@ public class Case {
         this.m_estObstacle = estObstacle;
     }
 
-    public void ajouterContenu(Object element) {
+    public void ajouterContenu(ElementCarte element) {  // Changé de Object à ElementCarte
         if (element != null) {
             m_contenu.add(element);
         }
     }
 
-    public boolean retirerContenu(Object element) {
+    public boolean retirerContenu(ElementCarte element) {  // Changé de Object à ElementCarte
         return m_contenu.remove(element);
     }
 
@@ -51,11 +50,11 @@ public class Case {
         return m_contenu.isEmpty();
     }
 
-    public List<Object> getContenu() {
+    public List<ElementCarte> getContenu() {  // Changé le type de retour
         return new ArrayList<>(m_contenu);
     }
 
-    public boolean contient(Object element) {
+    public boolean contient(ElementCarte element) {  // Changé de Object à ElementCarte
         return m_contenu.contains(element);
     }
 
@@ -64,7 +63,8 @@ public class Case {
         if (m_estObstacle) {
             return "[ ]";
         } else if (!m_contenu.isEmpty()) {
-            return " * ";  /* Represente un element sur la case */
+            // Utilise le symbole du premier élément
+            return " " + m_contenu.get(0).getSymbole() + " ";
         } else {
             return " . ";  /* Case vide */
         }
