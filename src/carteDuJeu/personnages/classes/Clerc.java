@@ -14,11 +14,9 @@ public class Clerc extends Classe{
     }
 
     @Override
-    public List<Equipement> getEquipementInitial() {
-        List<Equipement> equipements = new ArrayList<>();
-        equipements.add(new MasseDarmes());
-        equipements.add(new ArmureDEcailles());
-        equipements.add(new ArbaleteLegere());
-        return equipements;
+    protected void initialiserEquipement() {
+        m_equipementInitial.add(new MasseDarmes());
+        m_equipementInitial.add(new ArmureDEcailles());
+        m_equipementInitial.add(new ArbaleteLegere());
     }
 }

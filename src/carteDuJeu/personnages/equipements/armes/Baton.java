@@ -5,7 +5,7 @@ public class Baton extends Arme{
 
 
     public Baton() {
-        super("Bâton", "1d6", 1, false);
+        super("Bâton", 6, 1, false);
     }
 
 }

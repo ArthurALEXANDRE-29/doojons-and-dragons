@@ -14,6 +14,7 @@ public abstract class Classe {
     private final int m_forceBonus;
     private final int m_dexteriteBonus;
     private final int m_initiativeBonus;
+    protected List<Equipement> m_equipementInitial;
 
     // Constructeur
     Classe(String nom, int pointsDeVie, int forceBonus, int dexteriteBonus, int initiativeBonus) {
@@ -22,10 +23,17 @@ public abstract class Classe {
         this.m_forceBonus = forceBonus;
         this.m_dexteriteBonus = dexteriteBonus;
         this.m_initiativeBonus = initiativeBonus;
+        this.m_equipementInitial = new ArrayList<>();
+        initialiserEquipement();
+    }
+    protected abstract void initialiserEquipement();
+
+    public List<Equipement> getEquipementInitial() {
+        return m_equipementInitial;
     }
 
     // À redéfinir dans chaque type de classe
-    public abstract List<Equipement> getEquipementInitial();
+
 
     public String getNomClasse(){
         return m_nomClasse;
