@@ -1,6 +1,6 @@
 package carteDuJeu.personnages.equipements.armures;
 
-import carteDuJeu.personnages.equipements.ArmureType;
+
 import carteDuJeu.personnages.equipements.Equipement;
 
 public abstract class Armure extends Equipement {
