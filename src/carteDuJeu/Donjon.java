@@ -41,9 +41,31 @@ public class Donjon {
 
     // Méthode pour terminer le donjon
     public void finDonjon() {
-        // Logique pour finir le donjon
-        System.out.println("Le donjon est terminé.");
-        // Vous pouvez ajouter des récompenses ou des conséquences ici
+        boolean unPersonnageMort = false;
+        for (Personnage personnage : m_joueurs) {
+            if (personnage.getPointsDeVie() <= 0) {
+                unPersonnageMort = true;
+                break; // Si un personnage est mort, on peut arrêter la vérification
+            }
+        }
+
+        // Vérifier si tous les monstres sont morts
+        boolean tousLesMonstresMorts = true;
+        for (Monstre monstre : m_monstres) {
+            if (monstre.getPointsDeVie() > 0) {
+                tousLesMonstresMorts = false;
+                break; // Si un monstre est encore vivant, on arrête la vérification
+            }
+        }
+
+        // Si un personnage est mort, la partie est finie avec une défaite
+        if (unPersonnageMort) {
+            System.out.println("Un personnage est mort. Vous avez perdu !");
+        } else if (tousLesMonstresMorts) {
+            System.out.println("Tous les monstres ont été vaincus ! Le donjon est terminé. Vous avez gagné !");
+        } else {
+
+        }
     }
 
     // Getters et setters
