@@ -1,7 +1,9 @@
 package carteDuJeu.personnages.equipements;
 
 
-public abstract class Equipement {
+import carteDuJeu.ElementCarte;
+
+public abstract class Equipement implements ElementCarte {
     protected String m_nom;
 
     public Equipement(String nom) {
@@ -10,5 +12,10 @@ public abstract class Equipement {
 
     public String getNom() {
         return m_nom;
+    }
+
+    @Override
+    public String getSymbole() {
+        return "*"; // Symbole spécifique pour l'equipement
     }
 }
