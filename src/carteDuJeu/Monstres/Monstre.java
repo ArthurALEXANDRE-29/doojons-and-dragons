@@ -144,15 +144,15 @@ public class Monstre implements ElementCarte {
 
     @Override
     public String getSymbole() {
-        return String.valueOf(m_espece.charAt(0)) + m_numero;
+        if (m_numero > 9) {
+            return String.valueOf(m_espece.charAt(0)) + m_numero + " ";
+        }
+        return " " + String.valueOf(m_espece.charAt(0)) + m_numero + " ";
     }
 
     @Override
     public String getNom() {
         return m_espece + " #" + m_numero;
     }
-
-
-
 }
 

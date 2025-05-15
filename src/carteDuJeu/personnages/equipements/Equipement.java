@@ -16,6 +16,6 @@ public abstract class Equipement implements ElementCarte {
 
     @Override
     public String getSymbole() {
-        return "* "; // Symbole spécifique pour l'equipement
+        return " *  "; // Symbole spécifique pour l'equipement
     }
 }

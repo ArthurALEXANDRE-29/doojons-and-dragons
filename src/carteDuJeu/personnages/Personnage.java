@@ -178,7 +178,7 @@ public class Personnage implements ElementCarte {
     @Override
     public String getSymbole() {
         // Le symbole pour représenter un personnage sur la carte
-        return m_nom.substring(0,3);
+        return m_nom.substring(0,3) + " ";
     }
 }
 

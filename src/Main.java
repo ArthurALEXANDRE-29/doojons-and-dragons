@@ -26,7 +26,7 @@ public class Main {
 
         // Création d'un personnage
         Personnage personnage = new Personnage("Alexandru", new Humain(), new Magicien());
-        carte.ajouterContenu(3, 3, personnage);
+        carte.ajouterContenu(3, 2, personnage);
 
         // Affichage de la carte
         carte.afficher();

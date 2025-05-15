@@ -56,20 +56,21 @@ public class Carte {
         for (int i = 0; i < m_largeur; i++) {
             tabAlphabetique.add(String.valueOf((char) ('A' + i)));
             System.out.printf("%2c ", 'A' + i);
+            System.out.printf(" ");
         }
         System.out.println();
 
         // Ligne supérieure du contour
         System.out.print("   ");
         System.out.print("┌");
-        for (int x = 0; x < m_largeur - 1; x++) {
+        for (int x = 0; x < m_largeur + 2; x++) {
             System.out.print("───");
         }
-        System.out.println("───┐");
+        System.out.println("────┐");
 
         for (int y = 0; y < m_hauteur; y++) {
             // Coordonnée Y
-            System.out.printf("%2d │", y);
+            System.out.printf("%2d │", y+1);
 
             // Contenu de la ligne
             for (int x = 0; x < m_largeur; x++) {
@@ -82,10 +83,10 @@ public class Carte {
         // Ligne inférieure du contour
         System.out.print("   ");
         System.out.print("└");
-        for (int x = 0; x < m_largeur - 1; x++) {
+        for (int x = 0; x < m_largeur + 2; x++) {
             System.out.print("───");
         }
-        System.out.println("───┘");
+        System.out.println("────┘");
     }
 
 
