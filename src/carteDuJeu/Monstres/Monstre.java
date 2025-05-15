@@ -17,16 +17,18 @@ public class Monstre implements ElementCarte {
 
     private int m_force;
     private int m_dexterite;
+    private int m_vitesse;
 
     private int m_classeArmure;
     private int m_initiative;
 
     // Constructeur
-    public Monstre(String espece, int numero, int portee, int maxDmg, int nbDes, int pointsDeVieMax, int caracteristiqueDAttaque, int classeArmure, int initiative) {
+    public Monstre(String espece, int numero, int portee, int maxDmg, int vitesse, int nbDes, int pointsDeVieMax, int caracteristiqueDAttaque, int classeArmure, int initiative) {
         this.m_espece = espece;
         this.m_numero = numero;
         this.m_portee = portee ;
         this.m_maxDmg = maxDmg;
+        this.m_vitesse = vitesse;
         this.m_pointsDeVieMax = pointsDeVieMax;
         m_pointsDeVie = m_pointsDeVieMax;
         this.m_nbDes = nbDes;
@@ -79,6 +81,15 @@ public class Monstre implements ElementCarte {
 
     public int getPortee() {
         return m_portee;
+    }
+    public int getCasesMaxDeplacement()
+    {
+        int casesMax = m_vitesse /3;
+        return casesMax;
+    }
+    public void setVitesse(int vitesse)
+    {
+        m_vitesse = vitesse;
     }
     public void setPorteeEtStat(int portee, int caracteristiqueDAttaque ) {
         if(m_portee < 1)
