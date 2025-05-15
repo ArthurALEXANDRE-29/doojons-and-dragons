@@ -2,10 +2,7 @@ package carteDuJeu.actions;
 
 import carteDuJeu.Carte;
 import carteDuJeu.Case;
-import carteDuJeu.ElementCarte;
 import carteDuJeu.ElementMobile;
-import carteDuJeu.Monstres.Monstre;
-import carteDuJeu.personnages.Personnage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,5 +150,19 @@ public class Deplacement {
         }
 
         return null;
+    }
+
+    // Nouvelle méthode pour vérifier la portée entre deux positions
+    public boolean estAPortee(int x1, int y1, int x2, int y2, int portee) {
+        int distance = Math.abs(x2 - x1) + Math.abs(y2 - y1);
+        return distance <= portee;
+    }
+
+    // Méthode surchargée pour les éléments mobiles
+    public boolean estAPortee(ElementMobile e1, ElementMobile e2, int portee) {
+        int[] pos1 = trouverPosition(e1);
+        int[] pos2 = trouverPosition(e2);
+        if (pos1 == null || pos2 == null) return false;
+        return estAPortee(pos1[0], pos1[1], pos2[0], pos2[1], portee);
     }
 }
