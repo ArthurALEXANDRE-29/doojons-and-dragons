@@ -51,22 +51,18 @@ public class Carte {
 
     public void afficher() {
         // Affiche les coordonnées X
-        List<String> tabAlphabetique = new ArrayList<>();
         System.out.print("    ");
         for (int i = 0; i < m_largeur; i++) {
-            tabAlphabetique.add(String.valueOf((char) ('A' + i)));
-            System.out.printf("%2c ", 'A' + i);
-            System.out.printf(" ");
+            System.out.printf("%4c", 'A' + i);
         }
         System.out.println();
 
         // Ligne supérieure du contour
-        System.out.print("   ");
-        System.out.print("┌");
-        for (int x = 0; x < m_largeur + 2; x++) {
-            System.out.print("───");
+        System.out.print("   ┌");
+        for (int x = 0; x < m_largeur; x++) {
+            System.out.print("────");
         }
-        System.out.println("────┐");
+        System.out.println("┐");
 
         for (int y = 0; y < m_hauteur; y++) {
             // Coordonnée Y
@@ -81,12 +77,11 @@ public class Carte {
         }
 
         // Ligne inférieure du contour
-        System.out.print("   ");
-        System.out.print("└");
-        for (int x = 0; x < m_largeur + 2; x++) {
-            System.out.print("───");
+        System.out.print("   └");
+        for (int x = 0; x < m_largeur; x++) {
+            System.out.print("────");
         }
-        System.out.println("────┘");
+        System.out.println("┘");
     }
 
 
