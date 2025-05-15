@@ -77,6 +77,10 @@ package carteDuJeu{
             + setArmeEquipee(index: Integer) : Boolean
             + setArmureEquipee(index: Integer) : Boolean
             + getCasesMaxDeplacement() : Integer
+            + getSymbole() : String
+            + subirDegats(degats : Integer)
+            + estMort()
+            + recalculerStats()
         }
     package races {
              abstract class Race {
@@ -216,33 +220,48 @@ package carteDuJeu.personnages.equipements.armures{
 }
     ' ===== MONSTRES =====
     package carteDuJeu.Monstres {
-        class Monstre {
-          - espece : String
-            - numero : Integer
-            - attaque : Attaque
-            - pointsDeVie : Integer
-            - force : Integer
-            - dexterite : Integer
-            - classeArmure : Integer
-            - initiative : Integer
-            + Monstre(espece : String, numero : Integer, attaque : Attaque, pointsDeVie : Integer, force : Integer, dexterite : Integer, classeArmure : Integer, initiative : Integer)
-            + attaquer(cible : Personnage)
-            + getEspece() : String
-            + setEspece(espece : String)
-            + getNumero() : Integer
-            + setNumero(numero : Integer)
-            + getAttaque() : Attaque
-            + setAttaque(attaque : Attaque)
-            + getPointsDeVie() : Integer
-            + setPointsDeVie(pointsDeVie : Integer)
-            + getForce() : Integer
-            + setForce(force : Integer)
-            + getDexterite() : Integer
-            + setDexterite(dexterite : Integer)
-            + getClasseArmure() : Integer
-            + setClasseArmure(classeArmure : Integer)
-            + getInitiative() : Integer
-            + setInitiative(initiative : Integer)
+        class Monstre implements carteDuJeu.Carte{
+            - String m_espece
+            - Integer m_numero
+            - Integer m_portee
+            - Integer m_maxDmg
+            - Integer m_nbDes
+            - Integer m_pointsDeVieMax
+            - Integer m_pointsDeVie
+            - Integer m_force
+            - Integer m_dexterite
+            - Integer m_vitesse
+            - Integer m_classeArmure
+            - Integer m_initiative
+
+            + Monstre(String espece, Integer numero, Integer portee, Integer maxDmg, Integer vitesse, Integer nbDes, Integer pointsDeVieMax, Integer caracteristiqueDAttaque, Integer classeArmure, Integer initiative)
+
+            + String getEspece()
+            + void setEspece(String espece)
+            + Integer getNumero()
+            + void setNumero(Integer numero)
+            + Integer getM_maxDmg()
+            + Integer getNbDes()
+            + void setMaxdmg(Integer dmgMax, Integer nbDes)
+            + Integer getPortee()
+            + Integer getCasesMaxDeplacement()
+            + void setVitesse(Integer vitesse)
+            + void setPorteeEtStat(Integer portee, Integer caracteristiqueDAttaque)
+            + void changementCarac(Integer caracteristiqueDAttaque)
+            + Integer getPointsDeVie()
+            + void setPointsDeVieMax(Integer pointsDeVie)
+            + Integer getPointsDeVieMax()
+            + Integer getForce()
+            + Integer getDexterite()
+            + Integer getClasseArmure()
+            + void setClasseArmure(Integer classeArmure)
+            + Integer getInitiative()
+            + void setInitiative(Integer initiative)
+
+            + String getSymbole()
+            + String getNom()
+            + subirDegats(degats : Integer)
+            + estMort()
         }
 
         class Attaque {

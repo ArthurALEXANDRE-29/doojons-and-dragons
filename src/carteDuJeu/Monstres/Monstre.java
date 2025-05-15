@@ -165,5 +165,15 @@ public class Monstre implements ElementCarte {
     public String getNom() {
         return m_espece + " #" + m_numero;
     }
+
+    public void subirDegats(int degats) {
+        m_pointsDeVie -= degats;
+        if (m_pointsDeVie < 0) {
+            m_pointsDeVie = 0;
+        }
+    }
+    public boolean estMort() {
+        return m_pointsDeVie <= 0;
+    }
 }
 

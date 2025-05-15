@@ -123,51 +123,69 @@ public class Personnage implements ElementCarte {
     }
 
 
-    public Armure getArmureEquipee() {
-        return m_armureEquipee;
-    }
     public boolean setArmeEquipee(int index) {
         if (index < 0 || index >= m_inventaire.size()) {
-            return false; // index invalide
+            return false;
         }
 
         Equipement equipement = m_inventaire.get(index);
         if (equipement instanceof Arme) {
-            this.m_armeEquipee = (Arme) equipement;
-            if(m_armeEquipee.estLourde())
-            {
-                m_forceCurrent = m_forceCurrent + 4;
-                m_vitesseCurrent = m_vitesseCurrent - 2;
+            Arme nouvelleArme = (Arme) equipement;
+
+            if (m_armeEquipee != null) {
+                m_inventaire.add(m_armeEquipee);
             }
-            else
-            {
-                m_forceCurrent = m_forceBase;
-                m_vitesseCurrent = m_vitesseBase;
-            }
-            return true; // arme correctement équipée
+
+            m_inventaire.remove(index);
+            m_armeEquipee = nouvelleArme;
+
+            recalculerStats();
+
+            return true;
         }
 
-        return false; // l'équipement à cet index n'est pas une arme
+        return false;
+    }
+    private void recalculerStats() {
+        // Force de base
+        m_forceCurrent = m_forceBase;
+
+        // Vitesse de base
+        m_vitesseCurrent = m_vitesseBase;
+
+        // Bonus/malus lié à l'arme lourde
+        if (m_armeEquipee != null && m_armeEquipee.estLourde()) {
+            m_forceCurrent += 4;
+            m_vitesseCurrent -= 2;
+        }
+
+        // Malus lié à l’armure lourde
+        if (m_armureEquipee != null && m_armureEquipee.estLourde()) {
+            m_vitesseCurrent -= 4;
+        }
     }
     public boolean setArmureEquipee(int index) {
         if (index < 0 || index >= m_inventaire.size()) {
-            return false; // index invalide
+            return false;
         }
 
         Equipement equipement = m_inventaire.get(index);
         if (equipement instanceof Armure) {
-            this.m_armureEquipee = (Armure) equipement;
-            if(m_armureEquipee.estLourde())
-            {
-                m_vitesseCurrent = m_vitesseCurrent - 4;
+            Armure nouvelleArmure = (Armure) equipement;
+
+            if (m_armureEquipee != null) {
+                m_inventaire.add(m_armureEquipee);
             }
-            else {
-                m_vitesseCurrent = m_vitesseBase;
-            }
-            return true; // arme correctement équipée
+
+            m_inventaire.remove(index);
+            m_armureEquipee = nouvelleArmure;
+
+            recalculerStats();
+
+            return true;
         }
 
-        return false; // l'équipement à cet index n'est pas une arme
+        return false;
     }
     public int getCasesMaxDeplacement()
     {
@@ -180,6 +198,16 @@ public class Personnage implements ElementCarte {
         // Le symbole pour représenter un personnage sur la carte
         return m_nom.substring(0,3) + " ";
     }
+    public void subirDegats(int degats) {
+        m_pointsDeVie -= degats;
+        if (m_pointsDeVie < 0) {
+            m_pointsDeVie = 0;
+        }
+    }
+    public boolean estMort() {
+        return m_pointsDeVie <= 0;
+    }
+
 }
 
 
