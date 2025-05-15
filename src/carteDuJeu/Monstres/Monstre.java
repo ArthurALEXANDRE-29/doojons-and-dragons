@@ -1,122 +1,158 @@
 package carteDuJeu.Monstres;
 
-import carteDuJeu.personnages.Personnage;
-
 import carteDuJeu.ElementCarte;
 
 public class Monstre implements ElementCarte {
 
     // Attributs privés
-    private String espece;
-    private int numero;
-    private Attaque attaque;
-    private int pointsDeVie;
-    private int force;
-    private int dexterite;
-    private int classeArmure;
-    private int initiative;
+    private String m_espece;
+    private int m_numero;
+
+    private int m_portee;
+    private int m_maxDmg; // max dmg d'un de
+    private int m_nbDes; // nb de des que le monstre utilise
+
+    private int m_pointsDeVieMax;
+    private int m_pointsDeVie;
+
+    private int m_force;
+    private int m_dexterite;
+
+    private int m_classeArmure;
+    private int m_initiative;
 
     // Constructeur
-    public Monstre(String espece, int numero, Attaque attaque, int pointsDeVie, int force, int dexterite, int classeArmure, int initiative) {
-        this.espece = espece;
-        this.numero = numero;
-        this.attaque = attaque;
-        this.pointsDeVie = pointsDeVie;
-        this.force = force;
-        this.dexterite = dexterite;
-        this.classeArmure = classeArmure;
-        this.initiative = initiative;
-    }
+    public Monstre(String espece, int numero, int portee, int maxDmg, int nbDes, int pointsDeVieMax, int caracteristiqueDAttaque, int classeArmure, int initiative) {
+        this.m_espece = espece;
+        this.m_numero = numero;
+        this.m_portee = portee ;
+        this.m_maxDmg = maxDmg;
+        this.m_pointsDeVieMax = pointsDeVieMax;
+        m_pointsDeVie = m_pointsDeVieMax;
+        this.m_nbDes = nbDes;
 
-    // Méthode attaquer (modifiée pour prendre en compte l'attaque du monstre)
-    public void attaquer(Personnage cible) {
-        // Calcul des dégâts
-        System.out.println("Le " + espece + " attaque " + cible.getNom() + " avec " + attaque.getDegats() + " de dégats.");
-        // Logique d'attaque
-        // cible.subirDegats(attaque.getDegats()); // Exemple d'interaction
+        if(m_portee < 1)
+        {
+            System.out.println("Valeur inférieure à 1 impossible, portée mise en place à 1");
+            m_portee = 1;
+            m_force = caracteristiqueDAttaque;
+        } else if (m_portee > 1) {
+            m_dexterite = caracteristiqueDAttaque;
+        }
+        else{
+            m_force = caracteristiqueDAttaque;
+        }
+
+        this.m_classeArmure = classeArmure;
+        this.m_initiative = initiative;
     }
 
     // Getters et setters
     public String getEspece() {
-        return espece;
+        return m_espece;
     }
 
     public void setEspece(String espece) {
-        this.espece = espece;
+        this.m_espece = espece;
     }
 
     public int getNumero() {
-        return numero;
+        return m_numero;
     }
 
     public void setNumero(int numero) {
-        this.numero = numero;
+        this.m_numero = numero;
+    }
+    public int getM_maxDmg()
+    {
+        return m_maxDmg;
+    }
+    public int getNbDes()
+    {
+        return m_nbDes;
+    }
+    public void setMaxdmg(int dmgMax, int nbDes)
+    {
+        m_maxDmg = dmgMax;
+        m_nbDes = nbDes;
     }
 
-    public Attaque getAttaque() {
-        return attaque;
+    public int getPortee() {
+        return m_portee;
+    }
+    public void setPorteeEtStat(int portee, int caracteristiqueDAttaque ) {
+        if(m_portee < 1)
+        {
+            System.out.println("Valeur inférieure à 1 impossible, portée mise en place à 1");
+            m_portee = 1;
+            m_force = caracteristiqueDAttaque;
+        } else if (m_portee > 1) {
+            m_dexterite = caracteristiqueDAttaque;
+        }
+        else{
+            m_force = caracteristiqueDAttaque;
+        }
     }
 
-    public void setAttaque(Attaque attaque) {
-        this.attaque = attaque;
+
+    public void changementCarac(int caracteristiqueDAttaque) {
+        if(m_portee != 1)
+        {
+            m_dexterite = caracteristiqueDAttaque;
+        }
+        else{
+            m_force = caracteristiqueDAttaque;
+        }
     }
 
     public int getPointsDeVie() {
-        return pointsDeVie;
+        return m_pointsDeVie;
     }
 
-    public void setPointsDeVie(int pointsDeVie) {
-        this.pointsDeVie = pointsDeVie;
+    public void setPointsDeVieMax(int pointsDeVie) {
+        this.m_pointsDeVieMax = pointsDeVie;
+        m_pointsDeVie = m_pointsDeVieMax;
+    }
+    public int getPointsDeVieMax() {
+        return m_pointsDeVieMax;
     }
 
     public int getForce() {
-        return force;
-    }
-
-    public void setForce(int force) {
-        this.force = force;
+        return m_force;
     }
 
     public int getDexterite() {
-        return dexterite;
-    }
-
-    public void setDexterite(int dexterite) {
-        this.dexterite = dexterite;
+        return m_dexterite;
     }
 
     public int getClasseArmure() {
-        return classeArmure;
+        return m_classeArmure;
     }
 
     public void setClasseArmure(int classeArmure) {
-        this.classeArmure = classeArmure;
+        this.m_classeArmure = classeArmure;
     }
 
     public int getInitiative() {
-        return initiative;
+        return m_initiative;
     }
 
     public void setInitiative(int initiative) {
-        this.initiative = initiative;
+        this.m_initiative = initiative;
     }
+
 
     @Override
     public String getSymbole() {
-        // Un symbole par défaut ou basé sur l'espèce
-        switch(espece.toLowerCase()) {
-            case "gobelin": return "G";
-            case "orc": return "O";
-            case "troll": return "T";
-            case "dragon": return "D";
-            default: return "M";
-        }
+        return String.valueOf(m_espece.charAt(0)) + m_numero;
     }
 
     @Override
     public String getNom() {
-        return espece + " #" + numero;
+        return m_espece + " #" + m_numero;
     }
+
+
 
 }
 
