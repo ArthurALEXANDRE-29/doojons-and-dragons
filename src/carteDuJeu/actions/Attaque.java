@@ -67,7 +67,7 @@ public class Attaque {
         return true;
     }
 
-    private static int calculDistance(Case a, Case b) {
+    public static int calculDistance(Case a, Case b) {
         return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
     }
 }

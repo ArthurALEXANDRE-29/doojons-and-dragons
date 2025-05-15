@@ -267,7 +267,7 @@ package carteDuJeu.personnages.equipements.armures{
         class Attaque {
           +attaquer(carte : Carte, attaquant : Personnage, cible : Monstre, caseAttaquant : Case, caseCible : Case) : Boolean
           +attaquer(carte : Carte, attaquant : Monstre, cible : Personnage, caseAttaquant : Case, caseCible : Case) : Boolean
-          - {static} calculDistance() : Integer
+          + {static} calculDistance() : Integer
         }
     }
 
