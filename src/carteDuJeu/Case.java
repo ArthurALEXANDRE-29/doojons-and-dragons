@@ -64,7 +64,7 @@ public class Case {
             return "[ ]";
         } else if (!m_contenu.isEmpty()) {
             // Utilise le symbole du premier élément
-            return " " + m_contenu.get(0).getSymbole() + " ";
+            return " " + m_contenu.get(0).getSymbole();
         } else {
             return " . ";  /* Case vide */
         }
