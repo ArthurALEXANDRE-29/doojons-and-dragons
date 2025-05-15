@@ -58,23 +58,23 @@ public class Personnage implements ElementCarte {
 
         for (Equipement eq : classe.getEquipementInitial()) {
             m_inventaire.add(eq);
-            // parcours l'inventaire et ajoute la première arme rencontrée / armue aussi
-            // si il commence avec plusieurs armes / armures => à modifier
+
             if (eq instanceof Arme && m_armeEquipee == null) {
                 m_armeEquipee = (Arme) eq;
+
+                if (m_armeEquipee.estLourde()) {
+                    m_forceCurrent += 4;
+                    m_vitesseCurrent -= 2;
+                }
             }
+
             if (eq instanceof Armure && m_armureEquipee == null) {
                 m_armureEquipee = (Armure) eq;
+
+                if (m_armureEquipee.estLourde()) {
+                    m_vitesseCurrent -= 4;
+                }
             }
-        }
-        if(m_armeEquipee.estLourde())
-        {
-            m_forceCurrent = m_forceCurrent + 4;
-            m_vitesseCurrent = m_vitesseCurrent - 2;
-        }
-        if(m_armureEquipee.estLourde())
-        {
-            m_vitesseCurrent = m_vitesseCurrent - 4;
         }
 
     }
@@ -178,7 +178,7 @@ public class Personnage implements ElementCarte {
     @Override
     public String getSymbole() {
         // Le symbole pour représenter un personnage sur la carte
-        return "P";
+        return m_nom.substring(0,3);
     }
 }
 
