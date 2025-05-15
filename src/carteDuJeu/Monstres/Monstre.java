@@ -1,8 +1,9 @@
 package carteDuJeu.Monstres;
 
 import carteDuJeu.ElementCarte;
+import carteDuJeu.ElementMobile;
 
-public class Monstre implements ElementCarte {
+public class Monstre implements ElementMobile {
 
     // Attributs privés
     private String m_espece;

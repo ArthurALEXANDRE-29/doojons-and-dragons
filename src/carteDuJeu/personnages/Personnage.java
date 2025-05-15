@@ -1,6 +1,7 @@
 package carteDuJeu.personnages;
 import carteDuJeu.Des;
 
+import carteDuJeu.ElementMobile;
 import carteDuJeu.personnages.classes.Classe;
 import carteDuJeu.personnages.equipements.*;
 import carteDuJeu.personnages.equipements.armes.Arme;
@@ -12,7 +13,7 @@ import carteDuJeu.ElementCarte;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Personnage implements ElementCarte {
+public class Personnage implements ElementMobile {
     // attributs initialisés en fonction du joueur et ses choix / choix de la classe + race
     private String m_nom;
     private Race m_race;
