@@ -20,37 +20,73 @@ class MaitreDuJeu {
 
 package carteDuJeu{
 
+    Interface ElementCarte{
+        + getSymbole() : String
+        + getNom() : String
+    }
+    Interface ElementMobile extends ElementCarte{
+        + getCasesMaxDeplacement() : Integer
+        +  getNom() : String
+    }
+
     class Donjon {
-        - carte: Carte
-        - monstres: List<Monstre>
-        - equipements: Equipement[*]
-        - joueurs: List<Personnage>
-        + miseEnPlace()
-        + deroulerCombat()
-        + finDonjon()
+         - m_carte : Carte
+         + Donjon(Carte carte, monstres Monstre[*], equipements Equipement[*], Personnage joueurs[*])
+         + miseEnPlace() : void
+         + deroulerCombat() : void
+         + finDonjon() : void
+         + getCarte() : Carte
+         + setCarte(carte : Carte)
+         + getMonstres() : Monstre[*]
+         + setMonstres(monstres : Monstre[*])
+         + getEquipements() : Equipement[*]
+         + setEquipements(equipements : Equipement[*])
+         + getJoueurs() : Personnage[*]
+         + setJoueurs(joueurs : Personnage[*])
     }
     class Des{
         - {static} final random : Random
         + {static}  lancer( notation : String) : Integer
         + {static}  lancer( nbFaces : Integer) : Integer
-        + {static} lancer( nbDes : Integer,  nbFaces: int) : Integer
+        + {static} lancer( nbDes : Integer,  nbFaces: Integer) : Integer
     }
     class Carte {
       - largeur: Integer
       - hauteur: Integer
       - cases: Case[][]
       + afficherCarte()
+
+      + Carte(largeur: Integer, hauteur: Integer)
+      + getLargeur() : Integer
+      + getHauteur() : Integer
+      + getCase(x: Integer, y: Integer) : Case
+      + setCase(x: Integer, y: Integer, uneCase: Case)
+      + ajouterContenu(x: Integer, y: Integer, e: ElementCarte):
+      + afficher()
+      + genererObstaclesAleatoires(taux: double)
     }
 
     class Case {
       - x: Integer
       - y: Integer
       - estObstacle: Boolean
-      - contient: List<Object>
+
+      + Case(x: Integer, y: Integer, estObstacle: Boolean)
+      + Case(x: Integer, y: Integer)
+      + getX() : Integer
+      + getY() : Integer
+      + estObstacle() : Boolean
+      + setEstObstacle(estObstacle: Boolean)
+      + ajouterContenu(element: ElementCarte)
+      + retirerContenu(element: ElementCarte) : Boolean
+      + estVide() : Boolean
+      + getContenu() : List<ElementCarte>
+      + contient(element: ElementCarte) : Boolean
+      + toString() : String
     }
 
     package personnages {
-        class Personnage {
+        class Personnage implements carteDuJeu.ElementMobile{
             - m_nom : String
             - m_pointsDeVie : Integer
             - m_pointsDeVieMax : Integer
@@ -187,13 +223,14 @@ package carteDuJeu{
                                                 }
                     }
 package carteDuJeu.personnages.equipements{
-        abstract class Equipement {
+        abstract class Equipement implements carteDuJeu.ElementCarte{
             - m_nom : String
-
             + Equipement(nom : String)
             + getNom() : String
+            + getSymbole() : String
         }
 }
+
 package carteDuJeu.personnages.equipements.armures{
 
                 abstract class Armure extends carteDuJeu.personnages.equipements.Equipement {
@@ -220,7 +257,7 @@ package carteDuJeu.personnages.equipements.armures{
 }
     ' ===== MONSTRES =====
     package carteDuJeu.Monstres {
-        class Monstre implements carteDuJeu.Carte{
+        class Monstre implements carteDuJeu.ElementMobile {
             - String m_espece
             - Integer m_numero
             - Integer m_portee
@@ -264,29 +301,47 @@ package carteDuJeu.personnages.equipements.armures{
             + estMort()
         }
 
-        class Attaque {
-          +attaquer(carte : Carte, attaquant : Personnage, cible : Monstre, caseAttaquant : Case, caseCible : Case) : Boolean
-          +attaquer(carte : Carte, attaquant : Monstre, cible : Personnage, caseAttaquant : Case, caseCible : Case) : Boolean
-          + {static} calculDistance() : Integer
-        }
+
     }
 
+package carteDuJeu.actions {
 
+    class Attaque{
+    - m_deplacement : Deplacement
+    + Attaque(deplacement: Deplacement)
+    + attaquer(carte: Carte, attaquant: Personnage,cible: Monstre, caseAttaquant: Case, caseCible: Case) : Boolean
+    + attaquer(carte: Carte, attaquant: Monstre, cible: Personnage, caseAttaquant: Case, caseCible: Case) : Boolean
+    }
+    class Deplacement{
+    - m_carte : Carte
+    - m_scanner : Scanner
+    + Deplacement(carte: Carte)
+    + trouverPosition(element: ElementMobile) : Integer[]
+    + gererDeplacement(element: ElementMobile) : Boolean
+    + parseCoordonnees(coordString: String) : Integer[]
+    + coordonneesToString(x: Integer, y: Integer) : String
+    + estDeplacementValide(xCible: Integer, yCible: int) : Boolean
+    + deplacer(xD: Integer, yD: Integer, xC: Integer, yC: Integer,element: ElementMobile, casesMax: Integer) : Boolean
+    + trouverChemin(xD: Integer, yD: Integer, xC: Integer, yC: Integer,casesMax: int) : Integer[*]
+    + estAPortee(x1: Integer, y1: Integer, x2: Integer, y2: Integer, portee: Integer) : Boolean
+    + estAPortee(e1: ElementMobile, e2: ElementMobile, portee: Integer)|: Boolean
+    }
+}
 
 ' ===== RELATIONS =====
 Jeu --> Donjon
 Jeu --> Personnage
 Jeu --> MaitreDuJeu
 
-Donjon --> Carte
-Donjon --> Monstre
-Donjon --> Equipement
-Donjon --> Personnage
+Donjon ..> Carte : <<uses>>
+Donjon o-> "\n 1..* \n- m_monstres" Monstre
+Donjon o-> "\n 0..* \n- m_equipements" Equipement
+Donjon o-> "\n 1..* \n- m_joueurs" Personnage
 
-Carte --> Case
-Case --> Equipement
-Case --> Monstre
-Case --> Personnage
+Carte ..> Case : <<uses>>
+Case ..> Equipement : <<uses>>
+Case ..> Monstre : <<uses>>
+Case ..> Personnage : <<uses>>
 
 Classe "1" o-- "0..*" Equipement : m_equipementInitial
 
@@ -300,14 +355,23 @@ Personnage ..> Des : <<uses>>
 Personnage --> "\n 0..1 \n- m_race"  Race
 Personnage --> "\n 0..1 \n- m_classe" Classe
 
-Attaque ..> Carte : utilise
-Attaque ..> Case : utilise
-Attaque ..> Personnage : utilise
-Attaque ..> Monstre : utilise
-Attaque ..> Arme : utilise
-Attaque ..> Armure : utilise
+Attaque ..> Carte : <<uses>>
+Attaque ..> Case : <<uses>>
+Attaque ..> Personnage : <<uses>>
+Attaque ..> Monstre : <<uses>>
+Attaque ..> Arme : <<uses>>
+Attaque ..> Armure : <<uses>>
 Attaque ..> Des : <<uses>>
 
+Carte *-- Case : 1..*
+Carte ..> ElementCarte : <<uses>>
+Carte ..> Random : <<uses>>
+
+Case *-- ElementCarte : 0..*
+Case o-> "\n 0..1 \n- m_contenu" Equipement
 
 
+Deplacement --> Carte : <<uses>>
+Deplacement --> ElementMobile : <<uses>>
+Deplacement --> Case : <<uses>>
 @enduml
