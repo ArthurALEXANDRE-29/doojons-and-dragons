@@ -1,4 +1,4 @@
-package carteDuJeu.Monstres;
+package carteDuJeu.actions;
 
 /*Classe représentant l'attaque d'un monstre.
   Chaque monstre possède une attaque unique définie par ses dégâts et sa portée.*/
