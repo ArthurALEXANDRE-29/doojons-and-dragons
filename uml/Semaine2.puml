@@ -265,13 +265,9 @@ package carteDuJeu.personnages.equipements.armures{
         }
 
         class Attaque {
-          - m_degats : String
-            - m_portee : Integer
-            + Attaque(degats : String, portee : Integer)
-            + getDegats() : String
-            + getPortee() : Integer
-            + estCorpsACorps() : Boolean
-            + toString() : String
+          +attaquer(carte : Carte, attaquant : Personnage, cible : Monstre, caseAttaquant : Case, caseCible : Case) : Boolean
+          +attaquer(carte : Carte, attaquant : Monstre, cible : Personnage, caseAttaquant : Case, caseCible : Case) : Boolean
+          - {static} calculDistance() : Integer
         }
     }
 
@@ -304,7 +300,13 @@ Personnage ..> Des : <<uses>>
 Personnage --> "\n 0..1 \n- m_race"  Race
 Personnage --> "\n 0..1 \n- m_classe" Classe
 
-Monstre --> Attaque
+Attaque ..> Carte : utilise
+Attaque ..> Case : utilise
+Attaque ..> Personnage : utilise
+Attaque ..> Monstre : utilise
+Attaque ..> Arme : utilise
+Attaque ..> Armure : utilise
+Attaque ..> Des : <<uses>>
 
 
 

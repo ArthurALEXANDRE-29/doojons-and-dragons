@@ -1,36 +1,73 @@
 package carteDuJeu.actions;
 
-/*Classe représentant l'attaque d'un monstre.
-  Chaque monstre possède une attaque unique définie par ses dégâts et sa portée.*/
+import carteDuJeu.Des;
+import carteDuJeu.Carte;
+import carteDuJeu.Case;
+import carteDuJeu.personnages.Personnage;
+import carteDuJeu.Monstres.Monstre;
+import carteDuJeu.personnages.equipements.armes.Arme;
+import carteDuJeu.personnages.equipements.armures.Armure;
+
 public class Attaque {
-    private String m_degats;  // Format NdM (N dés à M faces, ex: "1d8", "2d6")
-    private int m_portee;     // Portée en nombre de cases (1 pour corps à corps)
 
-    //Constructeur de la classe Attaque
-    public Attaque(String degats, int portee) {
-        this.m_degats = degats;
-        this.m_portee = portee;
+    public static boolean attaquer(Carte carte, Personnage attaquant, Monstre cible, Case caseAttaquant, Case caseCible) {
+        Arme arme = attaquant.getArmeEquipee();
+        if (arme == null) {
+            System.out.println(attaquant.getNom() + " n'a pas d'arme équipée.");
+            return false;
+        }
+
+        int distance = calculDistance(caseAttaquant, caseCible);
+        if (distance > arme.getPortee()) {
+            System.out.println("Cible hors de portée.");
+            return false;
+        }
+
+        int modificateur = (arme.getPortee() > 1) ? attaquant.getDexterite() : attaquant.getForce();
+        int jetAttaque = Des.lancer(1, 20);
+        int scoreAttaque = jetAttaque + modificateur;
+
+        System.out.println(attaquant.getNom() + " attaque " + cible.getNom() + " avec un jet de " + jetAttaque + " + " + modificateur + " = " + scoreAttaque);
+
+        if (scoreAttaque > cible.getClasseArmure()) {  // Pour Monstre, getClasseArmure est OK
+            int degats = Des.lancer(1, arme.getDegats());
+            cible.subirDegats(degats);
+            System.out.println("Attaque réussie ! " + cible.getNom() + " subit " + degats + " dégâts.");
+        } else {
+            System.out.println("Attaque manquée !");
+        }
+
+        return true;
     }
 
-    //Obtenir la formule de dégâts de l'attaque
-    public String getDegats() {
-        return m_degats;
+    public static boolean attaquer(Carte carte, Monstre attaquant, Personnage cible, Case caseAttaquant, Case caseCible) {
+        int distance = calculDistance(caseAttaquant, caseCible);
+        if (distance > attaquant.getPortee()) {
+            System.out.println("Cible hors de portée.");
+            return false;
+        }
+
+        int modificateur = (attaquant.getPortee() > 1) ? attaquant.getDexterite() : attaquant.getForce();
+        int jetAttaque = Des.lancer(1, 20);
+        int scoreAttaque = jetAttaque + modificateur;
+
+        System.out.println(attaquant.getNom() + " attaque " + cible.getNom() + " avec un jet de " + jetAttaque + " + " + modificateur + " = " + scoreAttaque);
+
+        Armure armureEquipee = cible.getArmureEquipee();
+        int classeArmureCible = (armureEquipee != null) ? armureEquipee.getClasseArmure() : 10; // Défaut 10 si pas d'armure
+
+        if (scoreAttaque > classeArmureCible) {
+            int degats = Des.lancer(attaquant.getNbDes(), attaquant.getM_maxDmg());
+            cible.subirDegats(degats);
+            System.out.println("Attaque réussie ! " + cible.getNom() + " subit " + degats + " dégâts.");
+        } else {
+            System.out.println("Attaque manquée !");
+        }
+
+        return true;
     }
 
-    //Obtenir la portée de l'attaque
-    public int getPortee() {
-        return m_portee;
-    }
-
-    //Détermine si l'attaque est au corps à corps
-    public boolean estCorpsACorps() {
-        return m_portee == 1;
-    }
-
-    //Retourne une description de l'attaque
-    @Override
-    public String toString() {
-        String typeAttaque = estCorpsACorps() ? "corps à corps" : "distance";
-        return "Attaque à " + typeAttaque + " (dégâts: " + m_degats + ", portée: " + m_portee + ")";
+    private static int calculDistance(Case a, Case b) {
+        return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
     }
 }
