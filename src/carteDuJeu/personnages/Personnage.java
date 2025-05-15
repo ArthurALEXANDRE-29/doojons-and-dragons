@@ -179,7 +179,6 @@ public class Personnage implements ElementCarte {
     public String getSymbole() {
         // Le symbole pour représenter un personnage sur la carte
         return "P";
-
     }
 }
 
