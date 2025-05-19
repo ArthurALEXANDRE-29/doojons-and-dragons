@@ -6,12 +6,14 @@ public abstract class Arme extends Equipement {
     private final int m_degats;
     private final int m_portee;
     private final boolean m_estLourde;
+    private final int m_desMax;
 
-    public Arme(String nom, int degats, int portee, boolean estLourde) {
+    public Arme(String nom, int degats, int portee, boolean estLourde, int des) {
         super(nom); // Le nom est transmis à la classe Equipement
         this.m_degats = degats;
         this.m_portee = portee;
         this.m_estLourde = estLourde;
+        this.m_desMax = des;
     }
 
     public int getDegats() {
@@ -25,6 +27,7 @@ public abstract class Arme extends Equipement {
     public boolean estLourde() {
         return m_estLourde;
     }
+    public int getDes(){ return m_desMax;}
 
     @Override
     public String toString() {

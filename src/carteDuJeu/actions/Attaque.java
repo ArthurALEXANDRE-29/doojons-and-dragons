@@ -30,7 +30,10 @@ public class Attaque {
         }
 
         int modificateur = (arme.getPortee() > 1) ? attaquant.getDexterite() : attaquant.getForce();
+
+
         int jetAttaque = Des.lancer(1, 20);
+
         int scoreAttaque = jetAttaque + modificateur;
 
         System.out.println(attaquant.getNom() + " attaque " + cible.getNom() +
@@ -38,7 +41,8 @@ public class Attaque {
                 " = " + scoreAttaque);
 
         if (scoreAttaque > cible.getClasseArmure()) {
-            int degats = Des.lancer(1, arme.getDegats());
+
+            int degats = Des.lancer(arme.getDes(), arme.getDegats());
             cible.subirDegats(degats);
             System.out.println("Attaque réussie ! " + cible.getNom() + " subit " + degats + " dégâts.");
         } else {
@@ -56,7 +60,10 @@ public class Attaque {
         }
 
         int modificateur = (attaquant.getPortee() > 1) ? attaquant.getDexterite() : attaquant.getForce();
+
         int jetAttaque = Des.lancer(1, 20);
+
+
         int scoreAttaque = jetAttaque + modificateur;
 
         System.out.println(attaquant.getNom() + " attaque " + cible.getNom() +
