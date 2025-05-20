@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Case {
-    private final int m_x;
-    private final int m_y;
+    private int m_x;
+    private int m_y;
     private boolean m_estObstacle;
     private List<ElementCarte> m_contenu;  // Changé de Object à ElementCarte
 
@@ -26,6 +26,11 @@ public class Case {
 
     public int getY() {
         return m_y;
+    }
+
+    public void setPosition(int x, int y) {
+        this.m_x = x;
+        this.m_y = y;
     }
 
     public boolean estObstacle() {

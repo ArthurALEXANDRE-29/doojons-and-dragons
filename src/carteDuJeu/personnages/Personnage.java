@@ -7,7 +7,6 @@ import carteDuJeu.personnages.equipements.*;
 import carteDuJeu.personnages.equipements.armes.Arme;
 import carteDuJeu.personnages.equipements.armures.Armure;
 import carteDuJeu.personnages.races.Race;
-import carteDuJeu.ElementCarte;
 
 
 import java.util.ArrayList;
@@ -95,6 +94,17 @@ public class Personnage implements ElementMobile {
         return m_pointsDeVie;
     }
 
+    public void setPointsDeVie(int pointsDeVie) {
+        this.m_pointsDeVie = pointsDeVie;
+        if (this.m_pointsDeVie > m_pointsDeVieMax) {
+            this.m_pointsDeVie = m_pointsDeVieMax;
+        }
+    }
+
+    public boolean contientEquipement(Equipement equipement) {
+        return m_inventaire.contains(equipement);
+    }
+
     public int getPointsDeVieMax() {
         return m_pointsDeVieMax;
     }
@@ -151,6 +161,7 @@ public class Personnage implements ElementMobile {
 
         return false;
     }
+
     private void recalculerStats() {
         // Force de base
         m_forceCurrent = m_forceBase;
@@ -192,6 +203,7 @@ public class Personnage implements ElementMobile {
 
         return false;
     }
+
     public int getCasesMaxDeplacement()
     {
         int casesMax = m_vitesseCurrent /3;
@@ -213,6 +225,9 @@ public class Personnage implements ElementMobile {
         return m_pointsDeVie <= 0;
     }
 
+    public boolean estPersonnage() {
+        return true;
+    }
 }
 
 

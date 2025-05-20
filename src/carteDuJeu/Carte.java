@@ -28,6 +28,17 @@ public class Carte {
         return m_hauteur;
     }
 
+    public Case getCase(ElementMobile element) {
+        for (int y = 0; y < m_hauteur; y++) {
+            for (int x = 0; x < m_largeur; x++) {
+                if (m_cases[y][x].contient(element)) {
+                    return m_cases[y][x];
+                }
+            }
+        }
+        throw new IllegalArgumentException("L'élément mobile n'est pas présent sur la carte.");
+    }
+
     public Case getCase(int x, int y) {
         if (x < 0 || x >= m_largeur || y < 0 || y >= m_hauteur) {
             throw new IndexOutOfBoundsException("Coordonnées en dehors de la carte");

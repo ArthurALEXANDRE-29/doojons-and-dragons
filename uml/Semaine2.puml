@@ -221,6 +221,9 @@ package carteDuJeu{
                         class Rapiere extends Arme{
                                         + Rapiere()
                                                 }
+                        class EpeeADeuxMains extends Arme{
+                                        + EpeeADeuxMains()
+                                                }
                     }
 package carteDuJeu.personnages.equipements{
         abstract class Equipement implements carteDuJeu.ElementCarte{
