@@ -3,8 +3,10 @@ package carteDuJeu.personnages.sorts;
 import carteDuJeu.Carte;
 import carteDuJeu.ElementMobile;
 import carteDuJeu.personnages.Personnage;
+import carteDuJeu.personnages.classes.Classe;
 import carteDuJeu.personnages.equipements.armes.Arme;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class sortArmeMagique extends Sort {
@@ -23,11 +25,19 @@ public class sortArmeMagique extends Sort {
             if (cible.estPersonnage()) {
                 Personnage personnageCible = (Personnage) cible;
 
-                // Récupération des armes disponibles
-                List<Arme> armesDisponibles = personnageCible.getInventaire().stream()
+                // Initialisation de la liste des armes disponibles
+                List<Arme> armesDisponibles = new ArrayList<>();
+
+                // Ajout de l'arme équipée si elle existe
+                if (personnageCible.getArmeEquipee() != null) {
+                    armesDisponibles.add(personnageCible.getArmeEquipee());
+                }
+
+                // Ajout des armes de l'inventaire
+                armesDisponibles.addAll(personnageCible.getInventaire().stream()
                         .filter(e -> e.estUneArme())
                         .map(e -> (Arme) e)
-                        .toList();
+                        .toList());
 
                 if (!armesDisponibles.isEmpty()) {
                     System.out.println("Choisissez une arme à améliorer parmi les suivantes :");
@@ -35,10 +45,8 @@ public class sortArmeMagique extends Sort {
                         System.out.println((i + 1) + ". " + armesDisponibles.get(i).getNom());
                     }
 
-
-                    int choix = 0;
+                    int choix = 0; // Exemple : le joueur choisit la première arme
                     Arme armeChoisie = armesDisponibles.get(choix);
-
 
                     armeChoisie.ajouterBonusAttaque(1);
                     armeChoisie.ajouterBonusDegats(1);
@@ -50,5 +58,9 @@ public class sortArmeMagique extends Sort {
             }
         }
         return true;
+    }
+
+    public boolean estUtilisablePar(Classe classe) {
+        return classe.getNomClasse().equals("Magicien");
     }
 }

@@ -4,6 +4,7 @@ import carteDuJeu.Carte;
 import carteDuJeu.Des;
 import carteDuJeu.ElementMobile;
 import carteDuJeu.personnages.Personnage;
+import carteDuJeu.personnages.classes.Classe;
 
 public class sortGuerison extends Sort {
     public sortGuerison() {
@@ -23,5 +24,9 @@ public class sortGuerison extends Sort {
             }
         }
         return true;
+    }
+
+    public boolean estUtilisablePar(Classe classe) {
+        return classe.getNomClasse().equals("Clerc") || classe.getNomClasse().equals("Magicien");
     }
 }

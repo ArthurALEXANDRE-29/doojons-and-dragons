@@ -3,6 +3,7 @@ package carteDuJeu.personnages.sorts;
 import carteDuJeu.Carte;
 import carteDuJeu.ElementMobile;
 import carteDuJeu.personnages.Personnage;
+import carteDuJeu.personnages.classes.Classe;
 
 
 public abstract class Sort {
@@ -13,6 +14,8 @@ public abstract class Sort {
         this.m_nom = nom;
         this.m_description = description;
     }
+
+    public abstract boolean estUtilisablePar(Classe classe);
 
     public abstract boolean lancer(Carte carte, Personnage lanceur, ElementMobile[] cibles);
 }

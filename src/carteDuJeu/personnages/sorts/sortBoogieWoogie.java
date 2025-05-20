@@ -4,6 +4,7 @@ import carteDuJeu.Carte;
 import carteDuJeu.Case;
 import carteDuJeu.ElementMobile;
 import carteDuJeu.personnages.Personnage;
+import carteDuJeu.personnages.classes.Classe;
 
 public class sortBoogieWoogie extends Sort {
     public sortBoogieWoogie() {
@@ -30,5 +31,9 @@ public class sortBoogieWoogie extends Sort {
         case2.setPosition(tempX, tempY);
 
         return true;
+    }
+
+    public boolean estUtilisablePar(Classe classe) {
+        return classe.getNomClasse().equals("Magicien");
     }
 }
