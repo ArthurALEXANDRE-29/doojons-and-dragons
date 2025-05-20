@@ -30,4 +30,8 @@ public abstract class Armure extends Equipement {
                 ", estLourde=" + m_estLourde +
                 '}';
     }
+
+    public boolean estUneArme() {
+        return false;
+    }
 }

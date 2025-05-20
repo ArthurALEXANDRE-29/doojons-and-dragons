@@ -112,46 +112,6 @@ public class Deplacement {
         return true;
     }
 
-    public List<int[]> trouverChemin(int xDepart, int yDepart, int xCible, int yCible, int casesMax) {
-        if (!estDeplacementValide(xCible, yCible)) return null;
-
-        List<List<int[]>> queue = new ArrayList<>();
-        boolean[][] visites = new boolean[m_carte.getHauteur()][m_carte.getLargeur()];
-        int[][] directions = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
-
-        List<int[]> cheminInitial = new ArrayList<>();
-        cheminInitial.add(new int[]{xDepart, yDepart});
-        queue.add(cheminInitial);
-        visites[yDepart][xDepart] = true;
-
-        while (!queue.isEmpty()) {
-            List<int[]> cheminCourant = queue.remove(0);
-            int[] dernier = cheminCourant.get(cheminCourant.size() - 1);
-            int x = dernier[0], y = dernier[1];
-
-            if (x == xCible && y == yCible) {
-                cheminCourant.remove(0);
-                return cheminCourant;
-            }
-
-            if (cheminCourant.size() > casesMax + 1) continue;
-
-            for (int[] dir : directions) {
-                int nx = x + dir[0], ny = y + dir[1];
-                if (nx >= 0 && ny >= 0 && nx < m_carte.getLargeur() && ny < m_carte.getHauteur()
-                        && !visites[ny][nx] && estDeplacementValide(nx, ny)) {
-
-                    visites[ny][nx] = true;
-                    List<int[]> nouveauChemin = new ArrayList<>(cheminCourant);
-                    nouveauChemin.add(new int[]{nx, ny});
-                    queue.add(nouveauChemin);
-                }
-            }
-        }
-
-        return null;
-    }
-
     // Nouvelle méthode pour vérifier la portée entre deux positions
     public boolean estAPortee(int x1, int y1, int x2, int y2, int portee) {
         int distance = Math.abs(x2 - x1) + Math.abs(y2 - y1);

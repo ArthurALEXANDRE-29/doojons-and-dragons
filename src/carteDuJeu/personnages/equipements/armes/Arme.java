@@ -55,4 +55,7 @@ public abstract class Arme extends Equipement {
                 ", bonusDegats=" + bonusDegats +
                 '}';
     }
+    public boolean estUneArme() {
+        return true;
+    }
 }

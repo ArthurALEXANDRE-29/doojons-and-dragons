@@ -62,7 +62,7 @@ public class Carte {
 
     public void afficher() {
         // Affiche les coordonnées X
-        System.out.print("    ");
+        System.out.print("  ");
         for (int i = 0; i < m_largeur; i++) {
             System.out.printf("%4c", 'A' + i);
         }

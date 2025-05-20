@@ -101,10 +101,6 @@ public class Personnage implements ElementMobile {
         }
     }
 
-    public boolean contientEquipement(Equipement equipement) {
-        return m_inventaire.contains(equipement);
-    }
-
     public int getPointsDeVieMax() {
         return m_pointsDeVieMax;
     }
@@ -132,10 +128,10 @@ public class Personnage implements ElementMobile {
     public Arme getArmeEquipee() {
         return m_armeEquipee;
     }
+
     public Armure getArmureEquipee() {
         return m_armureEquipee;
     }
-
 
 
     public boolean setArmeEquipee(int index) {

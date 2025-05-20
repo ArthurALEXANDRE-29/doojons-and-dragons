@@ -5,6 +5,8 @@ import carteDuJeu.ElementMobile;
 import carteDuJeu.personnages.Personnage;
 import carteDuJeu.personnages.equipements.armes.Arme;
 
+import java.util.List;
+
 public class sortArmeMagique extends Sort {
     public sortArmeMagique() {
         super("Arme magique", "Le personnage détenteur du pouvoir peut choisir une arme détenue par un personnage (mais pas forcément équipée) à améliorer. " +
@@ -21,14 +23,27 @@ public class sortArmeMagique extends Sort {
             if (cible.estPersonnage()) {
                 Personnage personnageCible = (Personnage) cible;
 
-                // Vérifie si le personnage possède une arme dans son inventaire
-                if (personnageCible.getInventaire().contains()) {
-                    // Récupère l'arme et applique les bonus
-                    Arme arme = personnageCible.getInventaire().getArme();
-                    arme.ajouterBonusAttaque(1);
-                    arme.ajouterBonusDegats(1);
+                // Récupération des armes disponibles
+                List<Arme> armesDisponibles = personnageCible.getInventaire().stream()
+                        .filter(e -> e.estUneArme())
+                        .map(e -> (Arme) e)
+                        .toList();
 
-                    System.out.println("L'arme de " + personnageCible.getNom() + " a été améliorée !");
+                if (!armesDisponibles.isEmpty()) {
+                    System.out.println("Choisissez une arme à améliorer parmi les suivantes :");
+                    for (int i = 0; i < armesDisponibles.size(); i++) {
+                        System.out.println((i + 1) + ". " + armesDisponibles.get(i).getNom());
+                    }
+
+
+                    int choix = 0;
+                    Arme armeChoisie = armesDisponibles.get(choix);
+
+
+                    armeChoisie.ajouterBonusAttaque(1);
+                    armeChoisie.ajouterBonusDegats(1);
+
+                    System.out.println("L'arme " + armeChoisie.getNom() + " de " + personnageCible.getNom() + " a été améliorée !");
                 } else {
                     System.out.println(personnageCible.getNom() + " ne possède pas d'arme à améliorer.");
                 }

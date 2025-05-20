@@ -176,5 +176,10 @@ public class Monstre implements ElementMobile {
     public boolean estMort() {
         return m_pointsDeVie <= 0;
     }
+
+    @Override
+    public boolean estPersonnage() {
+        return false;
+    }
 }
 

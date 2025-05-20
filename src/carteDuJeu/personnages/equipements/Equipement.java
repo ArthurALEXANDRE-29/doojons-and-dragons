@@ -14,6 +14,10 @@ public abstract class Equipement implements ElementCarte {
         return m_nom;
     }
 
+    public boolean estUneArme() {
+        return false;
+    }
+
     @Override
     public String getSymbole() {
         return " *  "; // Symbole spécifique pour l'equipement
