@@ -7,8 +7,8 @@ public abstract class Arme extends Equipement {
     private final int m_portee;
     private final boolean m_estLourde;
     private final int m_desMax;
-    private int bonusAttaque; // Ajout de l'attribut
-    private int bonusDegats;  // Ajout de l'attribut
+    private int m_bonusAttaque; // Ajout de l'attribut
+    private int m_bonusDegats;  // Ajout de l'attribut
 
     public Arme(String nom, int degats, int portee, boolean estLourde, int des) {
         super(nom); // Le nom est transmis à la classe Equipement
@@ -16,8 +16,8 @@ public abstract class Arme extends Equipement {
         this.m_portee = portee;
         this.m_estLourde = estLourde;
         this.m_desMax = des;
-        this.bonusAttaque = 0; // Initialisation
-        this.bonusDegats = 0;  // Initialisation
+        this.m_bonusAttaque = 0; // Initialisation
+        this.m_bonusDegats = 0;  // Initialisation
     }
 
     public int getDegats() {
@@ -36,13 +36,7 @@ public abstract class Arme extends Equipement {
         return m_desMax;
     }
 
-    public void ajouterBonusAttaque(int bonus) {
-        this.bonusAttaque += bonus;
-    }
 
-    public void ajouterBonusDegats(int bonus) {
-        this.bonusDegats += bonus;
-    }
 
     @Override
     public String toString() {
@@ -51,9 +45,16 @@ public abstract class Arme extends Equipement {
                 ", degats='" + m_degats + '\'' +
                 ", portee=" + m_portee +
                 ", estLourde=" + m_estLourde +
-                ", bonusAttaque=" + bonusAttaque +
-                ", bonusDegats=" + bonusDegats +
+                ", bonusAttaque=" + m_bonusAttaque +
+                ", bonusDegats=" + m_bonusDegats +
                 '}';
+    }
+    public void ajouterBonusAttaque(int bonus) {
+        this.m_bonusAttaque += bonus;
+    }
+
+    public void ajouterBonusDegats(int bonus) {
+        this.m_bonusDegats += bonus;
     }
     public boolean estUneArme() {
         return true;
