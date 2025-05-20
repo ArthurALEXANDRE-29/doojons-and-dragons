@@ -114,7 +114,7 @@ public class Deplacement {
 
     // Nouvelle méthode pour vérifier la portée entre deux positions
     public boolean estAPortee(int x1, int y1, int x2, int y2, int portee) {
-        int distance = Math.abs(x2 - x1) + Math.abs(y2 - y1);
+        int distance = Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1)); // Chebyshev
         return distance <= portee;
     }
 

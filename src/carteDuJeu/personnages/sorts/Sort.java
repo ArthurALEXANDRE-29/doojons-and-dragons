@@ -15,6 +15,10 @@ public abstract class Sort {
         this.m_description = description;
     }
 
+    public String getNom() {
+        return m_nom;
+    }
+
     public abstract boolean estUtilisablePar(Classe classe);
 
     public abstract boolean lancer(Carte carte, Personnage lanceur, ElementMobile[] cibles);

@@ -1,77 +1,146 @@
 import carteDuJeu.Carte;
-import carteDuJeu.Case;
+import carteDuJeu.ElementMobile;
 import carteDuJeu.actions.Deplacement;
-import carteDuJeu.ElementCarte;
+import carteDuJeu.actions.Attaque;
 import carteDuJeu.Monstres.Monstre;
 import carteDuJeu.personnages.Personnage;
-import carteDuJeu.personnages.equipements.Equipement;
-import carteDuJeu.personnages.equipements.armes.*;
 import carteDuJeu.personnages.classes.*;
 import carteDuJeu.personnages.races.*;
-import carteDuJeu.actions.Attaque;
+import carteDuJeu.personnages.sorts.Sort;
+import carteDuJeu.personnages.sorts.sortArmeMagique;
+import carteDuJeu.personnages.sorts.sortBoogieWoogie;
+import carteDuJeu.personnages.sorts.sortGuerison;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // Créer une instance de carte et de déplacement
+        Scanner scanner = new Scanner(System.in);
+
+        // Création de la carte
         Carte carte = new Carte(20, 15);
         Deplacement deplacement = new Deplacement(carte);
         Attaque attaque = new Attaque(deplacement);
 
-        // Création et placement du personnage
-        Personnage joueur = new Personnage("Alexandru", new Humain(), new Magicien());
-        carte.ajouterContenu(3, 2, joueur);
-        Case caseJoueur = carte.getCase(3, 2);
+        // Création des personnages
+        Personnage joueur1 = new Personnage("Arthur", new Humain(), new Guerrier());
+        Personnage joueur2 = new Personnage("Alexandru", new Elfe(), new Magicien());
+        carte.ajouterContenu(3, 2, joueur1);
+        carte.ajouterContenu(4, 3, joueur2);
 
         // Création et placement du monstre
         Monstre goblin = new Monstre("Gobelin", 1, 1, 6, 12, 1, 10, 12, 12, 10);
         carte.ajouterContenu(5, 5, goblin);
-        Case caseGoblin = carte.getCase(5, 5);
 
         System.out.println("=== État initial de la carte ===");
         carte.afficher();
 
-        // Vérification de la portée et attaque si possible
-        if (deplacement.estAPortee(joueur, goblin, joueur.getArmeEquipee().getPortee())) {
-            System.out.println("\n=== Le personnage attaque le monstre ===");
-            attaque.attaquer(carte, joueur, goblin, caseJoueur, caseGoblin);
-            System.out.println("Points de vie du goblin après attaque: " + goblin.getPointsDeVie());
-        } else {
-            System.out.println("\nLe monstre est hors de portée.");
+        boolean partieEnCours = true;
+        while (partieEnCours) {
+            for (Personnage joueur : new Personnage[]{joueur1, joueur2}) {
+                System.out.println("\n=== Tour de " + joueur.getNom() + " ===");
+                System.out.println("1. Se déplacer");
+                System.out.println("2. Attaquer");
+                if (joueur.getClasse().equals("Magicien")) {
+                    System.out.println("3. Lancer un sort");
+                }
+                System.out.println("4. Passer le tour");
+                System.out.print("Choisissez une action : ");
+                int choix = scanner.nextInt();
+
+                switch (choix) {
+                    case 1 -> {
+                        System.out.println("Veuillez entrer une destination pour " + joueur.getNom() + "...");
+                        System.out.print("Nbre de case max : " + joueur.getCasesMaxDeplacement());
+                        deplacement.gererDeplacement(joueur);
+                    }
+                    case 2 -> {
+                        System.out.println("Choisissez une cible à attaquer.");
+                        if (deplacement.estAPortee(joueur, goblin, joueur.getArmeEquipee().getPortee())) {
+                            attaque.attaquer(carte, joueur, goblin, carte.getCase(joueur), carte.getCase(goblin));
+                            System.out.println("Points de vie du goblin après attaque : " + goblin.getPointsDeVie());
+                        } else {
+                            System.out.println("Aucune cible à portée.");
+                        }
+                    }
+                    case 3 -> {
+                        if (joueur.getClasse().equals("Magicien")) {
+                            // Liste des sorts disponibles
+                            List<Sort> sortsDisponibles = List.of(
+                                    new sortArmeMagique(),
+                                    new sortBoogieWoogie(),
+                                    new sortGuerison()
+                            );
+
+                            // Conversion de la classe en instance de `Classe`
+                            Classe classeJoueur = new Magicien(); // Exemple, ajustez selon votre logique
+
+                            // Filtrer les sorts utilisables par la classe du joueur
+                            List<Sort> sortsUtilisables = sortsDisponibles.stream()
+                                    .filter(sort -> sort.estUtilisablePar(classeJoueur))
+                                    .toList();
+
+                            if (sortsUtilisables.isEmpty()) {
+                                System.out.println("Aucun sort disponible pour votre classe.");
+                            } else {
+                                System.out.println("Choisissez un sort à lancer parmi les suivants :");
+                                for (int i = 0; i < sortsUtilisables.size(); i++) {
+                                    System.out.println((i + 1) + ". " + sortsUtilisables.get(i).getNom());
+                                }
+
+                                int choixSort = scanner.nextInt() - 1;
+                                if (choixSort >= 0 && choixSort < sortsUtilisables.size()) {
+                                    Sort sortChoisi = sortsUtilisables.get(choixSort);
+                                    System.out.println("Choisissez une cible pour le sort.");
+                                    // Implémentation de la sélection des cibles
+                                    ElementMobile[] cibles = {joueur1, goblin}; // ou joueur2, goblin, selon le contexte
+                                    if (sortChoisi.lancer(carte, joueur, cibles)) {
+                                        System.out.println("Le sort " + sortChoisi.getNom() + " a été lancé avec succès !");
+                                    } else {
+                                        System.out.println("Le sort a échoué.");
+                                    }
+                                } else {
+                                    System.out.println("Choix invalide.");
+                                }
+                            }
+                        } else {
+                            System.out.println("Action non disponible.");
+                        }
+                    }
+                    case 4 -> System.out.println(joueur.getNom() + " passe son tour.");
+                    default -> System.out.println("Choix invalide.");
+                }
+
+                if (goblin.estMort()) {
+                    System.out.println("Le goblin est mort ! Fin de la partie.");
+                    partieEnCours = false;
+                    break;
+                }
+            }
+
+            // Tour du monstre
+            if (partieEnCours) {
+                System.out.println("\n=== Tour du Gobelin ===");
+                if (deplacement.estAPortee(goblin, joueur1, goblin.getPortee())) {
+                    attaque.attaquer(carte, goblin, joueur1, carte.getCase(goblin), carte.getCase(joueur1));
+                    System.out.println("Points de vie de " + joueur1.getNom() + " après attaque : " + joueur1.getPointsDeVie());
+                } else if (deplacement.estAPortee(goblin, joueur2, goblin.getPortee())) {
+                    attaque.attaquer(carte, goblin, joueur2, carte.getCase(goblin), carte.getCase(joueur2));
+                    System.out.println("Points de vie de " + joueur2.getNom() + " après attaque : " + joueur2.getPointsDeVie());
+                } else {
+                    System.out.println("Le goblin ne peut attaquer personne.");
+                }
+
+                if (joueur1.getPointsDeVie() <= 0 && joueur2.getPointsDeVie() <= 0) {
+                    System.out.println("Tous les personnages sont morts. Fin de la partie.");
+                    partieEnCours = false;
+                }
+
+                carte.afficher();
+            }
         }
 
-        // Test de déplacement du joueur
-        System.out.println("\n=== Déplacement du joueur ===");
-        System.out.println("Veuillez entrer une destination pour le joueur...");
-        deplacement.gererDeplacement(joueur);
-
-        System.out.println("\n=== État de la carte après déplacement ===");
-        carte.afficher();
-
-        // Récupération de la nouvelle position du joueur après déplacement
-        int[] posJoueur = deplacement.trouverPosition(joueur);
-        caseJoueur = carte.getCase(posJoueur[0], posJoueur[1]);
-
-        System.out.println("\n=== Vérification de la portée après déplacement ===");
-        System.out.println("Arme équipée: " + joueur.getArmeEquipee().getNom() + " (portée: " + joueur.getArmeEquipee().getPortee() + ")");
-
-        // Vérification si le joueur peut attaquer après déplacement
-        if (deplacement.estAPortee(joueur, goblin, joueur.getArmeEquipee().getPortee())) {
-            System.out.println("\n=== Le personnage attaque le monstre après déplacement ===");
-            attaque.attaquer(carte, joueur, goblin, caseJoueur, caseGoblin);
-            System.out.println("Points de vie du goblin après attaque: " + goblin.getPointsDeVie());
-        } else {
-            System.out.println("\nLe monstre est toujours hors de portée.");
-        }
-
-        // Vérification si le monstre peut contre-attaquer
-        if (deplacement.estAPortee(goblin, joueur, goblin.getPortee())) {
-            System.out.println("\n=== Le monstre contre-attaque ===");
-            attaque.attaquer(carte, goblin, joueur, caseGoblin, caseJoueur);
-            System.out.println("Points de vie du joueur après attaque: " + joueur.getPointsDeVie());
-        } else {
-            System.out.println("\nLe joueur est hors de portée du monstre.");
-        }
+        scanner.close();
     }
 }
