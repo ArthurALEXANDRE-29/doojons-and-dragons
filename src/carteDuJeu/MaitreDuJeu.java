@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-public class maitreDuJeu {
+public class MaitreDuJeu {
     private List<Monstre> m_monstres;
     private Carte carte;
     private List<Personnage> m_joueurs;
     private final String m_nomMdj = "Maitre du Jeu";
 
-    public maitreDuJeu(Carte carte) {
+    public MaitreDuJeu(Carte carte) {
         this.carte = carte;
         this.m_monstres = new ArrayList<>();
         this.m_joueurs = new ArrayList<>();
