@@ -26,7 +26,16 @@ package carteDuJeu{
     }
     Interface ElementMobile extends ElementCarte{
         + getCasesMaxDeplacement() : Integer
-        +  getNom() : String
+        + getNom() : String
+        + estPersonnage() : Boolean
+        + subirDegats(degats : Integer)
+        + estMort() Boolean
+        + getPointsDeVie() Integer
+        + getPointsDeVieMax() Integer
+        + getForce() Integer
+        + getDexterite() Integer
+        + getInitiative() Integer
+        + getSymbole() String
     }
 
     class Donjon {
@@ -74,6 +83,7 @@ package carteDuJeu{
       + Case(x: Integer, y: Integer)
       + getX() : Integer
       + getY() : Integer
+      + setPosition(Integer x, Integer y)
       + estObstacle() : Boolean
       + setEstObstacle(estObstacle: Boolean)
       + ajouterContenu(element: ElementCarte)
@@ -183,10 +193,33 @@ package carteDuJeu{
 
         }
 
-        ' ==== Equipements =====
+            ' ==== Sorts =====
+    package sorts{
+        abstract class Sort{
+            - m_nom : String
+            - m_description : String
 
-
+            + getNom() : String
+            + {abstract} estUtilisablePar(Classe classe) : Boolean
+            + {abstract} lancer(Carte carte, Personnage lanceur, ElementMobile[] cibles) : Boolean
         }
+
+        class sortArmeMagique extends Sort{
+            + lancer(Carte carte, Personnage lanceur, ElementMobile[] cibles) : Boolean
+            + estUtilisablePar(Classe classe) : Boolean
+        }
+
+        class sortGuerison extends Sort{
+            + lancer(Carte carte, Personnage lanceur, ElementMobile[] cibles) : Boolean
+            + estUtilisablePar(Classe classe) : Boolean
+        }
+
+        class sortWoogieBoogie extends Sort{
+            + lancer(Carte carte, Personnage lanceur, ElementMobile[] cibles) : Boolean
+            + estUtilisablePar(Classe classe) : Boolean
+        }
+
+
     }
     package carteDuJeu.personnages.equipements.armes{
                         abstract class Arme extends carteDuJeu.personnages.equipements.Equipement {
@@ -233,9 +266,10 @@ package carteDuJeu{
 package carteDuJeu.personnages.equipements{
         abstract class Equipement implements carteDuJeu.ElementCarte{
             - m_nom : String
-            + {abstract} Equipement(nom : String)
-            + {abstract} getNom() : String
-            + {abstract} getSymbole() : String
+            + Equipement(nom : String)
+            + getNom() : String
+            + getSymbole() : String
+            + estUneArme() Boolean
         }
 }
 
@@ -264,6 +298,8 @@ package carteDuJeu.personnages.equipements.armures{
                                  + DemiPlate()
                             }
 }
+
+
     ' ===== MONSTRES =====
     package carteDuJeu.Monstres {
         class Monstre implements carteDuJeu.ElementMobile {
