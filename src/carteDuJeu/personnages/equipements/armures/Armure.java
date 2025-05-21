@@ -34,4 +34,5 @@ public abstract class Armure extends Equipement {
     public boolean estUneArme() {
         return false;
     }
+    public boolean estUneArmure(){return true;}
 }

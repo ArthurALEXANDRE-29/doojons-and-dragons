@@ -59,7 +59,7 @@ public class Personnage implements ElementMobile {
         for (Equipement eq : classe.getEquipementInitial()) {
             m_inventaire.add(eq);
 
-            if (eq instanceof Arme && m_armeEquipee == null) {
+            if (eq.estUneArme() && m_armeEquipee == null) {
                 m_armeEquipee = (Arme) eq;
 
                 if (m_armeEquipee.estLourde()) {
@@ -68,7 +68,7 @@ public class Personnage implements ElementMobile {
                 }
             }
 
-            if (eq instanceof Armure && m_armureEquipee == null) {
+            if (eq.estUneArmure() && m_armureEquipee == null) {
                 m_armureEquipee = (Armure) eq;
 
                 if (m_armureEquipee.estLourde()) {
@@ -140,7 +140,7 @@ public class Personnage implements ElementMobile {
         }
 
         Equipement equipement = m_inventaire.get(index);
-        if (equipement instanceof Arme) {
+        if (equipement.estUneArme()) {
             Arme nouvelleArme = (Arme) equipement;
 
             if (m_armeEquipee != null) {
@@ -182,7 +182,7 @@ public class Personnage implements ElementMobile {
         }
 
         Equipement equipement = m_inventaire.get(index);
-        if (equipement instanceof Armure) {
+        if (equipement.estUneArmure()) {
             Armure nouvelleArmure = (Armure) equipement;
 
             if (m_armureEquipee != null) {

@@ -59,4 +59,5 @@ public abstract class Arme extends Equipement {
     public boolean estUneArme() {
         return true;
     }
+    public boolean estUneArmure(){return false;}
 }

@@ -18,6 +18,8 @@ public abstract class Equipement implements ElementCarte {
         return false;
     }
 
+    public boolean estUneArmure(){return false;}
+
     @Override
     public String getSymbole() {
         return " *  "; // Symbole spécifique pour l'equipement
