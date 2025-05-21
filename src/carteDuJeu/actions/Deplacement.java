@@ -48,7 +48,7 @@ public class Deplacement {
                 int[] coordonnees = parseCoordonnees(destination);
                 int xCible = coordonnees[0];
                 int yCible = coordonnees[1];
-                int distance = Math.abs(xCible - xActuel) + Math.abs(yCible - yActuel);
+                int distance = Math.max(Math.abs(xCible - xActuel), Math.abs(yCible - yActuel));
 
                 if (distance > casesMax) continue;
                 if (!estDeplacementValide(xCible, yCible)) continue;
@@ -104,7 +104,7 @@ public class Deplacement {
         if (!caseDepart.contient(element)) return false;
         if (!estDeplacementValide(xCible, yCible)) return false;
 
-        int distance = Math.abs(xCible - xDepart) + Math.abs(yCible - yDepart);
+        int distance = Math.max(Math.abs(xCible - xDepart), Math.abs(yCible - yDepart));
         if (distance > casesMax) return false;
 
         caseDepart.retirerContenu(element);

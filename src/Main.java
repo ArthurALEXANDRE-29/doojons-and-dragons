@@ -19,7 +19,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         // Création de la carte
-        Carte carte = new Carte(20, 15);
+        Carte carte = new Carte(10, 13);1
         Deplacement deplacement = new Deplacement(carte);
         Attaque attaque = new Attaque(deplacement);
 

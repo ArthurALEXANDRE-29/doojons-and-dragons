@@ -295,6 +295,7 @@ package carteDuJeu.personnages.equipements.armures{
             + setPorteeEtStat(Integer portee, Integer caracteristiqueDAttaque)
             + changementCarac(Integer caracteristiqueDAttaque)
             + getPointsDeVie() : Integer
+            + setPointDeVie(Integer pointsDeVie)
             + setPointsDeVieMax(Integer pointsDeVie)
             + getPointsDeVieMax() : Integer
             + getForce() : Integer
