@@ -4,7 +4,10 @@ package carteDuJeu;
 import carteDuJeu.personnages.equipements.*;
 import carteDuJeu.personnages.*;
 import carteDuJeu.Monstres.*;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Donjon {
 
@@ -13,6 +16,7 @@ public class Donjon {
     private List<Monstre> m_monstres;
     private List<Equipement> m_equipements;
     private List<Personnage> m_joueurs;
+    private List<ElementMobile> m_entiteTour;
 
     // Constructeur
     public Donjon(Carte carte, List<Monstre> monstres, List<Equipement> equipements, List<Personnage> joueurs) {
@@ -21,6 +25,7 @@ public class Donjon {
         this.m_equipements = equipements;
         this.m_joueurs = joueurs;
     }
+
 
     // Méthode pour la mise en place du donjon
     public void miseEnPlace() {
@@ -37,6 +42,25 @@ public class Donjon {
         System.out.println("Le combat commence !");
         // Interaction avec les monstres et les personnages
         // Exemple : un monstre attaque un joueur, un joueur attaque un monstre
+    }
+    public void preparerEtTrierInitiative() {
+        Random random = new Random();
+
+        if (m_entiteTour == null) {
+            m_entiteTour = new ArrayList<>();
+        }
+
+        m_entiteTour.clear();
+        m_entiteTour.addAll(m_joueurs);
+        m_entiteTour.addAll(m_monstres);
+
+        // Trier la liste m_entiteTour par initiative totale (lancer + initiative de base)
+        m_entiteTour.sort((e1, e2) -> {
+            int initiativeE1 = random.nextInt(20) + 1 + e1.getInitiative();
+            int initiativeE2 = random.nextInt(20) + 1 + e2.getInitiative();
+            return Integer.compare(initiativeE2, initiativeE1);
+        }
+        );
     }
 
     // Méthode pour terminer le donjon
