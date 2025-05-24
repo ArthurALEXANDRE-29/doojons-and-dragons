@@ -7,7 +7,7 @@ public class Case {
     private int m_x;
     private int m_y;
     private boolean m_estObstacle;
-    private List<ElementCarte> m_contenu;  // Changé de Object à ElementCarte
+    private List<ElementCarte> m_contenu;
 
     public Case(int x, int y, boolean estObstacle) {
         this.m_x = x;
@@ -41,13 +41,13 @@ public class Case {
         this.m_estObstacle = estObstacle;
     }
 
-    public void ajouterContenu(ElementCarte element) {  // Changé de Object à ElementCarte
+    public void ajouterContenu(ElementCarte element) {
         if (element != null) {
             m_contenu.add(element);
         }
     }
 
-    public boolean retirerContenu(ElementCarte element) {  // Changé de Object à ElementCarte
+    public boolean retirerContenu(ElementCarte element) {
         return m_contenu.remove(element);
     }
 
@@ -55,12 +55,57 @@ public class Case {
         return m_contenu.isEmpty();
     }
 
-    public List<ElementCarte> getContenu() {  // Changé le type de retour
+    public List<ElementCarte> getContenu() {
         return new ArrayList<>(m_contenu);
     }
 
-    public boolean contient(ElementCarte element) {  // Changé de Object à ElementCarte
+    public boolean contient(ElementCarte element) {
         return m_contenu.contains(element);
+    }
+
+    /**
+     * Vérifie si la case contient un élément mobile
+     */
+    public boolean contientElementMobile() {
+        for (ElementCarte element : m_contenu) {
+            if (element instanceof ElementMobile) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Retourne le premier élément mobile trouvé sur la case
+     */
+    public ElementMobile getElementMobile() {
+        for (ElementCarte element : m_contenu) {
+            if (element instanceof ElementMobile) {
+                return (ElementMobile) element;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Retourne tous les éléments mobiles sur la case
+     */
+    public List<ElementMobile> getElementsMobiles() {
+        List<ElementMobile> elementsMobiles = new ArrayList<>();
+        for (ElementCarte element : m_contenu) {
+            if (element instanceof ElementMobile) {
+                elementsMobiles.add((ElementMobile) element);
+            }
+        }
+        return elementsMobiles;
+    }
+
+    /**
+     * Vérifie si la case est accessible pour un déplacement
+     * (pas obstacle et pas d'élément mobile)
+     */
+    public boolean estAccessible() {
+        return !m_estObstacle && !contientElementMobile();
     }
 
     @Override

@@ -31,6 +31,17 @@ public class Main {
         System.out.println("=== Carte après placement des monstres ===");
         carte.afficher();
 
+        // Test déplacements
+        Deplacement deplacement = new Deplacement(carte);
+        Personnage joueur = new Personnage("Héros", new Humain(), new Guerrier());
+        carte.ajouterContenu(0, 0, joueur); // Position initiale du joueur
+        System.out.println("=== Déplacement du joueur ===");
+        deplacement.gererDeplacement(joueur);
+        carte.afficher();
+
+        // Test attaque
+
+
         // Ici, tu peux ajouter d'autres interactions via mdj selon tes besoins
     }
 }

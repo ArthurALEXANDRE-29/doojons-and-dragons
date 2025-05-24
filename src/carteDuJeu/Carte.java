@@ -28,6 +28,9 @@ public class Carte {
         return m_hauteur;
     }
 
+    /**
+     * Trouve la case contenant un élément mobile
+     */
     public Case getCase(ElementMobile element) {
         for (int y = 0; y < m_hauteur; y++) {
             for (int x = 0; x < m_largeur; x++) {
@@ -37,6 +40,20 @@ public class Carte {
             }
         }
         throw new IllegalArgumentException("L'élément mobile n'est pas présent sur la carte.");
+    }
+
+    /**
+     * Trouve la position [x,y] d'un élément mobile
+     */
+    public int[] trouverPosition(ElementMobile element) {
+        for (int y = 0; y < m_hauteur; y++) {
+            for (int x = 0; x < m_largeur; x++) {
+                if (m_cases[y][x].contient(element)) {
+                    return new int[]{x, y};
+                }
+            }
+        }
+        return null;
     }
 
     public Case getCase(int x, int y) {
@@ -53,11 +70,131 @@ public class Carte {
         m_cases[y][x] = uneCase; // attention à l'ordre
     }
 
-    public void ajouterContenu(int x, int y, ElementCarte element) {  // Changé de Object à ElementCarte
+    public void ajouterContenu(int x, int y, ElementCarte element) {
         if (x < 0 || x >= m_largeur || y < 0 || y >= m_hauteur) {
             throw new IndexOutOfBoundsException("Coordonnées en dehors de la carte");
         }
         m_cases[y][x].ajouterContenu(element);
+    }
+
+    /**
+     * Vérifie si les coordonnées sont valides sur cette carte
+     */
+    public boolean coordonneesValides(int x, int y) {
+        return x >= 0 && x < m_largeur && y >= 0 && y < m_hauteur;
+    }
+
+    /**
+     * Vérifie si une case est accessible (pas obstacle, pas d'élément mobile)
+     */
+    public boolean estCaseAccessible(int x, int y) {
+        if (!coordonneesValides(x, y)) {
+            return false;
+        }
+
+        Case caseCible = getCase(x, y);
+
+        // Vérifier si c'est un obstacle
+        if (caseCible.estObstacle()) {
+            return false;
+        }
+
+        // Vérifier s'il y a déjà un élément mobile sur la case
+        return !caseCible.contientElementMobile();
+    }
+
+    /**
+     * Déplace un élément d'une case à une autre sur la carte
+     */
+    public boolean deplacerElement(ElementMobile element, int xCible, int yCible) {
+        // Trouver la case actuelle
+        Case caseActuelle = null;
+        try {
+            caseActuelle = getCase(element);
+        } catch (IllegalArgumentException e) {
+            return false; // Élément pas sur la carte
+        }
+
+        // Vérifier que la destination est accessible
+        if (!estCaseAccessible(xCible, yCible)) {
+            return false;
+        }
+
+        // Effectuer le déplacement
+        caseActuelle.retirerContenu(element);
+        ajouterContenu(xCible, yCible, element);
+        return true;
+    }
+
+    /**
+     * Retourne les cases accessibles dans un rayon donné
+     */
+    public List<int[]> getCasesAccessibles(int xCentre, int yCentre, int rayon) {
+        List<int[]> casesAccessibles = new ArrayList<>();
+
+        for (int y = yCentre - rayon; y <= yCentre + rayon; y++) {
+            for (int x = xCentre - rayon; x <= xCentre + rayon; x++) {
+                if (calculerDistance(xCentre, yCentre, x, y) <= rayon &&
+                        estCaseAccessible(x, y)) {
+                    casesAccessibles.add(new int[]{x, y});
+                }
+            }
+        }
+
+        return casesAccessibles;
+    }
+
+    /**
+     * Calcule la distance entre deux points (distance de Chebyshev)
+     */
+    public static int calculerDistance(int x1, int y1, int x2, int y2) {
+        return Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
+    }
+
+    /**
+     * Vérifie si deux positions sont à portée l'une de l'autre
+     */
+    public static boolean estAPortee(int x1, int y1, int x2, int y2, int portee) {
+        return calculerDistance(x1, y1, x2, y2) <= portee;
+    }
+
+    /**
+     * Parse une chaîne de coordonnées (ex: "A5") en coordonnées x,y
+     */
+    public int[] parseCoordonnees(String coordString) {
+        if (coordString == null || coordString.length() < 2) {
+            throw new IllegalArgumentException("Format de coordonnées incorrect.");
+        }
+
+        char colChar = coordString.charAt(0);
+        if (colChar < 'A' || colChar > 'Z') {
+            throw new IllegalArgumentException("La colonne doit être une lettre entre A et Z.");
+        }
+
+        int x = colChar - 'A';
+        String ligneStr = coordString.substring(1);
+
+        try {
+            int y = Integer.parseInt(ligneStr) - 1;
+
+            if (!coordonneesValides(x, y)) {
+                throw new IllegalArgumentException("Coordonnées hors limites de la carte.");
+            }
+
+            return new int[]{x, y};
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Numéro de ligne invalide.");
+        }
+    }
+
+    /**
+     * Convertit des coordonnées x,y en chaîne (ex: A5)
+     */
+    public static String coordonneesToString(int x, int y) {
+        if (x < 0 || x >= 26 || y < 0) {
+            throw new IllegalArgumentException("Coordonnées invalides pour la conversion");
+        }
+        return (char) ('A' + x) + String.valueOf(y + 1);
     }
 
     public void afficher() {
@@ -95,7 +232,6 @@ public class Carte {
         System.out.println("┘");
     }
 
-
     public void genererObstaclesAleatoires(double tauxObstacle) {
         if (tauxObstacle < 0 || tauxObstacle > 1) {
             throw new IllegalArgumentException("Le taux d'obstacles doit être entre 0.0 et 1.0");
@@ -111,4 +247,3 @@ public class Carte {
         }
     }
 }
-

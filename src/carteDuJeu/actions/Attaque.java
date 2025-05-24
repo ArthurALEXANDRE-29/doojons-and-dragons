@@ -23,7 +23,7 @@ public class Attaque {
             return false;
         }
 
-        if (!m_deplacement.estAPortee(caseAttaquant.getX(), caseAttaquant.getY(),
+        if (!carte.estAPortee(caseAttaquant.getX(), caseAttaquant.getY(),
                 caseCible.getX(), caseCible.getY(), arme.getPortee())) {
             System.out.println("Cible hors de portée.");
             return false;
@@ -53,7 +53,7 @@ public class Attaque {
     }
 
     public boolean attaquer(Carte carte, Monstre attaquant, Personnage cible, Case caseAttaquant, Case caseCible) {
-        if (!m_deplacement.estAPortee(caseAttaquant.getX(), caseAttaquant.getY(),
+        if (!carte.estAPortee(caseAttaquant.getX(), caseAttaquant.getY(),
                 caseCible.getX(), caseCible.getY(), attaquant.getPortee())) {
             System.out.println("Cible hors de portée.");
             return false;
