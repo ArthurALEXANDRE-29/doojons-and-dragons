@@ -11,14 +11,22 @@ class Jeu {
   + finPartie()
 }
 
+
+package carteDuJeu{
 class MaitreDuJeu {
+- m_nomMdj : String
   + narrer()
+  + phaseCreationDesMonstres()
   + decrireContexte()
   + creerMonstres()
   + positionnerElements()
+  + placerMonstresAleatoirement()
+  + faireDmg( joueurs[Personnage])
+  + deplacerElementMobile( cible : ElementMobile, x : Integer , y : Integer)
+    +  ajouterObstacle()
+    + deplacerCibleParNom()
 }
 
-package carteDuJeu{
 
     Interface ElementCarte{
         + getSymbole() : String
@@ -52,6 +60,7 @@ package carteDuJeu{
          + setEquipements(equipements : Equipement[*])
          + getJoueurs() : Personnage[*]
          + setJoueurs(joueurs : Personnage[*])
+         + preparerEtTrierInitiative()
     }
     class Des{
         - {static} final random : Random
@@ -68,10 +77,14 @@ package carteDuJeu{
       + getLargeur() : Integer
       + getHauteur() : Integer
       + getCase(x: Integer, y: Integer) : Case
-      + setCase(x: Integer, y: Integer, uneCase: Case)
+      + setCase(x: Integer, y: Integer, une Case: Case)
       + ajouterContenu(x: Integer, y: Integer, e: ElementCarte):
       + afficher()
       + genererObstaclesAleatoires(taux: double)
+    + parseCoordonnees(coordString: String) : Integer[]
+    + coordonneesToString(x: Integer, y: Integer) : String
+    + calculerDistance(x1: Integer, y1: Integer, x2: Integer, y2: Integer) : Integer
+
     }
 
     class Case {
@@ -383,6 +396,10 @@ Jeu --> Donjon
 Jeu --> Personnage
 Jeu --> MaitreDuJeu
 
+MaitreDuJeu o-> "\n 1..* \n- m_monstres" Monstre
+MaitreDuJeu o-> "\n 0..* \n- m_cartem_equipements" Carte
+MaitreDuJeu o-> "\n 1..* \n- m_joueurs" Personnage
+
 Donjon ..> Carte : <<uses>>
 Donjon o-> "\n 1..* \n- m_monstres" Monstre
 Donjon o-> "\n 0..* \n- m_equipements" Equipement
@@ -412,6 +429,10 @@ Attaque ..> Monstre : <<uses>>
 Attaque ..> Arme : <<uses>>
 Attaque ..> Armure : <<uses>>
 Attaque ..> Des : <<uses>>
+
+
+
+sortArmeMagique ..> Arme : <<uses>>
 
 Carte "\n 1..* \n" *--> "- m_cases" Case
 Carte ..> ElementCarte : <<uses>>Carte ..> Case : <<uses>>

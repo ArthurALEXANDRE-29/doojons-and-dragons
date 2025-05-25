@@ -9,12 +9,12 @@ import java.util.Random;
 import java.util.Scanner;
 public class MaitreDuJeu {
     private List<Monstre> m_monstres;
-    private Carte carte;
+    private Carte m_carte;
     private List<Personnage> m_joueurs;
     private final String m_nomMdj = "Maitre du Jeu";
 
     public MaitreDuJeu(Carte carte) {
-        this.carte = carte;
+        this.m_carte = carte;
         this.m_monstres = new ArrayList<>();
         this.m_joueurs = new ArrayList<>();
     }
@@ -73,9 +73,9 @@ public class MaitreDuJeu {
             boolean place = false;
 
             while (!place) {
-                int x = rand.nextInt(carte.getLargeur());
-                int y = rand.nextInt(carte.getHauteur());
-                Case uneCase = carte.getCase(x, y);
+                int x = rand.nextInt(m_carte.getLargeur());
+                int y = rand.nextInt(m_carte.getHauteur());
+                Case uneCase = m_carte.getCase(x, y);
 
                 if (!uneCase.estObstacle() && uneCase.estVide()) {
                     uneCase.ajouterContenu(monstre);
@@ -133,7 +133,7 @@ public class MaitreDuJeu {
 
         if (cible.estMort()) {
             System.out.println("💀 " + cible.getNom() + " est mort !");
-            Case caseCible = carte.getCase(cible);
+            Case caseCible = m_carte.getCase(cible);
             caseCible.retirerContenu(cible);
         }
     }
@@ -180,7 +180,7 @@ public class MaitreDuJeu {
         // Afficher la position actuelle de la cible
         Case caseActuelle;
         try {
-            caseActuelle = carte.getCase(cible);
+            caseActuelle = m_carte.getCase(cible);
             System.out.println(cible.getNom() + " est actuellement en (" + caseActuelle.getX() + ", " + caseActuelle.getY() + ")");
         } catch (IllegalArgumentException e) {
             System.out.println("❌ Impossible de trouver la case actuelle de la cible.");
@@ -188,16 +188,16 @@ public class MaitreDuJeu {
         }
 
         // Demander les nouvelles coordonnées
-        System.out.print("Entrez la nouvelle coordonnée X (lettre de A à " + (char)('A' + carte.getLargeur() - 1) + ") : ");
+        System.out.print("Entrez la nouvelle coordonnée X (lettre de A à " + (char)('A' + m_carte.getLargeur() - 1) + ") : ");
         char lettreX = scanner.next().toUpperCase().charAt(0);
         int newX = lettreX - 'A';  // Convertit la lettre en indice (A->0, B->1, etc.)
 
-        System.out.print("Entrez la nouvelle coordonnée Y (nombre de 1 à " + carte.getHauteur() + ") : ");
+        System.out.print("Entrez la nouvelle coordonnée Y (nombre de 1 à " + m_carte.getHauteur() + ") : ");
         int newYUtilisateur = scanner.nextInt();
         int newY = newYUtilisateur - 1;  // Convertit l'entrée utilisateur en indice 0-based
 
         // Vérifier que newX et newY sont valides avant d’appeler le déplacement
-        if (newX < 0 || newX >= carte.getLargeur() || newY < 0 || newY >= carte.getHauteur()) {
+        if (newX < 0 || newX >= m_carte.getLargeur() || newY < 0 || newY >= m_carte.getHauteur()) {
             System.out.println("❌ Coordonnées invalides.");
         } else {
             deplacerElementMobile(cible, newX, newY);
@@ -206,8 +206,8 @@ public class MaitreDuJeu {
 
     public void deplacerElementMobile(ElementMobile cible, int x, int y) {
         try {
-            Case caseDestination = carte.getCase(x, y);
-            Case caseActuelle = carte.getCase(cible);
+            Case caseDestination = m_carte.getCase(x, y);
+            Case caseActuelle = m_carte.getCase(cible);
 
             caseActuelle.retirerContenu(cible);
             caseDestination.ajouterContenu(cible);
@@ -222,21 +222,21 @@ public class MaitreDuJeu {
     public void ajouterObstacle() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Entrez la coordonnée X de l'obstacle (lettre de A à " + (char)('A' + carte.getLargeur() - 1) + ") : ");
+        System.out.print("Entrez la coordonnée X de l'obstacle (lettre de A à " + (char)('A' + m_carte.getLargeur() - 1) + ") : ");
         char lettreX = scanner.next().toUpperCase().charAt(0);
         int x = lettreX - 'A';
 
-        System.out.print("Entrez la coordonnée Y de l'obstacle (nombre de 1 à " + carte.getHauteur() + ") : ");
+        System.out.print("Entrez la coordonnée Y de l'obstacle (nombre de 1 à " + m_carte.getHauteur() + ") : ");
         int yUtilisateur = scanner.nextInt();
         int y = yUtilisateur - 1;
 
         // Vérification des coordonnées
-        if (x < 0 || x >= carte.getLargeur() || y < 0 || y >= carte.getHauteur()) {
+        if (x < 0 || x >= m_carte.getLargeur() || y < 0 || y >= m_carte.getHauteur()) {
             System.out.println("❌ Coordonnées invalides.");
             return;
         }
 
-        Case caseCible = carte.getCase(x, y);
+        Case caseCible = m_carte.getCase(x, y);
 
         if (caseCible.estObstacle()) {
             System.out.println("❌ Il y a déjà un obstacle à cet endroit.");
