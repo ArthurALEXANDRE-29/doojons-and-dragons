@@ -17,6 +17,7 @@ public abstract class Equipement implements ElementCarte {
     public boolean estUneArme() {
         return false;
     }
+    public abstract Equipement copier();
 
     public boolean estUneArmure(){return false;}
 

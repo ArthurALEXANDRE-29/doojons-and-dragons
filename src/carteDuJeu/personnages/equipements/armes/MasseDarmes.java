@@ -5,4 +5,8 @@ public class MasseDarmes extends Arme {
     public MasseDarmes() {
         super("Masse d'armes", 6, 1, false,1);
     }
+    public Arme copier() {
+        MasseDarmes copie = new MasseDarmes();
+        return copie;
+    }
 }

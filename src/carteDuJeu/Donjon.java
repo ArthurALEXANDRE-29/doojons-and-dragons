@@ -4,37 +4,105 @@ package carteDuJeu;
 import carteDuJeu.personnages.equipements.*;
 import carteDuJeu.personnages.*;
 import carteDuJeu.Monstres.*;
+import carteDuJeu.MaitreDuJeu;
+import carteDuJeu.Carte;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Donjon {
 
     // Attributs privés
     private Carte m_carte;
+    private MaitreDuJeu m_maitreDuJeu;
     private List<Monstre> m_monstres;
     private List<Equipement> m_equipements;
     private List<Personnage> m_joueurs;
     private List<ElementMobile> m_entiteTour;
 
     // Constructeur
-    public Donjon(Carte carte, List<Monstre> monstres, List<Equipement> equipements, List<Personnage> joueurs) {
-        this.m_carte = carte;
-        this.m_monstres = monstres;
-        this.m_equipements = equipements;
+    public Donjon( MaitreDuJeu maitreDuJeu, List<Equipement> tousLesEquipements, List<Personnage> joueurs) {
+        try {
+            System.out.println("Quelle taille de carte veut le maitre du jeu ? (largeur) : ");
+            Scanner scanner = new Scanner(System.in);
+            int largeur = scanner.nextInt();
+            System.out.println("Quelle taille de carte veut le maitre du jeu ? (hauteur) : ");
+            int hauteur = scanner.nextInt();
+            initialiserCarte(largeur, hauteur);
+            } catch (Exception e) {
+            System.out.println("Erreur lors de l'initialisation de la carte : " + e.getMessage());
+            // Vous pouvez choisir de relancer l'initialisation ou de gérer l'erreur autrement
+            return;
+        }
+        this.m_maitreDuJeu = maitreDuJeu;
+        maitreDuJeu.phaseCreationDesMonstres();
+        this.m_monstres = maitreDuJeu.getMonstres();
+
+        try {
+            System.out.println("Combien d'équipements souhaitez-vous dans le donjon ?");
+            Scanner scanner = new Scanner(System.in);
+            int nbEquipementsSouhaites = scanner.nextInt();
+            scanner.nextLine(); // vider la ligne
+
+            this.m_equipements = new ArrayList<>();
+            Random random = new Random();
+
+            for (int i = 0; i < nbEquipementsSouhaites; i++) {
+                int index = random.nextInt(tousLesEquipements.size());
+                Equipement equipementChoisi = tousLesEquipements.get(index);
+
+                // Cloner ou créer une nouvelle instance si nécessaire
+                // Ici on suppose que les équipements sont des objets distincts
+                this.m_equipements.add(equipementChoisi.copier());
+            }
+        } catch (Exception e) {
+            System.out.println("Erreur lors de l'initialisation des équipements : " + e.getMessage());
+            // Vous pouvez choisir de relancer l'initialisation ou de gérer l'erreur autrement
+            return;
+        }
         this.m_joueurs = joueurs;
+    }
+    public void initialiserCarte(int x, int y)
+    {
+        // Initialisation de la carte avec une largeur et une hauteur données
+        this.m_carte = new Carte(x, y);
     }
 
 
     // Méthode pour la mise en place du donjon
     public void miseEnPlace() {
-        // Logique pour la mise en place du donjon
+        // Création des monstres par le Maitre du Jeu
+        System.out.println("Création des monstres...");
+        m_maitreDuJeu.phaseCreationDesMonstres();
+        m_monstres = m_maitreDuJeu.getMonstres();
+
+        // Placement aléatoire des monstres
+        System.out.println("Placement aléatoire des monstres...");
+        for (Monstre monstre : m_monstres) {
+            m_carte.ajouterContenuAleatoire(monstre);
+        }
+
+        // Placement aléatoire des joueurs
+        System.out.println("Placement aléatoire des joueurs...");
+        for (Personnage joueur : m_joueurs) {
+            m_carte.ajouterContenuAleatoire(joueur);
+        }
+
+        // Placement aléatoire des équipements
+        System.out.println("Placement aléatoire des équipements...");
+        for (Equipement equipement : m_equipements) {
+            m_carte.ajouterContenuAleatoire(equipement);
+        }
+
+        // Affichage de la carte
+        System.out.println("Affichage de la carte...");
+        m_carte.afficherCarte();
         System.out.println("Le donjon est en place !");
-        // Positionner les monstres, les équipements, les joueurs, etc.
-        // Exemple : carte.afficherCarte();
-        // Positionnement des éléments sur la carte
     }
+
+
 
     // Méthode pour dérouler un combat
     public void deroulerCombat() {

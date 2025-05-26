@@ -5,4 +5,8 @@ public class Harnois extends Armure {
     {
         super("Harnois", 12, true);
     }
+    public Armure copier() {
+        Harnois copie = new Harnois();
+        return copie;
+    }
 }
