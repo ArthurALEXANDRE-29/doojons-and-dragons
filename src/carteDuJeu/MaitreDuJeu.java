@@ -2,21 +2,34 @@ package carteDuJeu;
 
 import carteDuJeu.Monstres.Monstre;
 import carteDuJeu.personnages.Personnage;
+import carteDuJeu.Carte;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+
+
 public class MaitreDuJeu {
     private List<Monstre> m_monstres;
-    private Carte m_carte;
     private List<Personnage> m_joueurs;
     private final String m_nomMdj = "Maitre du Jeu";
+    private Carte m_carte;
 
-    public MaitreDuJeu(Carte carte) {
-        this.m_carte = carte;
+    public MaitreDuJeu(List<Personnage> joueurs, List<Donjon> donjons) {
         this.m_monstres = new ArrayList<>();
         this.m_joueurs = new ArrayList<>();
+    }
+
+    public void getCarte(Carte carte) {
+        this.m_carte = carte;
+    }
+
+    public void decrireContexte() {
+        System.out.println("Bienvenue dans le donjon mystérieux !");
+        System.out.println("Vous incarnez des aventuriers courageux, prêts à affronter des monstres redoutables.");
+        System.out.println("Explorez la carte, évitez les pièges et survivez aux dangers qui vous attendent.");
+        System.out.println("Bonne chance à tous !");
     }
 
     public void phaseCreationDesMonstres() {
@@ -66,24 +79,7 @@ public class MaitreDuJeu {
         }
     }
 
-    public void placerMonstresAleatoirement() {
-        Random rand = new Random();
 
-        for (Monstre monstre : m_monstres) {
-            boolean place = false;
-
-            while (!place) {
-                int x = rand.nextInt(m_carte.getLargeur());
-                int y = rand.nextInt(m_carte.getHauteur());
-                Case uneCase = m_carte.getCase(x, y);
-
-                if (!uneCase.estObstacle() && uneCase.estVide()) {
-                    uneCase.ajouterContenu(monstre);
-                    place = true;
-                }
-            }
-        }
-    }
 
     public List<Monstre> getMonstres() {
         return m_monstres;
@@ -251,9 +247,4 @@ public class MaitreDuJeu {
         caseCible.setEstObstacle(true);
         System.out.println("✅ Obstacle ajouté en (" + lettreX + ", " + yUtilisateur + ").");
     }
-
-
-
-
-
 }

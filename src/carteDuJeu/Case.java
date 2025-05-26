@@ -47,6 +47,7 @@ public class Case {
         }
     }
 
+
     public boolean retirerContenu(ElementCarte element) {
         return m_contenu.remove(element);
     }

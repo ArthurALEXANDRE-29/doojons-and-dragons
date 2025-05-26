@@ -77,6 +77,27 @@ public class Carte {
         m_cases[y][x].ajouterContenu(element);
     }
 
+    public void ajouterContenuAleatoire(ElementCarte element) {
+        Random rand = new Random();
+        int tentatives = 0;
+        int maxTentatives = m_largeur * m_hauteur * 2; // Limite pour éviter boucle infinie
+
+        try {
+            while (tentatives < maxTentatives) {
+                int x = rand.nextInt(m_largeur);
+                int y = rand.nextInt(m_hauteur);
+                if (m_cases[y][x].estVide()) {
+                    m_cases[y][x].ajouterContenu(element);
+                    return;
+                }
+                tentatives++;
+            }
+            throw new Exception("Impossible d'ajouter l'élément : aucune case vide disponible.");
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
     /**
      * Vérifie si les coordonnées sont valides sur cette carte
      */
