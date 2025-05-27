@@ -34,6 +34,11 @@ public class Tours {
     public void commencerTours() {
         System.out.println("\n=== DÉBUT DES TOURS DE JEU ===\n");
 
+        // Afficher la carte au début du combat
+        System.out.println("État initial de la carte :");
+        m_donjon.getCarte().afficher();
+        System.out.println("\n" + "=".repeat(50) + "\n");
+
         while (!estFinDePartie()) {
             System.out.println("--- TOUR " + m_numeroTour + " ---");
 
@@ -45,6 +50,11 @@ public class Tours {
                 if (entiteActuelle.estMort()) {
                     continue;
                 }
+
+                // Afficher la carte au début de chaque tour d'entité
+                System.out.println("\n📍 État de la carte avant le tour de " + entiteActuelle.getNom() + " :");
+                m_donjon.getCarte().afficher();
+                System.out.println();
 
                 jouerTour(entiteActuelle);
 
@@ -60,9 +70,16 @@ public class Tours {
             m_numeroTour++;
 
             // Afficher la carte après chaque tour complet
-            System.out.println("État de la carte après le tour " + (m_numeroTour - 1) + " :");
-            m_donjon.getCarte().afficher();
+            if (!estFinDePartie()) {
+                System.out.println("📊 État de la carte après le tour " + (m_numeroTour - 1) + " :");
+                m_donjon.getCarte().afficher();
+                System.out.println("\n" + "=".repeat(80) + "\n");
+            }
         }
+
+        // Afficher la carte finale
+        System.out.println("🏁 État final de la carte :");
+        m_donjon.getCarte().afficher();
 
         m_donjon.finDonjon();
     }
@@ -110,12 +127,27 @@ public class Tours {
                     break;
                 case 2:
                     actionEffectuee = actionSeDeplacer(personnage);
+                    if (actionEffectuee) {
+                        // Afficher la carte après un déplacement
+                        System.out.println("\n🚶 Carte après déplacement de " + personnage.getNom() + " :");
+                        m_donjon.getCarte().afficher();
+                    }
                     break;
                 case 3:
                     actionEffectuee = actionAttaquer(personnage);
+                    if (actionEffectuee) {
+                        // Afficher la carte après une attaque (pour voir les effets)
+                        System.out.println("\n⚔️ Carte après attaque de " + personnage.getNom() + " :");
+                        m_donjon.getCarte().afficher();
+                    }
                     break;
                 case 4:
                     actionEffectuee = actionRamasserEquipement(personnage);
+                    if (actionEffectuee) {
+                        // Afficher la carte après ramassage d'équipement
+                        System.out.println("\n📦 Carte après ramassage d'équipement :");
+                        m_donjon.getCarte().afficher();
+                    }
                     break;
                 case 5:
                     System.out.println(personnage.getNom() + " termine son tour.");
@@ -160,9 +192,19 @@ public class Tours {
             switch (choix) {
                 case 1:
                     actionEffectuee = actionSeDeplacer(monstre);
+                    if (actionEffectuee) {
+                        // Afficher la carte après déplacement du monstre
+                        System.out.println("\n👹 Carte après déplacement de " + monstre.getNom() + " :");
+                        m_donjon.getCarte().afficher();
+                    }
                     break;
                 case 2:
                     actionEffectuee = actionAttaquerMonstre(monstre);
+                    if (actionEffectuee) {
+                        // Afficher la carte après attaque du monstre
+                        System.out.println("\n🗡️ Carte après attaque de " + monstre.getNom() + " :");
+                        m_donjon.getCarte().afficher();
+                    }
                     break;
                 case 3:
                     System.out.println(monstre.getNom() + " termine son tour.");
@@ -292,7 +334,9 @@ public class Tours {
         // Récupérer tous les équipements présents sur la case
         List<Equipement> equipementsSurCase = new ArrayList<>();
         for (ElementCarte element : casePersonnage.getContenu()) {
-            equipementsSurCase.add((Equipement) element);
+            if (element instanceof Equipement) {
+                equipementsSurCase.add((Equipement) element);
+            }
         }
 
         if (equipementsSurCase.isEmpty()) {
