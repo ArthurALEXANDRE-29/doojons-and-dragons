@@ -88,6 +88,11 @@ public class Personnage implements ElementMobile {
         }
 
     }
+
+    public void ajouterAInventaire(Equipement e) {
+        this.m_inventaire.add(e);
+    }
+
     public String getNom() {
         return m_nom;
     }

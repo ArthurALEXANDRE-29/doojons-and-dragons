@@ -13,9 +13,12 @@ public class Jeu {
     private List<Donjon> m_donjons;
     private List<Personnage> m_joueurs;
     private MaitreDuJeu m_maitreDuJeu;
+    private int m_donjonActuel; // Index du donjon en cours
+    private static final int NOMBRE_DONJONS_TOTAL = 3;
 
     public Jeu() {
         Scanner scanner = new Scanner(System.in);
+        m_donjonActuel = 0;
 
         // Demander le nombre de joueurs AVANT de créer les donjons
         System.out.print("Combien de joueurs voulez-vous créer ? ");
@@ -41,22 +44,19 @@ public class Jeu {
             m_joueurs.add(new Personnage(nom, race, classe));
         }
 
-        // Créer le maître du jeu AVANT les donjons
-        m_maitreDuJeu = new MaitreDuJeu(m_joueurs, new ArrayList<>());
+        // Créer le maître du jeu
+        m_maitreDuJeu = new MaitreDuJeu(m_joueurs);
 
         // Créer la liste de tous les équipements disponibles
         List<Equipement> tousLesEquipements = creerTousLesEquipements();
 
-        // Création des donjons (pour l'instant juste un)
+        // Création des 3 donjons
         m_donjons = new ArrayList<>();
-        m_donjons.add(new Donjon(m_maitreDuJeu, tousLesEquipements, m_joueurs));
-
-        if (!m_donjons.isEmpty()) {
-            m_donjons.get(0).premierePhase();
+        for (int i = 1; i <= NOMBRE_DONJONS_TOTAL; i++) {
+            System.out.println("\n=== Configuration du Donjon " + i + " ===");
+            m_donjons.add(new Donjon(i, m_maitreDuJeu, tousLesEquipements, m_joueurs));
         }
     }
-
-
 
     private Race creerRace(String raceStr) {
         switch (raceStr.toLowerCase()) {
@@ -121,17 +121,72 @@ public class Jeu {
         System.out.println("La partie commence !");
         m_maitreDuJeu.decrireContexte();
 
-        // Lancer le premier donjon
-        if (!m_donjons.isEmpty()) {
-            Donjon premierDonjon = m_donjons.get(0);
-            premierDonjon.miseEnPlace();
-            // Ici vous pouvez ajouter la logique pour dérouler le donjon
+        // Boucle principale pour les 3 donjons
+        while (m_donjonActuel < NOMBRE_DONJONS_TOTAL && !partiePerdue()) {
+            System.out.println("\n" + "=".repeat(60));
+            System.out.println("DONJON " + (m_donjonActuel + 1) + " / " + NOMBRE_DONJONS_TOTAL);
+            System.out.println("=".repeat(60));
+
+            Donjon donjonCourant = m_donjons.get(m_donjonActuel);
+
+            // Phase d'équipement avant le donjon
+            donjonCourant.premierePhase();
+
+            // Mise en place du donjon
+            donjonCourant.miseEnPlace();
+
+            // Déroulement du donjon
+            boolean donjonReussi = donjonCourant.deroulerDonjon();
+
+            if (donjonReussi) {
+                System.out.println("\n🎉 Donjon " + (m_donjonActuel + 1) + " terminé avec succès !");
+
+                if (m_donjonActuel < NOMBRE_DONJONS_TOTAL - 1) {
+                    // Régénération des PV entre les donjons
+                    regenererPVJoueurs();
+                    System.out.println("Les personnages récupèrent tous leurs points de vie !");
+                    System.out.println("Préparez-vous pour le prochain donjon...");
+                }
+
+                m_donjonActuel++;
+            } else {
+                System.out.println("\n💀 Échec du donjon " + (m_donjonActuel + 1));
+                break;
+            }
+        }
+
+        // Fin de partie
+        finPartie();
+    }
+
+    private boolean partiePerdue() {
+        for (Personnage joueur : m_joueurs) {
+            if (joueur.estMort()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void regenererPVJoueurs() {
+        for (Personnage joueur : m_joueurs) {
+            joueur.setPointsDeVie(joueur.getPointsDeVieMax());
         }
     }
 
-    // Méthode pour finir la partie
     public void finPartie() {
-        System.out.println("La partie est terminée.");
+        System.out.println("\n" + "=".repeat(60));
+        if (m_donjonActuel >= NOMBRE_DONJONS_TOTAL) {
+            System.out.println("🏆 FÉLICITATIONS ! VOUS AVEZ GAGNÉ !");
+            System.out.println("Vous avez triomphé des " + NOMBRE_DONJONS_TOTAL + " donjons !");
+            System.out.println("Les aventuriers sont devenus des légendes !");
+        } else {
+            System.out.println("💀 VOUS AVEZ PERDU !");
+            System.out.println("Cause de la défaite : Un ou plusieurs personnages sont morts au donjon " + (m_donjonActuel + 1));
+            System.out.println("Les aventuriers ont péri dans les profondeurs...");
+        }
+        System.out.println("=".repeat(60));
+        System.out.println("Merci d'avoir joué à DOOnjon&Dragon !");
     }
 
     // Getters et setters
@@ -157,5 +212,9 @@ public class Jeu {
 
     public void setMaitreDuJeu(MaitreDuJeu maitreDuJeu) {
         this.m_maitreDuJeu = maitreDuJeu;
+    }
+
+    public int getDonjonActuel() {
+        return m_donjonActuel;
     }
 }

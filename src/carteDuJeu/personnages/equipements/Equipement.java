@@ -18,7 +18,9 @@ public abstract class Equipement implements ElementCarte {
         return false;
     }
     public abstract Equipement copier();
-
+    public boolean estUnEquipement() {
+        return true;
+    }
     public boolean estUneArmure(){return false;}
 
     @Override
