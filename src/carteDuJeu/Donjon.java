@@ -1,12 +1,9 @@
 package carteDuJeu;
 
-
 import carteDuJeu.actions.ChangerEquipement;
 import carteDuJeu.personnages.equipements.*;
 import carteDuJeu.personnages.*;
 import carteDuJeu.Monstres.*;
-import carteDuJeu.MaitreDuJeu;
-import carteDuJeu.Carte;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +21,14 @@ public class Donjon {
     private List<ElementMobile> m_entiteTour;
 
     // Constructeur
-    public Donjon( MaitreDuJeu maitreDuJeu, List<Equipement> tousLesEquipements, List<Personnage> joueurs) {
+    public Donjon(MaitreDuJeu maitreDuJeu, List<Equipement> tousLesEquipements, List<Personnage> joueurs) {
+        this.m_maitreDuJeu = maitreDuJeu;
+        this.m_joueurs = joueurs;
+        this.m_monstres = new ArrayList<>();
+        this.m_equipements = new ArrayList<>();
+        this.m_entiteTour = new ArrayList<>();
+
+        // Initialisation de la carte
         try {
             System.out.println("Quelle taille de carte veut le maitre du jeu ? (largeur) : ");
             Scanner scanner = new Scanner(System.in);
@@ -32,45 +36,39 @@ public class Donjon {
             System.out.println("Quelle taille de carte veut le maitre du jeu ? (hauteur) : ");
             int hauteur = scanner.nextInt();
             initialiserCarte(largeur, hauteur);
-            } catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Erreur lors de l'initialisation de la carte : " + e.getMessage());
-            // Vous pouvez choisir de relancer l'initialisation ou de gérer l'erreur autrement
-            return;
+            // Initialiser avec des valeurs par défaut
+            initialiserCarte(20, 15);
         }
-        this.m_maitreDuJeu = maitreDuJeu;
-        maitreDuJeu.phaseCreationDesMonstres();
-        this.m_monstres = maitreDuJeu.getMonstres();
 
+        // Donner la carte au maître du jeu
+        m_maitreDuJeu.setCarte(m_carte);
+
+        // Initialisation des équipements du donjon
         try {
             System.out.println("Combien d'équipements souhaitez-vous dans le donjon ?");
             Scanner scanner = new Scanner(System.in);
             int nbEquipementsSouhaites = scanner.nextInt();
             scanner.nextLine(); // vider la ligne
 
-            this.m_equipements = new ArrayList<>();
             Random random = new Random();
-
-            for (int i = 0; i < nbEquipementsSouhaites; i++) {
+            for (int i = 0; i < nbEquipementsSouhaites && !tousLesEquipements.isEmpty(); i++) {
                 int index = random.nextInt(tousLesEquipements.size());
                 Equipement equipementChoisi = tousLesEquipements.get(index);
 
-                // Cloner ou créer une nouvelle instance si nécessaire
-                // Ici on suppose que les équipements sont des objets distincts
+                // Créer une copie de l'équipement
                 this.m_equipements.add(equipementChoisi.copier());
             }
         } catch (Exception e) {
             System.out.println("Erreur lors de l'initialisation des équipements : " + e.getMessage());
-            // Vous pouvez choisir de relancer l'initialisation ou de gérer l'erreur autrement
-            return;
         }
-        this.m_joueurs = joueurs;
     }
-    public void initialiserCarte(int x, int y)
-    {
+
+    public void initialiserCarte(int x, int y) {
         // Initialisation de la carte avec une largeur et une hauteur données
         this.m_carte = new Carte(x, y);
     }
-
 
     // Méthode pour la mise en place du donjon
     public void miseEnPlace() {
@@ -99,9 +97,16 @@ public class Donjon {
 
         // Affichage de la carte
         System.out.println("Affichage de la carte...");
-        m_carte.afficherCarte();
+        m_carte.afficher();
         System.out.println("Le donjon est en place !");
     }
+
+    // Méthode pour dérouler un combat
+    public void deroulerCombat() {
+        System.out.println("Le combat commence !");
+        // Logique pour gérer le combat entre les joueurs et les monstres
+    }
+
     public void premierePhase() {
         Scanner scanner = new Scanner(System.in);
         ChangerEquipement gestionEquipement = new ChangerEquipement();
@@ -145,10 +150,6 @@ public class Donjon {
         System.out.println("Tous les joueurs ont eu l'opportunité de gérer leur équipement.\n");
     }
 
-
-
-    // Méthode pour dérouler un combat
-
     public void preparerEtTrierInitiative() {
         Random random = new Random();
 
@@ -165,8 +166,7 @@ public class Donjon {
             int initiativeE1 = random.nextInt(20) + 1 + e1.getInitiative();
             int initiativeE2 = random.nextInt(20) + 1 + e2.getInitiative();
             return Integer.compare(initiativeE2, initiativeE1);
-        }
-        );
+        });
     }
 
     // Méthode pour terminer le donjon
@@ -175,7 +175,7 @@ public class Donjon {
         for (Personnage personnage : m_joueurs) {
             if (personnage.getPointsDeVie() <= 0) {
                 unPersonnageMort = true;
-                break; // Si un personnage est mort, on peut arrêter la vérification
+                break;
             }
         }
 
@@ -184,7 +184,7 @@ public class Donjon {
         for (Monstre monstre : m_monstres) {
             if (monstre.getPointsDeVie() > 0) {
                 tousLesMonstresMorts = false;
-                break; // Si un monstre est encore vivant, on arrête la vérification
+                break;
             }
         }
 
@@ -193,8 +193,6 @@ public class Donjon {
             System.out.println("Un personnage est mort. Vous avez perdu !");
         } else if (tousLesMonstresMorts) {
             System.out.println("Tous les monstres ont été vaincus ! Le donjon est terminé. Vous avez gagné !");
-        } else {
-
         }
     }
 
@@ -229,5 +227,9 @@ public class Donjon {
 
     public void setJoueurs(List<Personnage> joueurs) {
         this.m_joueurs = joueurs;
+    }
+
+    public List<ElementMobile> getEntiteTour() {
+        return m_entiteTour;
     }
 }

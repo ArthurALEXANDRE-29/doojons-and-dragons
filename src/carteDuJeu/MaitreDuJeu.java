@@ -2,13 +2,10 @@ package carteDuJeu;
 
 import carteDuJeu.Monstres.Monstre;
 import carteDuJeu.personnages.Personnage;
-import carteDuJeu.Carte;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
-
 
 public class MaitreDuJeu {
     private List<Monstre> m_monstres;
@@ -18,18 +15,22 @@ public class MaitreDuJeu {
 
     public MaitreDuJeu(List<Personnage> joueurs, List<Donjon> donjons) {
         this.m_monstres = new ArrayList<>();
-        this.m_joueurs = new ArrayList<>();
+        this.m_joueurs = new ArrayList<>(joueurs); // Copier la liste des joueurs
     }
 
-    public void getCarte(Carte carte) {
+    public void setCarte(Carte carte) {
         this.m_carte = carte;
+    }
+
+    public Carte getCarte() {
+        return m_carte;
     }
 
     public void decrireContexte() {
         System.out.println("Bienvenue dans le donjon mystérieux !");
         System.out.println("Vous incarnez des aventuriers courageux, prêts à affronter des monstres redoutables.");
-        System.out.println("Explorez la carte, évitez les pièges et survivez aux dangers qui vous attendent.");
-        System.out.println("Bonne chance à tous !");
+        System.out.println("Tuez tout les monstres qui se dressent sur votre chemin");
+        System.out.println("Bonne chance à vous !");
     }
 
     public void phaseCreationDesMonstres() {
@@ -60,7 +61,7 @@ public class MaitreDuJeu {
             System.out.print("Caractéristique d'attaque (force ou dextérité selon portée) : ");
             int caracAttaque = scanner.nextInt();
 
-            System.out.print("Classe d’armure : ");
+            System.out.print("Classe d'armure : ");
             int classeArmure = scanner.nextInt();
 
             System.out.print("Initiative : ");
@@ -79,11 +80,10 @@ public class MaitreDuJeu {
         }
     }
 
-
-
     public List<Monstre> getMonstres() {
         return m_monstres;
     }
+
     public void faireDmg(List<Personnage> joueurs) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Voulez-vous utiliser la foudre divine ? (y/n) ");
@@ -129,20 +129,21 @@ public class MaitreDuJeu {
 
         if (cible.estMort()) {
             System.out.println("💀 " + cible.getNom() + " est mort !");
-            Case caseCible = m_carte.getCase(cible);
-            caseCible.retirerContenu(cible);
+            if (m_carte != null) {
+                Case caseCible = m_carte.getCase(cible);
+                if (caseCible != null) {
+                    caseCible.retirerContenu(cible);
+                }
+            }
         }
     }
 
-
-    private void setListJoueurs(List<Personnage> joueurs)
-    {
-        this.m_joueurs = joueurs;
-    }
-
-
-
     public void deplacerCibleParNom() {
+        if (m_carte == null) {
+            System.out.println("❌ Aucune carte disponible pour le déplacement.");
+            return;
+        }
+
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Entrez le nom du monstre ou joueur à déplacer : ");
@@ -192,7 +193,7 @@ public class MaitreDuJeu {
         int newYUtilisateur = scanner.nextInt();
         int newY = newYUtilisateur - 1;  // Convertit l'entrée utilisateur en indice 0-based
 
-        // Vérifier que newX et newY sont valides avant d’appeler le déplacement
+        // Vérifier que newX et newY sont valides avant d'appeler le déplacement
         if (newX < 0 || newX >= m_carte.getLargeur() || newY < 0 || newY >= m_carte.getHauteur()) {
             System.out.println("❌ Coordonnées invalides.");
         } else {
@@ -201,6 +202,11 @@ public class MaitreDuJeu {
     }
 
     public void deplacerElementMobile(ElementMobile cible, int x, int y) {
+        if (m_carte == null) {
+            System.out.println("❌ Aucune carte disponible.");
+            return;
+        }
+
         try {
             Case caseDestination = m_carte.getCase(x, y);
             Case caseActuelle = m_carte.getCase(cible);
@@ -215,7 +221,13 @@ public class MaitreDuJeu {
             System.out.println("❌ Déplacement impossible : " + e.getMessage());
         }
     }
+
     public void ajouterObstacle() {
+        if (m_carte == null) {
+            System.out.println("❌ Aucune carte disponible.");
+            return;
+        }
+
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Entrez la coordonnée X de l'obstacle (lettre de A à " + (char)('A' + m_carte.getLargeur() - 1) + ") : ");
