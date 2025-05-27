@@ -57,8 +57,8 @@ public class Personnage implements ElementMobile {
         // Ajouter l'équipement de classe (armes/armures) à l'inventaire ( initialisation)
 
         for (Equipement eq : classe.getEquipementInitial()) {
-            m_inventaire.add(eq);
 
+            // Si c’est une arme et aucune arme équipée, on l’équipe directement
             if (eq.estUneArme() && m_armeEquipee == null) {
                 m_armeEquipee = (Arme) eq;
 
@@ -66,15 +66,25 @@ public class Personnage implements ElementMobile {
                     m_forceCurrent += 4;
                     m_vitesseCurrent -= 2;
                 }
+
+                // Ne pas ajouter à l’inventaire
+                continue;
             }
 
+            // Si c’est une armure et aucune armure équipée, on l’équipe directement
             if (eq.estUneArmure() && m_armureEquipee == null) {
                 m_armureEquipee = (Armure) eq;
 
                 if (m_armureEquipee.estLourde()) {
                     m_vitesseCurrent -= 4;
                 }
+
+                // Ne pas ajouter à l’inventaire
+                continue;
             }
+
+            // Si non équipé, ajouter à l'inventaire
+            m_inventaire.add(eq);
         }
 
     }
