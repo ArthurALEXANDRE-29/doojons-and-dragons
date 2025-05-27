@@ -1,6 +1,7 @@
 package carteDuJeu;
 
 
+import carteDuJeu.actions.ChangerEquipement;
 import carteDuJeu.personnages.equipements.*;
 import carteDuJeu.personnages.*;
 import carteDuJeu.Monstres.*;
@@ -101,16 +102,53 @@ public class Donjon {
         m_carte.afficherCarte();
         System.out.println("Le donjon est en place !");
     }
+    public void premierePhase() {
+        Scanner scanner = new Scanner(System.in);
+        ChangerEquipement gestionEquipement = new ChangerEquipement();
+
+        System.out.println("\n--- PHASE D'ÉQUIPEMENT DES JOUEURS ---\n");
+
+        for (Personnage joueur : m_joueurs) {
+            System.out.println("Joueur : " + joueur.getNom());
+            System.out.println("Classe : " + joueur.getClasse() + " | Race : " + joueur.getRace());
+            System.out.println("Arme équipée : " +
+                    (joueur.getArmeEquipee() != null ? joueur.getArmeEquipee().getNom() : "Aucune"));
+            System.out.println("Armure équipée : " +
+                    (joueur.getArmureEquipee() != null ? joueur.getArmureEquipee().getNom() : "Aucune"));
+
+            boolean continuer = true;
+
+            while (continuer) {
+                System.out.println("\nQue voulez-vous faire ?");
+                System.out.println("1. Changer d'équipement");
+                System.out.println("2. Ne rien changer");
+
+                System.out.print("Choix : ");
+                int choix = scanner.nextInt();
+                scanner.nextLine(); // Consommer la ligne
+
+                switch (choix) {
+                    case 1:
+                        gestionEquipement.proposerChangement(joueur);
+                        break;
+                    case 2:
+                        continuer = false;
+                        break;
+                    default:
+                        System.out.println("Choix invalide. Réessayez.");
+                        break;
+                }
+            }
+            System.out.println("------------------------------------\n");
+        }
+
+        System.out.println("Tous les joueurs ont eu l'opportunité de gérer leur équipement.\n");
+    }
 
 
 
     // Méthode pour dérouler un combat
-    public void deroulerCombat() {
-        // Logique pour gérer le combat entre les joueurs et les monstres
-        System.out.println("Le combat commence !");
-        // Interaction avec les monstres et les personnages
-        // Exemple : un monstre attaque un joueur, un joueur attaque un monstre
-    }
+
     public void preparerEtTrierInitiative() {
         Random random = new Random();
 
