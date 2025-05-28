@@ -30,10 +30,7 @@ public class Attaque {
         }
 
         int modificateur = (arme.getPortee() > 1) ? attaquant.getDexterite() : attaquant.getForce();
-
-
         int jetAttaque = Des.lancer(1, 20);
-
         int scoreAttaque = jetAttaque + modificateur;
 
         System.out.println(attaquant.getNom() + " attaque " + cible.getNom() +
@@ -41,12 +38,16 @@ public class Attaque {
                 " = " + scoreAttaque);
 
         if (scoreAttaque > cible.getClasseArmure()) {
-
             int degats = Des.lancer(arme.getDes(), arme.getDegats());
             cible.subirDegats(degats);
             if (cible.estMort()) {
                 System.out.println(cible.getNom() + " est mort !");
-                carte.getCase(caseCible.getX(), caseCible.getY()).retirerContenu(cible);
+                try {
+                    Case c = carte.getCase(caseCible.getX(), caseCible.getY());
+                    c.retirerContenu(cible);
+                } catch (Exception e) {
+                    System.out.println("Erreur lors du retrait de la cible de la case : " + e.getMessage());
+                }
             }
             System.out.println("Attaque réussie ! " + cible.getNom() + " subit " + degats + " dégâts.");
         } else {
@@ -64,10 +65,7 @@ public class Attaque {
         }
 
         int modificateur = (attaquant.getPortee() > 1) ? attaquant.getDexterite() : attaquant.getForce();
-
         int jetAttaque = Des.lancer(1, 20);
-
-
         int scoreAttaque = jetAttaque + modificateur;
 
         System.out.println(attaquant.getNom() + " attaque " + cible.getNom() +
@@ -83,7 +81,12 @@ public class Attaque {
             System.out.println("Attaque réussie ! " + cible.getNom() + " subit " + degats + " dégâts.");
             if (cible.estMort()) {
                 System.out.println(cible.getNom() + " est mort !");
-                carte.getCase(caseCible.getX(), caseCible.getY()).retirerContenu(cible);
+                try {
+                    Case c = carte.getCase(caseCible.getX(), caseCible.getY());
+                    c.retirerContenu(cible);
+                } catch (Exception e) {
+                    System.out.println("Erreur lors du retrait de la cible de la case : " + e.getMessage());
+                }
             }
         } else {
             System.out.println("Attaque manquée !");

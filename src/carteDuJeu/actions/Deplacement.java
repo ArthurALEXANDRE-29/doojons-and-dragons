@@ -20,7 +20,13 @@ public class Deplacement {
      * C'est la seule vraie responsabilité de cette classe
      */
     public boolean gererDeplacement(ElementMobile element) {
-        int[] position = m_carte.trouverPosition(element);
+        int[] position;
+        try {
+            position = m_carte.trouverPosition(element);
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la recherche de la position : " + e.getMessage());
+            return false;
+        }
         if (position == null) {
             System.out.println("Élément non trouvé sur la carte !");
             return false;
@@ -35,7 +41,11 @@ public class Deplacement {
         System.out.println("Déplacement maximum : " + casesMax + " cases");
 
         // Afficher les cases accessibles
-        afficherCasesAccessibles(element);
+        try {
+            afficherCasesAccessibles(element);
+        } catch (Exception e) {
+            System.out.println("Erreur lors de l'affichage des cases accessibles : " + e.getMessage());
+        }
 
         while (true) {
             System.out.print("Entrez la destination (ex: A5 ou 'quitter' pour annuler) : ");
@@ -52,20 +62,25 @@ public class Deplacement {
                 int yCible = coordonnees[1];
 
                 if (!peutSeDeplacer(element, xCible, yCible)) {
-                    continue; // Les messages d'erreur sont gérés dans peutSeDeplacer
+                    continue;
                 }
 
-                // Effectuer le déplacement
-                if (m_carte.deplacerElement(element, xCible, yCible)) {
-                    System.out.println(element.getNom() + " s'est déplacé vers " +
-                            Carte.coordonneesToString(xCible, yCible));
-                    return true;
-                } else {
-                    System.out.println("Erreur lors du déplacement !");
+                try {
+                    if (m_carte.deplacerElement(element, xCible, yCible)) {
+                        System.out.println(element.getNom() + " s'est déplacé vers " +
+                                Carte.coordonneesToString(xCible, yCible));
+                        return true;
+                    } else {
+                        System.out.println("Erreur lors du déplacement !");
+                    }
+                } catch (Exception e) {
+                    System.out.println("Erreur lors du déplacement : " + e.getMessage());
                 }
 
             } catch (IllegalArgumentException e) {
                 System.out.println("Erreur : " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Erreur inattendue : " + e.getMessage());
             }
         }
     }

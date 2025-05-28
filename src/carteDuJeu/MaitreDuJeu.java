@@ -4,6 +4,7 @@ import carteDuJeu.Monstres.Monstre;
 import carteDuJeu.personnages.Personnage;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -40,9 +41,18 @@ public class MaitreDuJeu {
     public void phaseCreationDesMonstres() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Combien de monstres voulez-vous créer ? ");
-        int nombreMonstres = scanner.nextInt();
-        scanner.nextLine(); // consommer le retour à la ligne
+        int nombreMonstres = 0;
+        while (true) {
+            System.out.print("Combien de monstres voulez-vous créer ? ");
+            try {
+                nombreMonstres = scanner.nextInt();
+                scanner.nextLine();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                scanner.nextLine();
+            }
+        }
 
         for (int i = 1; i <= nombreMonstres; i++) {
             System.out.println("\nCréation du monstre #" + i);
@@ -50,30 +60,14 @@ public class MaitreDuJeu {
             System.out.print("Espèce : ");
             String espece = scanner.nextLine();
 
-            System.out.print("Portée (1 pour mêlée, >1 pour distance) : ");
-            int portee = scanner.nextInt();
-
-            System.out.print("Dégâts max par dé : ");
-            int maxDmg = scanner.nextInt();
-
-            System.out.print("Nombre de dés : ");
-            int nbDes = scanner.nextInt();
-
-            System.out.print("Points de vie max : ");
-            int pvMax = scanner.nextInt();
-
-            System.out.print("Caractéristique d'attaque (force ou dextérité selon portée) : ");
-            int caracAttaque = scanner.nextInt();
-
-            System.out.print("Classe d'armure : ");
-            int classeArmure = scanner.nextInt();
-
-            System.out.print("Initiative : ");
-            int initiative = scanner.nextInt();
-
-            System.out.print("Vitesse : ");
-            int vitesse = scanner.nextInt();
-            scanner.nextLine(); // pour sauter à la ligne suivante
+            int portee = demanderInt(scanner, "Portée (1 pour mêlée, >1 pour distance) : ");
+            int maxDmg = demanderInt(scanner, "Dégâts max par dé : ");
+            int nbDes = demanderInt(scanner, "Nombre de dés : ");
+            int pvMax = demanderInt(scanner, "Points de vie max : ");
+            int caracAttaque = demanderInt(scanner, "Caractéristique d'attaque (force ou dextérité selon portée) : ");
+            int classeArmure = demanderInt(scanner, "Classe d'armure : ");
+            int initiative = demanderInt(scanner, "Initiative : ");
+            int vitesse = demanderInt(scanner, "Vitesse : ");
 
             Monstre monstre = new Monstre(
                     espece, i, portee, maxDmg, vitesse, nbDes,
@@ -95,7 +89,6 @@ public class MaitreDuJeu {
 
         if (!rep.equals("y")) return;
 
-        // Affichage des cibles disponibles
         System.out.println("\n--- Cibles disponibles ---");
         for (Monstre m : m_monstres) {
             System.out.println("[Monstre] " + m.getNom() + " (PV: " + m.getPointsDeVie() + "/" + m.getPointsDeVieMax() + ")");
@@ -107,21 +100,17 @@ public class MaitreDuJeu {
         System.out.print("\nTapez le nom exact de la cible : ");
         String nomCible = scanner.nextLine().trim();
 
-        // Chercher d'abord parmi les monstres
         for (Monstre m : m_monstres) {
             if (m.getNom().equalsIgnoreCase(nomCible)) {
-                System.out.println("Donnez les dégats à infliger à " + m.getNom() + " :");
-                int dmg = scanner.nextInt();
+                int dmg = demanderInt(scanner, "Donnez les dégats à infliger à " + m.getNom() + " : ");
                 infligerDegats(m, dmg);
                 return;
             }
         }
 
-        // Puis chercher parmi les joueurs
         for (Personnage j : joueurs) {
             if (j.getNom().equalsIgnoreCase(nomCible)) {
-                System.out.println("Donnez les dégats à infliger à " + j.getNom() + " :");
-                int dmg = scanner.nextInt();
+                int dmg = demanderInt(scanner, "Donnez les dégats à infliger à " + j.getNom() + " : ");
                 infligerDegats(j, dmg);
                 return;
             }
@@ -159,15 +148,12 @@ public class MaitreDuJeu {
 
         ElementMobile cible = null;
 
-        // Chercher dans les monstres
         for (Monstre m : m_monstres) {
             if (m.getNom().equalsIgnoreCase(nomCible)) {
                 cible = m;
                 break;
             }
         }
-
-        // Si pas trouvé dans les monstres, chercher dans les joueurs
         if (cible == null) {
             for (Personnage j : m_joueurs) {
                 if (j.getNom().equalsIgnoreCase(nomCible)) {
@@ -182,7 +168,6 @@ public class MaitreDuJeu {
             return;
         }
 
-        // Afficher la position actuelle de la cible
         Case caseActuelle;
         try {
             caseActuelle = m_carteActuelle.getCase(cible);
@@ -192,16 +177,13 @@ public class MaitreDuJeu {
             return;
         }
 
-        // Demander les nouvelles coordonnées
         System.out.print("Entrez la nouvelle coordonnée X (lettre de A à " + (char)('A' + m_carteActuelle.getLargeur() - 1) + ") : ");
         char lettreX = scanner.next().toUpperCase().charAt(0);
-        int newX = lettreX - 'A';  // Convertit la lettre en indice (A->0, B->1, etc.)
+        int newX = lettreX - 'A';
 
-        System.out.print("Entrez la nouvelle coordonnée Y (nombre de 1 à " + m_carteActuelle.getHauteur() + ") : ");
-        int newYUtilisateur = scanner.nextInt();
-        int newY = newYUtilisateur - 1;  // Convertit l'entrée utilisateur en indice 0-based
+        int newYUtilisateur = demanderInt(scanner, "Entrez la nouvelle coordonnée Y (nombre de 1 à " + m_carteActuelle.getHauteur() + ") : ");
+        int newY = newYUtilisateur - 1;
 
-        // Vérifier que newX et newY sont valides avant d'appeler le déplacement
         if (newX < 0 || newX >= m_carteActuelle.getLargeur() || newY < 0 || newY >= m_carteActuelle.getHauteur()) {
             System.out.println("❌ Coordonnées invalides.");
         } else {
@@ -242,11 +224,9 @@ public class MaitreDuJeu {
         char lettreX = scanner.next().toUpperCase().charAt(0);
         int x = lettreX - 'A';
 
-        System.out.print("Entrez la coordonnée Y de l'obstacle (nombre de 1 à " + m_carteActuelle.getHauteur() + ") : ");
-        int yUtilisateur = scanner.nextInt();
+        int yUtilisateur = demanderInt(scanner, "Entrez la coordonnée Y de l'obstacle (nombre de 1 à " + m_carteActuelle.getHauteur() + ") : ");
         int y = yUtilisateur - 1;
 
-        // Vérification des coordonnées
         if (x < 0 || x >= m_carteActuelle.getLargeur() || y < 0 || y >= m_carteActuelle.getHauteur()) {
             System.out.println("❌ Coordonnées invalides.");
             return;
@@ -266,5 +246,20 @@ public class MaitreDuJeu {
 
         caseCible.setEstObstacle(true);
         System.out.println("✅ Obstacle ajouté en (" + lettreX + ", " + yUtilisateur + ").");
+    }
+
+    private int demanderInt(Scanner scanner, String message) {
+        int valeur;
+        while (true) {
+            System.out.print(message);
+            try {
+                valeur = scanner.nextInt();
+                scanner.nextLine();
+                return valeur;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                scanner.nextLine();
+            }
+        }
     }
 }

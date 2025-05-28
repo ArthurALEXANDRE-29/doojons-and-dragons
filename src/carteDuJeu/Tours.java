@@ -6,6 +6,7 @@ import carteDuJeu.personnages.equipements.Equipement;
 import carteDuJeu.Monstres.Monstre;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -117,9 +118,18 @@ public class Tours {
             System.out.println("4. Ramasser un équipement");
             System.out.println("5. Terminer le tour");
 
-            System.out.print("Choisissez une action : ");
-            int choix = m_scanner.nextInt();
-            m_scanner.nextLine(); // Consommer la ligne
+            int choix = -1;
+            while (true) {
+                System.out.print("Choisissez une action : ");
+                try {
+                    choix = m_scanner.nextInt();
+                    m_scanner.nextLine(); // Consommer la ligne
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                    m_scanner.nextLine(); // Vider la ligne incorrecte
+                }
+            }
 
             boolean actionEffectuee = false;
             boolean consommerAction = true;
@@ -194,9 +204,18 @@ public class Tours {
             System.out.println("2. Attaquer");
             System.out.println("3. Terminer le tour");
 
-            System.out.print("Choisissez une action : ");
-            int choix = m_scanner.nextInt();
-            m_scanner.nextLine(); // Consommer la ligne
+            int choix = -1;
+            while (true) {
+                System.out.print("Choisissez une action : ");
+                try {
+                    choix = m_scanner.nextInt();
+                    m_scanner.nextLine(); // Consommer la ligne
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                    m_scanner.nextLine(); // Vider la ligne incorrecte
+                }
+            }
 
             boolean actionEffectuee = false;
 
@@ -247,9 +266,18 @@ public class Tours {
             System.out.println("2. Déplacer un monstre ou joueur");
             System.out.println("3. Ajouter un obstacle");
             System.out.println("4. Terminer l'action du Maître du Jeu");
-            System.out.print("Choisissez une action (1-4) : ");
-            int choix = scanner.nextInt();
-            scanner.nextLine();
+            int choix = -1;
+            while (true) {
+                System.out.print("Choisissez une action : ");
+                try {
+                    choix = m_scanner.nextInt();
+                    m_scanner.nextLine(); // Consommer la ligne
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                    m_scanner.nextLine(); // Vider la ligne incorrecte
+                }
+            }
 
             switch (choix) {
                 case 1:
@@ -318,9 +346,18 @@ public class Tours {
                     " (PV: " + monstre.getPointsDeVie() + "/" + monstre.getPointsDeVieMax() + ")");
         }
 
-        System.out.print("Choisissez votre cible : ");
-        int choixCible = m_scanner.nextInt() - 1;
-        m_scanner.nextLine();
+        int choixCible = -1;
+        while (true) {
+            System.out.print("Choisissez votre cible : ");
+            try {
+                choixCible = m_scanner.nextInt() - 1;
+                m_scanner.nextLine();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                m_scanner.nextLine();
+            }
+        }
 
         if (choixCible < 0 || choixCible >= monstresAPortee.size()) {
             System.out.println("Choix invalide.");
@@ -355,9 +392,18 @@ public class Tours {
                     " (PV: " + personnage.getPointsDeVie() + "/" + personnage.getPointsDeVieMax() + ")");
         }
 
-        System.out.print("Choisissez votre cible : ");
-        int choixCible = m_scanner.nextInt() - 1;
-        m_scanner.nextLine();
+        int choixCible = -1;
+        while (true) {
+            System.out.print("Choisissez votre cible : ");
+            try {
+                choixCible = m_scanner.nextInt() - 1;
+                m_scanner.nextLine();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                m_scanner.nextLine();
+            }
+        }
 
         if (choixCible < 0 || choixCible >= personnagesAPortee.size()) {
             System.out.println("Choix invalide.");
@@ -397,9 +443,18 @@ public class Tours {
             System.out.println((i + 1) + ". " + equipementsSurCase.get(i).getNom());
         }
 
-        System.out.print("Choisissez l'équipement à ramasser : ");
-        int choix = m_scanner.nextInt() - 1;
-        m_scanner.nextLine();
+        int choix = -1;
+        while (true) {
+            System.out.print("Choisissez le chiffre de l'équipement à récuperer : ");
+            try {
+                choix = m_scanner.nextInt() - 1;
+                m_scanner.nextLine();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                m_scanner.nextLine();
+            }
+        }
 
         if (choix < 0 || choix >= equipementsSurCase.size()) {
             System.out.println("Choix invalide.");

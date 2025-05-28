@@ -5,10 +5,7 @@ import carteDuJeu.personnages.equipements.*;
 import carteDuJeu.personnages.*;
 import carteDuJeu.Monstres.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Donjon {
 
@@ -70,11 +67,10 @@ public class Donjon {
         } else {
             // Configuration personnalisée
             try {
-                System.out.print("Quelle largeur pour le donjon " + m_numeroDonjon + " ? ( < 25) : ");
-                int largeur = Math.max(1, Math.min(25, scanner.nextInt()));
-                System.out.print("Quelle hauteur pour le donjon " + m_numeroDonjon + " ? ( < 25) : ");
-                int hauteur = Math.max(1, Math.min(25, scanner.nextInt()));
-                scanner.nextLine(); // Consommer la ligne
+                int largeur = demanderInt(scanner, "Quelle largeur pour le donjon " + m_numeroDonjon + " ? ( < 25) : ");
+                int hauteur = demanderInt(scanner, "Quelle hauteur pour le donjon " + m_numeroDonjon + " ? ( < 25) : ");
+                largeur = Math.max(1, Math.min(25, largeur));
+                hauteur = Math.max(1, Math.min(25, hauteur));
                 initialiserCarte(largeur, hauteur);
             } catch (Exception e) {
                 System.out.println("Erreur lors de la configuration, utilisation des valeurs par défaut.");
@@ -86,9 +82,7 @@ public class Donjon {
     private void initialiserEquipementsDonjon(List<Equipement> tousLesEquipements) {
         try {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Combien d'équipements dans le donjon " + m_numeroDonjon + " ? (recommandé: " + (2 + m_numeroDonjon) + ")");
-            int nbEquipementsSouhaites = scanner.nextInt();
-            scanner.nextLine(); // vider la ligne
+            int nbEquipementsSouhaites = demanderInt(scanner, "Combien d'équipements dans le donjon " + m_numeroDonjon + " ? (recommandé: " + (2 + m_numeroDonjon) + ") ");
 
             Random random = new Random();
             for (int i = 0; i < nbEquipementsSouhaites && !tousLesEquipements.isEmpty(); i++) {
@@ -241,8 +235,7 @@ public class Donjon {
                 System.out.println("3. Ne rien changer");
 
                 System.out.print("Choix : ");
-                int choix = scanner.nextInt();
-                scanner.nextLine(); // Consommer la ligne
+                int choix = demanderInt(scanner, "Choix : ");
 
                 switch (choix) {
                     case 1:
@@ -346,6 +339,21 @@ public class Donjon {
             String statut = joueur.estMort() ? "💀 MORT" : "❤️ VIVANT";
             System.out.println(joueur.getNom() + " : " + statut +
                     " (PV: " + joueur.getPointsDeVie() + "/" + joueur.getPointsDeVieMax() + ")");
+        }
+    }
+
+    private int demanderInt(Scanner scanner, String message) {
+        int valeur;
+        while (true) {
+            System.out.print(message);
+            try {
+                valeur = scanner.nextInt();
+                scanner.nextLine();
+                return valeur;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                scanner.nextLine();
+            }
         }
     }
 
