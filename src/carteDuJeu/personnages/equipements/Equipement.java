@@ -9,22 +9,20 @@ public abstract class Equipement implements ElementCarte {
     public Equipement(String nom) {
         this.m_nom = nom;
     }
-
     public String getNom() {
         return m_nom;
     }
-
     public boolean estUneArme() {
         return false;
     }
     public abstract Equipement copier();
-    public boolean estUnEquipement() {
-        return true;
-    }
     public boolean estUneArmure(){return false;}
 
     @Override
     public String getSymbole() {
         return " *  "; // Symbole spécifique pour l'equipement
+    }
+    public boolean estEquipement() {
+        return true;
     }
 }

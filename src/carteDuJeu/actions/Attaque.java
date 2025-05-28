@@ -44,6 +44,10 @@ public class Attaque {
 
             int degats = Des.lancer(arme.getDes(), arme.getDegats());
             cible.subirDegats(degats);
+            if (cible.estMort()) {
+                System.out.println(cible.getNom() + " est mort !");
+                carte.getCase(caseCible.getX(), caseCible.getY()).retirerContenu(cible);
+            }
             System.out.println("Attaque réussie ! " + cible.getNom() + " subit " + degats + " dégâts.");
         } else {
             System.out.println("Attaque manquée !");
@@ -77,6 +81,10 @@ public class Attaque {
             int degats = Des.lancer(attaquant.getNbDes(), attaquant.getM_maxDmg());
             cible.subirDegats(degats);
             System.out.println("Attaque réussie ! " + cible.getNom() + " subit " + degats + " dégâts.");
+            if (cible.estMort()) {
+                System.out.println(cible.getNom() + " est mort !");
+                carte.getCase(caseCible.getX(), caseCible.getY()).retirerContenu(cible);
+            }
         } else {
             System.out.println("Attaque manquée !");
         }

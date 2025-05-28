@@ -23,6 +23,7 @@ public class MaitreDuJeu {
         this.m_carteActuelle = carte;
         System.out.println("Le Maître du Jeu prend contrôle d'une nouvelle carte (" +
                 carte.getLargeur() + "x" + carte.getHauteur() + ")");
+        if (m_carteActuelle != null) m_carteActuelle.afficher();
     }
 
     public Carte getCarte() {
