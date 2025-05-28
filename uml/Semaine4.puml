@@ -44,6 +44,7 @@ package carteDuJeu{
         + estFinDePartie() : Boolean
         + getNumeroTour() : Integer
         + getEntiteActuelle() : ElementMobile
+        + actionMDJ( joueurs : Personnage[*])
     }
 
 class MaitreDuJeu {
@@ -70,6 +71,7 @@ class MaitreDuJeu {
         + getSymbole() : String
         + estEquipement() : Boolean
         + getNom() : String
+        + estElementMobile() : Boolean
     }
     Interface ElementMobile extends ElementCarte{
         + getCasesMaxDeplacement() : Integer
@@ -83,6 +85,7 @@ class MaitreDuJeu {
         + getDexterite() Integer
         + getInitiative() Integer
         + getSymbole() String
+        + estElementMobile() : Boolean
     }
 
     class Donjon {
@@ -125,6 +128,7 @@ class MaitreDuJeu {
       + Carte(largeur: Integer, m_hauteur: Integer)
       + getLargeur() : Integer
       + getHauteur() : Integer
+      + contientElement(element : ElementMobile) : Boolean
       + getCase(x: Integer, y: Integer) : Case
       + setCase(x: Integer, y: Integer, une Case: Case)
       + ajouterContenu(x: Integer, y: Integer, e: ElementCarte):
@@ -190,6 +194,7 @@ class MaitreDuJeu {
             + recalculerStats()
             + estPersonnage() : Boolean
             + ajouterEquipement(e: Equipement)
+            + estElementMobile() : Boolean
         }
     package races {
              abstract class Race {
@@ -428,6 +433,7 @@ package carteDuJeu.personnages.equipements.armures{
             + subirDegats(degats : Integer)
             + estMort() :  Boolean
             + estPersonnage() : Boolean
+            + estElementMobile() : Boolean
         }
 
 
@@ -475,13 +481,14 @@ Tours o-- "\n 1 \n- m_donjon" Donjon
 Tours o-- "\n 1 \n- m_gestionEquipement" ChangerEquipement
 Tours o-- "\n 1 \n- m_deplacement" Deplacement
 Tours o-- "\n 1 \n- m_attaque" Attaque
+Tours o-- "\n 1 \n- m_maitreDuJeu" MaitreDuJeu
 
 Donjon *-- "\n 1 \n- m_carte" Carte
 Donjon ..> "\n 1 \n -m_maitreDuJeu" MaitreDuJeu : <<uses>>
 Donjon ..> Tours : <<uses>>
 Donjon o-> "\n 1..* \n- m_entiteTour" ElementMobile
 Donjon o-> "\n 1..* \n- m_monstres" Monstre
-Donjon o-> "\n 0..* \n- m_equipements" Equipement
+Donjon o-> "\n 0..* \n- m_equipements- m_equipements- m_equipements- m_equipements" Equipement
 Donjon o-> "\n 1..* \n- m_joueurs" Personnage
 
 
