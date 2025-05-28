@@ -6,4 +6,7 @@ public interface ElementCarte {
     default boolean estEquipement() {
         return false;
     }
+    default boolean estElementMobile() {
+        return false; // Par défaut, un élément n'est pas mobile
+    }
 }

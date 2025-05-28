@@ -110,7 +110,9 @@ public class MaitreDuJeu {
         // Chercher d'abord parmi les monstres
         for (Monstre m : m_monstres) {
             if (m.getNom().equalsIgnoreCase(nomCible)) {
-                infligerDegats(m, 20); // Exemple : 20 dégâts
+                System.out.println("Donnez les dégats à infliger à " + m.getNom() + " :");
+                int dmg = scanner.nextInt();
+                infligerDegats(m, dmg);
                 return;
             }
         }
@@ -118,7 +120,9 @@ public class MaitreDuJeu {
         // Puis chercher parmi les joueurs
         for (Personnage j : joueurs) {
             if (j.getNom().equalsIgnoreCase(nomCible)) {
-                infligerDegats(j, 20);
+                System.out.println("Donnez les dégats à infliger à " + j.getNom() + " :");
+                int dmg = scanner.nextInt();
+                infligerDegats(j, dmg);
                 return;
             }
         }
@@ -133,7 +137,7 @@ public class MaitreDuJeu {
 
         if (cible.estMort()) {
             System.out.println("💀 " + cible.getNom() + " est mort !");
-            if (m_carteActuelle != null) {
+            if (m_carteActuelle != null && m_carteActuelle.contientElement(cible)) {
                 Case caseCible = m_carteActuelle.getCase(cible);
                 if (caseCible != null) {
                     caseCible.retirerContenu(cible);

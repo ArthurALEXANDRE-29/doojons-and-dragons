@@ -17,6 +17,7 @@ public class Tours {
     private carteDuJeu.actions.Attaque m_attaque;
     private int m_indexTourActuel;
     private int m_numeroTour;
+    private MaitreDuJeu m_maitreDuJeu;
 
     public Tours(Donjon donjon) {
         this.m_donjon = donjon;
@@ -26,6 +27,7 @@ public class Tours {
         this.m_attaque = new carteDuJeu.actions.Attaque(m_deplacement);
         this.m_indexTourActuel = 0;
         this.m_numeroTour = 1;
+        this.m_maitreDuJeu = donjon.getMaitreDuJeu();
     }
 
     /**
@@ -154,20 +156,26 @@ public class Tours {
                     break;
                 case 5:
                     System.out.println(personnage.getNom() + " termine son tour.");
-                    return;
+                    break;
                 default:
                     System.out.println("Choix invalide, réessayez.");
                     continue;
             }
 
+            if (choix == 5) {
+                System.out.println(personnage.getNom() + " termine son tour.");
+                break; // Terminer le tour si l'utilisateur choisit de le faire
+            }
             if (actionEffectuee && consommerAction) {
                 actionsRestantes--;
                 demanderCommentaire();
+                actionMDJ(m_donjon.getJoueurs());
             }
         }
 
         System.out.println(personnage.getNom() + " a épuisé ses actions pour ce tour.");
     }
+
 
     /**
      * Gère le tour d'un monstre (contrôlé par le maître du jeu)
@@ -217,13 +225,49 @@ public class Tours {
                     continue;
             }
 
+            if (choix == 3) {
+                System.out.println(monstre.getNom() + " termine son tour.");
+                return;
+            }
             if (actionEffectuee) {
                 actionsRestantes--;
                 demanderCommentaire();
+                actionMDJ(m_donjon.getJoueurs());
             }
         }
 
         System.out.println(monstre.getNom() + " a épuisé ses actions pour ce tour.");
+    }
+
+    public void actionMDJ(List<Personnage> joueurs) {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("\n--- Actions du Maître du Jeu ---");
+            System.out.println("1. Frapper avec la foudre divine");
+            System.out.println("2. Déplacer un monstre ou joueur");
+            System.out.println("3. Ajouter un obstacle");
+            System.out.println("4. Terminer l'action du Maître du Jeu");
+            System.out.print("Choisissez une action (1-4) : ");
+            int choix = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choix) {
+                case 1:
+                    m_maitreDuJeu.faireDmg(joueurs);
+                    break;
+                case 2:
+                    m_maitreDuJeu.deplacerCibleParNom();
+                    break;
+                case 3:
+                    m_maitreDuJeu.ajouterObstacle();
+                    break;
+                case 4:
+                    System.out.println("Fin des actions du Maître du Jeu.");
+                    return;
+                default:
+                    System.out.println("Choix invalide, réessayez.");
+            }
+        }
     }
 
     /**

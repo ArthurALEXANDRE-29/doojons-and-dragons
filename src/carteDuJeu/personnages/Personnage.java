@@ -239,6 +239,10 @@ public class Personnage implements ElementMobile {
     public boolean estPersonnage() {
         return true;
     }
+
+    public boolean estElementMobile() {
+        return true;
+    }
 }
 
 

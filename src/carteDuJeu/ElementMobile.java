@@ -12,4 +12,5 @@ public interface ElementMobile extends ElementCarte {
     public int getDexterite();
     public int getInitiative();
     public String getSymbole();
+    public boolean estElementMobile();
 }

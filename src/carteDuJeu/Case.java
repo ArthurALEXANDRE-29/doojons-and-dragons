@@ -68,7 +68,7 @@ public class Case {
      */
     public boolean contientElementMobile() {
         for (ElementCarte element : m_contenu) {
-            if (element instanceof ElementMobile) {
+            if (element.estElementMobile()) {
                 return true;
             }
         }
@@ -80,7 +80,7 @@ public class Case {
      */
     public ElementMobile getElementMobile() {
         for (ElementCarte element : m_contenu) {
-            if (element instanceof ElementMobile) {
+            if (element.estElementMobile()) {
                 return (ElementMobile) element;
             }
         }
@@ -93,7 +93,7 @@ public class Case {
     public List<ElementMobile> getElementsMobiles() {
         List<ElementMobile> elementsMobiles = new ArrayList<>();
         for (ElementCarte element : m_contenu) {
-            if (element instanceof ElementMobile) {
+            if (element.estElementMobile()) {
                 elementsMobiles.add((ElementMobile) element);
             }
         }
@@ -113,7 +113,11 @@ public class Case {
         if (m_estObstacle) {
             return "[  ]";
         } else if (!m_contenu.isEmpty()) {
-            // Utilise le symbole du premier élément
+            for (ElementCarte element : m_contenu) {
+                if (element.estElementMobile()) {
+                    return element.getSymbole();
+                }
+            }
             return m_contenu.get(0).getSymbole();
         } else {
             return " .  ";  /* Case vide */

@@ -27,22 +27,20 @@ public class Monstre implements ElementMobile {
     public Monstre(String espece, int numero, int portee, int maxDmg, int vitesse, int nbDes, int pointsDeVieMax, int caracteristiqueDAttaque, int classeArmure, int initiative) {
         this.m_espece = espece;
         this.m_numero = numero;
-        this.m_portee = portee ;
+        this.m_portee = portee;
         this.m_maxDmg = maxDmg;
         this.m_vitesse = vitesse;
         this.m_pointsDeVieMax = pointsDeVieMax;
         m_pointsDeVie = m_pointsDeVieMax;
         this.m_nbDes = nbDes;
 
-        if(m_portee < 1)
-        {
+        if (m_portee < 1) {
             System.out.println("Valeur inférieure à 1 impossible, portée mise en place à 1");
             m_portee = 1;
             m_force = caracteristiqueDAttaque;
         } else if (m_portee > 1) {
             m_dexterite = caracteristiqueDAttaque;
-        }
-        else{
+        } else {
             m_force = caracteristiqueDAttaque;
         }
 
@@ -66,16 +64,16 @@ public class Monstre implements ElementMobile {
     public void setNumero(int numero) {
         this.m_numero = numero;
     }
-    public int getM_maxDmg()
-    {
+
+    public int getM_maxDmg() {
         return m_maxDmg;
     }
-    public int getNbDes()
-    {
+
+    public int getNbDes() {
         return m_nbDes;
     }
-    public void setMaxdmg(int dmgMax, int nbDes)
-    {
+
+    public void setMaxdmg(int dmgMax, int nbDes) {
         m_maxDmg = dmgMax;
         m_nbDes = nbDes;
     }
@@ -83,36 +81,33 @@ public class Monstre implements ElementMobile {
     public int getPortee() {
         return m_portee;
     }
-    public int getCasesMaxDeplacement()
-    {
-        int casesMax = m_vitesse /3;
+
+    public int getCasesMaxDeplacement() {
+        int casesMax = m_vitesse / 3;
         return casesMax;
     }
-    public void setVitesse(int vitesse)
-    {
+
+    public void setVitesse(int vitesse) {
         m_vitesse = vitesse;
     }
-    public void setPorteeEtStat(int portee, int caracteristiqueDAttaque ) {
-        if(m_portee < 1)
-        {
+
+    public void setPorteeEtStat(int portee, int caracteristiqueDAttaque) {
+        if (m_portee < 1) {
             System.out.println("Valeur inférieure à 1 impossible, portée mise en place à 1");
             m_portee = 1;
             m_force = caracteristiqueDAttaque;
         } else if (m_portee > 1) {
             m_dexterite = caracteristiqueDAttaque;
-        }
-        else{
+        } else {
             m_force = caracteristiqueDAttaque;
         }
     }
 
 
     public void changementCarac(int caracteristiqueDAttaque) {
-        if(m_portee != 1)
-        {
+        if (m_portee != 1) {
             m_dexterite = caracteristiqueDAttaque;
-        }
-        else{
+        } else {
             m_force = caracteristiqueDAttaque;
         }
     }
@@ -125,6 +120,7 @@ public class Monstre implements ElementMobile {
         this.m_pointsDeVieMax = pointsDeVie;
         m_pointsDeVie = m_pointsDeVieMax;
     }
+
     public int getPointsDeVieMax() {
         return m_pointsDeVieMax;
     }
@@ -162,7 +158,6 @@ public class Monstre implements ElementMobile {
         return " " + String.valueOf(m_espece.charAt(0)) + m_numero + " ";
     }
 
-    @Override
     public String getNom() {
         return m_espece + " #" + m_numero;
     }
@@ -173,13 +168,17 @@ public class Monstre implements ElementMobile {
             m_pointsDeVie = 0;
         }
     }
+
     public boolean estMort() {
         return m_pointsDeVie <= 0;
     }
 
-    @Override
     public boolean estPersonnage() {
         return false;
+    }
+
+    public boolean estElementMobile() {
+        return true;
     }
 }
 

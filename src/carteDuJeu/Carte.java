@@ -42,6 +42,17 @@ public class Carte {
         throw new IllegalArgumentException("L'élément mobile n'est pas présent sur la carte.");
     }
 
+    public boolean contientElement(ElementMobile element) {
+        for (int y = 0; y < m_hauteur; y++) {
+            for (int x = 0; x < m_largeur; x++) {
+                if (m_cases[y][x].contient(element)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * Trouve la position [x,y] d'un élément mobile
      */
@@ -112,19 +123,11 @@ public class Carte {
      * Vérifie si une case est accessible (pas obstacle, pas d'élément mobile)
      */
     public boolean estCaseAccessible(int x, int y) {
-        if (!coordonneesValides(x, y)) {
-            return false;
-        }
-
         Case caseCible = getCase(x, y);
-
-        // Vérifier si c'est un obstacle
-        if (caseCible.estObstacle()) {
-            return false;
+        if (coordonneesValides(x, y)) {
+            return caseCible.estAccessible();
         }
-
-        // Vérifier s'il y a déjà un élément mobile sur la case
-        return !caseCible.contientElementMobile();
+        return false;
     }
 
     /**
@@ -158,7 +161,7 @@ public class Carte {
 
         for (int y = yCentre - rayon; y <= yCentre + rayon; y++) {
             for (int x = xCentre - rayon; x <= xCentre + rayon; x++) {
-                if (calculerDistance(xCentre, yCentre, x, y) <= rayon &&
+                if (coordonneesValides(x, y) && calculerDistance(xCentre, yCentre, x, y) <= rayon &&
                         estCaseAccessible(x, y)) {
                     casesAccessibles.add(new int[]{x, y});
                 }

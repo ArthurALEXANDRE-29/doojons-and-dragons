@@ -100,6 +100,7 @@ public class Jeu {
         // Armes de guerre de corps à corps
         equipements.add(new EpeeLongue());
         equipements.add(new Rapiere());
+        equipements.add(new EpeeADeuxMains());
 
         // Armes à distance
         equipements.add(new ArbaleteLegere());
