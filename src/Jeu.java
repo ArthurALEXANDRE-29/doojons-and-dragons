@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -17,13 +18,11 @@ public class Jeu {
     private static final int NOMBRE_DONJONS_TOTAL = 3;
 
     public Jeu() {
-        Scanner scanner = new Scanner(System.in);
         m_donjonActuel = 0;
 
         // Demander le nombre de joueurs AVANT de créer les donjons
-        System.out.print("Combien de joueurs voulez-vous créer ? ");
-        int nbJoueurs = scanner.nextInt();
-        scanner.nextLine(); // Consommer le retour à la ligne
+        Scanner scanner = new Scanner(System.in);
+        int nbJoueurs = demanderInt(scanner, "Combien de joueurs voulez-vous créer ? ");
 
         // Créer les joueurs d'abord
         m_joueurs = new ArrayList<>();
@@ -188,6 +187,21 @@ public class Jeu {
         }
         System.out.println("=".repeat(60));
         System.out.println("Merci d'avoir joué à DOOnjon&Dragon !");
+    }
+
+    private int demanderInt(Scanner scanner, String message) {
+        int valeur;
+        while (true) {
+            System.out.print(message);
+            try {
+                valeur = scanner.nextInt();
+                scanner.nextLine();
+                return valeur;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                scanner.nextLine();
+            }
+        }
     }
 
     // Getters et setters

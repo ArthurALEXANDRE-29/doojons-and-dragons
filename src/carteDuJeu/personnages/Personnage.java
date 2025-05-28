@@ -223,9 +223,13 @@ public class Personnage implements ElementMobile {
 
     @Override
     public String getSymbole() {
-        // Le symbole pour représenter un personnage sur la carte
-        return m_nom.substring(0,3) + " ";
+        String nom = m_nom.length() >= 3 ? m_nom.substring(0, 3) : m_nom;
+        while (nom.length() < 3) {
+            nom += " ";
+        }
+        return " " + nom;
     }
+
     public void subirDegats(int degats) {
         m_pointsDeVie -= degats;
         if (m_pointsDeVie < 0) {

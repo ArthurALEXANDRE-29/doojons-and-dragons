@@ -227,14 +227,12 @@ public class Donjon {
                     (joueur.getArmureEquipee() != null ? joueur.getArmureEquipee().getNom() : "Aucune"));
 
             boolean continuer = true;
-
             while (continuer) {
                 System.out.println("\nQue voulez-vous faire ?");
                 System.out.println("1. Changer d'équipement");
                 System.out.println("2. Voir l'inventaire");
                 System.out.println("3. Ne rien changer");
 
-                System.out.print("Choix : ");
                 int choix = demanderInt(scanner, "Choix : ");
 
                 switch (choix) {
