@@ -90,9 +90,9 @@ public class Tours {
     private void jouerTour(ElementMobile entite) {
         System.out.println(">>> Tour de " + entite.getNom() + " <<<");
 
-        if (entite instanceof Personnage) {
+        if (entite.estPersonnage()) {
             jouerTourPersonnage((Personnage) entite);
-        } else if (entite instanceof Monstre) {
+        } else if (!entite.estPersonnage()) {
             jouerTourMonstre((Monstre) entite);
         }
     }
@@ -120,10 +120,12 @@ public class Tours {
             m_scanner.nextLine(); // Consommer la ligne
 
             boolean actionEffectuee = false;
+            boolean consommerAction = true;
 
             switch (choix) {
                 case 1:
                     actionEffectuee = actionSEquiper(personnage);
+                    consommerAction = false;
                     break;
                 case 2:
                     actionEffectuee = actionSeDeplacer(personnage);
@@ -143,6 +145,7 @@ public class Tours {
                     break;
                 case 4:
                     actionEffectuee = actionRamasserEquipement(personnage);
+                    consommerAction = false;
                     if (actionEffectuee) {
                         // Afficher la carte après ramassage d'équipement
                         System.out.println("\n📦 Carte après ramassage d'équipement :");
@@ -157,7 +160,7 @@ public class Tours {
                     continue;
             }
 
-            if (actionEffectuee) {
+            if (actionEffectuee && consommerAction) {
                 actionsRestantes--;
                 demanderCommentaire();
             }
@@ -334,7 +337,8 @@ public class Tours {
         // Récupérer tous les équipements présents sur la case
         List<Equipement> equipementsSurCase = new ArrayList<>();
         for (ElementCarte element : casePersonnage.getContenu()) {
-            if (element instanceof Equipement) {
+            System.out.println("Type: " + element.getClass() + ", estEquipement: " + element.estEquipement());
+            if (element.estEquipement()) {
                 equipementsSurCase.add((Equipement) element);
             }
         }
@@ -384,53 +388,65 @@ public class Tours {
      * Obtient la liste des monstres à portée d'un personnage
      */
     private List<Monstre> getMonstresAPortee(Personnage personnage) {
+        List<Monstre> monstresAPortee = new ArrayList<>();
         Case casePersonnage = m_donjon.getCarte().getCase(personnage);
         int porteeArme = personnage.getArmeEquipee().getPortee();
 
-        return m_donjon.getMonstres().stream()
-                .filter(m -> !m.estMort())
-                .filter(m -> {
-                    Case caseMonstre = m_donjon.getCarte().getCase(m);
-                    return m_donjon.getCarte().estAPortee(
-                            casePersonnage.getX(), casePersonnage.getY(),
-                            caseMonstre.getX(), caseMonstre.getY(),
-                            porteeArme
-                    );
-                })
-                .collect(java.util.stream.Collectors.toList());
+        for (Monstre monstre : m_donjon.getMonstres()) {
+            if (!monstre.estMort()) {
+                Case caseMonstre = m_donjon.getCarte().getCase(monstre);
+                if (m_donjon.getCarte().estAPortee(
+                        casePersonnage.getX(), casePersonnage.getY(),
+                        caseMonstre.getX(), caseMonstre.getY(),
+                        porteeArme)) {
+                    monstresAPortee.add(monstre);
+                }
+            }
+        }
+        return monstresAPortee;
     }
 
     /**
      * Obtient la liste des personnages à portée d'un monstre
      */
     private List<Personnage> getPersonnagesAPortee(Monstre monstre) {
+        List<Personnage> personnagesAPortee = new ArrayList<>();
         Case caseMonstre = m_donjon.getCarte().getCase(monstre);
         int porteeMonstre = monstre.getPortee();
 
-        return m_donjon.getJoueurs().stream()
-                .filter(p -> !p.estMort())
-                .filter(p -> {
-                    Case casePersonnage = m_donjon.getCarte().getCase(p);
-                    return m_donjon.getCarte().estAPortee(
-                            caseMonstre.getX(), caseMonstre.getY(),
-                            casePersonnage.getX(), casePersonnage.getY(),
-                            porteeMonstre
-                    );
-                })
-                .collect(java.util.stream.Collectors.toList());
+        for (Personnage personnage : m_donjon.getJoueurs()) {
+            if (!personnage.estMort()) {
+                Case casePersonnage = m_donjon.getCarte().getCase(personnage);
+                if (m_donjon.getCarte().estAPortee(
+                        caseMonstre.getX(), caseMonstre.getY(),
+                        casePersonnage.getX(), casePersonnage.getY(),
+                        porteeMonstre)) {
+                    personnagesAPortee.add(personnage);
+                }
+            }
+        }
+        return personnagesAPortee;
     }
 
     /**
      * Vérifie si la partie est terminée
      */
     private boolean estFinDePartie() {
-        // Vérifier si tous les personnages sont morts
-        boolean tousPersonnagesMorts = m_donjon.getJoueurs().stream()
-                .allMatch(ElementMobile::estMort);
+        boolean tousPersonnagesMorts = true;
+        for (Personnage p : m_donjon.getJoueurs()) {
+            if (!p.estMort()) {
+                tousPersonnagesMorts = false;
+                break;
+            }
+        }
 
-        // Vérifier si tous les monstres sont morts
-        boolean tousMonstresMorts = m_donjon.getMonstres().stream()
-                .allMatch(ElementMobile::estMort);
+        boolean tousMonstresMorts = true;
+        for (Monstre m : m_donjon.getMonstres()) {
+            if (!m.estMort()) {
+                tousMonstresMorts = false;
+                break;
+            }
+        }
 
         return tousPersonnagesMorts || tousMonstresMorts;
     }

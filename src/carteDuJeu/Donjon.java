@@ -193,10 +193,10 @@ public class Donjon {
      * Vérifie les conditions de victoire
      */
     private boolean verifierVictoire() {
-        boolean tousJoueursMorts = m_joueurs.stream().allMatch(ElementMobile::estMort);
+        boolean unJoueurMort = m_joueurs.stream().anyMatch(ElementMobile::estMort);
         boolean tousMonstresMorts = m_monstres.stream().allMatch(ElementMobile::estMort);
 
-        if (tousJoueursMorts) {
+        if (unJoueurMort) {
             System.out.println("💀 Défaite ! Tous les personnages sont morts dans le donjon " + m_numeroDonjon);
             return false;
         } else if (tousMonstresMorts) {
