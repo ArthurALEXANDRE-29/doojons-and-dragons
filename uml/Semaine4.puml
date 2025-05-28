@@ -4,18 +4,50 @@ skinparam classAttributeIconSize 0
 
 ' ===== CLASSES PRINCIPALES =====
 class Jeu {
-  - donjons: List<Donjon>
-  - joueurs: List<Personnage>
-  - maitreDuJeu: MaitreDuJeu
-  + demarrer()
-  + finPartie()
+   - m_donjonActuel: Integer
+   - NOMBRE_DONJONS_TOTAL: Integer
+   + Jeu()
+   + demarrer()
+   - creerRace(raceStr: String): Race
+   - creerClasse(classeStr: String): Classe
+   - creerTousLesEquipements(): Equipement[*]
+   - partiePerdue(): Boolean
+   - regenererPVJoueurs()
+   + finPartie()
+   + getDonjons(): Donjon[*]
+   + setDonjons(donjons: Donjon[*])
+   + getJoueurs(): Personnage[*]
+   + setJoueurs(joueurs: Personnage[*]):
+   + getMaitreDuJeu(): MaitreDuJeu
+   + setMaitreDuJeu(maitreDuJeu: MaitreDuJeu)
+   + getDonjonActuel(): Integer
 }
 
 
 package carteDuJeu{
+    class Tours {
+        - m_indexTourActuel : Integer
+        - m_numeroTour : Integer
+        + << Create >> Tours( donjon : Donjon)
+        + commencerTours()
+        + jouerTour(entite : ElementMobile )
+        + jouerTourPersonnage(personnage : Personnage )
+        + jouerTourMonstre(monstre : Monstre )
+        + actionSEquiper(personnage : Personnage ) : Boolean
+        + actionSeDeplacer(entite : ElementMobile ) : Boolean
+        + actionAttaquer( personnage : Personnage) : Boolean
+        + actionAttaquerMonstre(monstre : Monstre ) : Boolean
+        + actionRamasserEquipement(personnage : Personnage ) : Boolean
+        + demanderCommentaire()
+        + getMonstresAPortee( personnage : Personnage ) : Monstre[*]
+        + getPersonnagesAPortee(monstre : Monstre ) : Personnage[*]
+        + estFinDePartie() : Boolean
+        + getNumeroTour() : Integer
+        + getEntiteActuelle() : ElementMobile
+    }
+
 class MaitreDuJeu {
     - m_nomMdj : String
-
     + << Create >> MaitreDuJeu( joueurs : Personnage[*] , donjons : Donjon[*])
     + getNomMdj() : String
     + setCarte()
@@ -53,14 +85,18 @@ class MaitreDuJeu {
     }
 
     class Donjon {
-' pas sur de enlever le MDJ de la classe Donjon
-         - MaitreDuJeu m_maitreDuJeu;
-         - m_entiteTour : ElementMobile[*]
+        - m_numeroDonjon : Integer
          + << Create >>Donjon(maitreDuJeu MaitreDuJeu, tousLesEquipements Equipement[*], Personnage joueurs[*])
          + miseEnPlace()
+         + initialiserEquipementsDonjon( tousLesEquipements : Equipement[*])
          + initialiserCarte()
          + finDonjon()
-         + deroulerCombat()
+         + deroulerDonjon() : Boolean
+         + verifierVictoire() : Boolean
+         + afficherInventaire(personnage : Personnage )
+         + getNumeroDonjon() : Integer
+         + getMaitreDuJeu() : MaitreDuJeu
+         + getGestionTours() : Tours
          + getCarte() : Carte
          + setCarte(carte : Carte)
          + premierePhase()
@@ -152,6 +188,7 @@ class MaitreDuJeu {
             + estMort() : Boolean
             + recalculerStats()
             + estPersonnage() : Boolean
+            + ajouterEquipement(e: Equipement)
         }
     package races {
              abstract class Race {
@@ -302,6 +339,7 @@ package carteDuJeu.personnages.equipements{
         abstract class Equipement implements carteDuJeu.ElementCarte{
             - m_nom : String
             + << Create >> Equipement(nom : String)
+            + estUnEquipement() : Boolean
             + getNom() : String
             + getSymbole() : String
             + estUneArme() Boolean
@@ -397,7 +435,6 @@ package carteDuJeu.personnages.equipements.armures{
 package carteDuJeu.actions {
 
     class Attaque{
-    - m_deplacement : Deplacement
     + << Create >> Attaque(deplacement: Deplacement)
     + attaquer(carte: Carte, attaquant: Personnage,cible: Monstre, caseAttaquant: Case, caseCible: Case) : Boolean
     + attaquer(carte: Carte, attaquant: Monstre, cible: Personnage, caseAttaquant: Case, caseCible: Case) : Boolean
@@ -416,25 +453,39 @@ package carteDuJeu.actions {
     + estAPortee(x1: Integer, y1: Integer, x2: Integer, y2: Integer, portee: Integer) : Boolean
     + estAPortee(e1: ElementMobile, e2: ElementMobile, portee: Integer)|: Boolean
     }
+    class ChangerEquipement {
+        + proposerChangement(personnage: Personnage): void
+    }
+
+
 }
 
 ' ===== RELATIONS =====
-Jeu --> Donjon
-Jeu --> Personnage
-Jeu --> MaitreDuJeu
+Jeu --> "\n 1 \n m_maitreDuJeu" MaitreDuJeu : <<uses>>
+Jeu o-> "\n 1..* \n- m_donjons" Donjon
+Jeu o-> "\n 1..* \n- m_joueurs" Personnage
 
-MaitreDuJeu o-- "\n 1..* \n- m_carte" Carte
+MaitreDuJeu o-- "\n 1..* \n- m_carteActuelle" Carte
 MaitreDuJeu o-> "\n 1..* \n- m_monstres" Monstre
 MaitreDuJeu o-> "\n 0..* \n- m_cartem_equipements" Carte
 MaitreDuJeu o-> "\n 1..* \n- m_joueurs" Personnage
 
+Tours o-- "\n 1 \n- m_donjon" Donjon
+Tours o-- "\n 1 \n- m_gestionEquipement" ChangerEquipement
+Tours o-- "\n 1 \n- m_deplacement" Deplacement
+Tours o-- "\n 1 \n- m_attaque" Attaque
+
 Donjon *-- "\n 1 \n- m_carte" Carte
-Donjon ..> MaitreDuJeu : <<uses>>
+Donjon ..> "\n 1 \n -m_maitreDuJeu" MaitreDuJeu : <<uses>>
+Donjon ..> Tours : <<uses>>
+Donjon o-> "\n 1..* \n- m_entiteTour" ElementMobile
 Donjon o-> "\n 1..* \n- m_monstres" Monstre
 Donjon o-> "\n 0..* \n- m_equipements" Equipement
 Donjon o-> "\n 1..* \n- m_joueurs" Personnage
 
 
+Case *-- ElementCarte : 0..*
+Case o-> "\n 0..1 \n- m_contenu" Equipement
 Case ..> Equipement : <<uses>>
 Case ..> Monstre : <<uses>>
 Case ..> Personnage : <<uses>>
@@ -445,31 +496,27 @@ Classe "1" o-- "0..*" Equipement : m_equipementInitial
 Personnage o-> "\n 0..* \n- m_inventaire" Equipement : < peut être mis dans l'inventaire
 Personnage o-> "\n 0..1 \n- m_armeEquipee" Arme : < portée par
 Personnage o-> "\n 0..1 \n- m_armureEquipee" Armure : < portée par
-
 Personnage ..> Des : <<uses>>
-
 Personnage --> "\n 0..1 \n- m_race"  Race
 Personnage --> "\n 0..1 \n- m_classe" Classe
+
+sortArmeMagique ..> Arme : <<uses>>
+
+Carte "\n 1..* \n" *--> "- m_cases" Case
+Carte ..> ElementCarte : <<uses>actions>Carte ..> Case : <<uses>>
+Carte ..> Random : <<uses>>
+
+    ' LES RELATIONS ENTRE LES CLASSES D'ACTIONS
+ChangerEquipement ..> Personnage : <<uses>>
 
 Attaque ..> Carte : <<uses>>
 Attaque ..> Case : <<uses>>
 Attaque ..> Personnage : <<uses>>
 Attaque ..> Monstre : <<uses>>
 Attaque ..> Arme : <<uses>>
+Attaque ..>"\n 1 \n m_deplacement" Deplacement : <<uses>>
 Attaque ..> Armure : <<uses>>
 Attaque ..> Des : <<uses>>
-
-
-
-sortArmeMagique ..> Arme : <<uses>>
-
-Carte "\n 1..* \n" *--> "- m_cases" Case
-Carte ..> ElementCarte : <<uses>>Carte ..> Case : <<uses>>
-Carte ..> Random : <<uses>>
-
-Case *-- ElementCarte : 0..*
-Case o-> "\n 0..1 \n- m_contenu" Equipement
-
 
 Deplacement "\n0..1\n" --> "- m_carte " Carte : <<uses>>
 Deplacement --> ElementMobile : <<uses>>
