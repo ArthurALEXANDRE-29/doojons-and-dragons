@@ -68,6 +68,7 @@ class MaitreDuJeu {
 
     Interface ElementCarte{
         + getSymbole() : String
+        + estEquipement() : Boolean
         + getNom() : String
     }
     Interface ElementMobile extends ElementCarte{
@@ -339,7 +340,7 @@ package carteDuJeu.personnages.equipements{
         abstract class Equipement implements carteDuJeu.ElementCarte{
             - m_nom : String
             + << Create >> Equipement(nom : String)
-            + estUnEquipement() : Boolean
+            + estEquipement() : Boolean
             + getNom() : String
             + getSymbole() : String
             + estUneArme() Boolean
