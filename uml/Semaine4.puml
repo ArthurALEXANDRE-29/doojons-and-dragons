@@ -21,6 +21,8 @@ class Jeu {
    + getMaitreDuJeu(): MaitreDuJeu
    + setMaitreDuJeu(maitreDuJeu: MaitreDuJeu)
    + getDonjonActuel(): Integer
+   + demanderInt(Scanner scanner, message :  String) : Integer
+
 }
 
 
@@ -63,6 +65,7 @@ class MaitreDuJeu {
     + infligerDegats( cible :ElementMobile,  degats : Integer)
     +  ajouterObstacle()
     + deplacerElementMobile( cible :ElementMobile,  x :Integer, y : Integer)
+    + demanderInt(Scanner scanner, message :  String) : Integer
 
 }
 
@@ -105,7 +108,8 @@ class MaitreDuJeu {
          + setCarte(carte : Carte)
          + premierePhase()
          + preparerEtTrierInitiative()
-
+         + demanderInt(Scanner scanner, message :  String) : Integer
+' a check
          + getMonstres() : Monstre[*]
          + setMonstres(monstres : Monstre[*])
          + getEquipements() : Equipement[*]
