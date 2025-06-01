@@ -487,6 +487,7 @@ MaitreDuJeu o-- "\n 1..* \n- m_carteActuelle" Carte
 MaitreDuJeu o-> "\n 1..* \n- m_monstres" Monstre
 MaitreDuJeu o-> "\n 0..* \n- m_cartem_equipements" Carte
 MaitreDuJeu o-> "\n 1..* \n- m_joueurs" Personnage
+MaitreDuJeu o-> Affichage : uses
 
 Tours o-- "\n 1 \n- m_donjon" Donjon
 Tours o-- "\n 1 \n- m_gestionEquipement" ChangerEquipement
