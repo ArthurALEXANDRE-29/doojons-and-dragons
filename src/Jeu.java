@@ -22,7 +22,20 @@ public class Jeu {
 
         // Demander le nombre de joueurs AVANT de créer les donjons
         Scanner scanner = new Scanner(System.in);
-        int nbJoueurs = demanderInt(scanner, "Combien de joueurs voulez-vous créer ? ");
+        int nbJoueurs = 0;
+        while (nbJoueurs < 1) {
+            System.out.print("Combien de joueurs voulez-vous créer ? (minimum 1) ");
+            try {
+                nbJoueurs = scanner.nextInt();
+                scanner.nextLine(); // Consommer le reste de la ligne
+                if (nbJoueurs < 1) {
+                    System.out.println("Le nombre de joueurs doit être au moins 1. Veuillez réessayer.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Entrée invalide, veuillez entrer un nombre entier.");
+                scanner.nextLine(); // Consommer l'entrée incorrecte
+            }
+        }
 
         // Créer les joueurs d'abord
         m_joueurs = new ArrayList<>();

@@ -159,7 +159,7 @@ public class Monstre implements ElementMobile {
     }
 
     public String getNom() {
-        return m_espece + " #" + m_numero;
+        return m_espece + "#" + m_numero;
     }
 
     public void subirDegats(int degats) {

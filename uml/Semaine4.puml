@@ -27,6 +27,12 @@ class Jeu {
 
 
 package carteDuJeu{
+    class Affichage {
+    + afficherMessageBienvenue()
+    + afficherEntitesDeplacables(joueurs: List<Personnage>, monstres: List<Monstre>, carteActuelle: Carte)
+    + afficherErreur(message: String)
+    + afficherConfirmation(message: String)
+    }
     class Tours {
         - m_indexTourActuel : Integer
         - m_numeroTour : Integer

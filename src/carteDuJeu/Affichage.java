@@ -1,0 +1,57 @@
+package carteDuJeu;
+
+import java.util.List;
+
+import carteDuJeu.personnages.Personnage;
+import carteDuJeu.Monstres.Monstre;
+import carteDuJeu.Carte;
+/**
+ * Classe pour gérer l'affichage des messages et des entités dans le jeu.
+ */
+
+
+
+public class Affichage {
+
+    public static void afficherMessageBienvenue() {
+        System.out.println("Bienvenue dans le donjon mystérieux !");
+        System.out.println("Vous incarnez des aventuriers courageux, prêts à affronter des monstres redoutables.");
+        System.out.println("Tuez tous les monstres qui se dressent sur votre chemin.");
+        System.out.println("Bonne chance à vous !");
+    }
+
+    public static void afficherEntitesDeplacables(List<Personnage> joueurs, List<Monstre> monstres, Carte carteActuelle) {
+        if (carteActuelle == null) {
+            System.out.println("❌ Aucune carte disponible.");
+            return;
+        }
+
+        System.out.println("\n--- Entités disponibles pour le déplacement ---");
+
+        for (Personnage joueur : joueurs) {
+            try {
+                Case caseJoueur = carteActuelle.getCase(joueur);
+                Affichage.afficherConfirmation("[Joueur] " + joueur.getNom() + " est en (" + caseJoueur.getX() + ", " + caseJoueur.getY() + ")");
+            } catch (IllegalArgumentException e) {
+                System.out.println("[Joueur] " + joueur.getNom() + " : Position introuvable.");
+            }
+        }
+
+        for (Monstre monstre : monstres) {
+            try {
+                Case caseMonstre = carteActuelle.getCase(monstre);
+                System.out.println("[Monstre] " + monstre.getNom() + " est en (" + caseMonstre.getX() + ", " + caseMonstre.getY() + ")");
+            } catch (IllegalArgumentException e) {
+                System.out.println("[Monstre] " + monstre.getNom() + " : Position introuvable.");
+            }
+        }
+    }
+
+    public static void afficherErreur(String message) {
+        System.out.println("❌ " + message);
+    }
+
+    public static void afficherConfirmation(String message) {
+        System.out.println("✅ " + message);
+    }
+}
