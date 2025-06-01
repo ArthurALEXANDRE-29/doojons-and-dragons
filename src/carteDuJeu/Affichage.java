@@ -54,4 +54,15 @@ public class Affichage {
     public static void afficherConfirmation(String message) {
         System.out.println("✅ " + message);
     }
+    public static void afficherCiblesDisponibles(List<Monstre> monstres, List<Personnage> joueurs) {
+        System.out.println("\n--- Cibles disponibles ---");
+
+        for (Monstre monstre : monstres) {
+            System.out.println("[Monstre] " + monstre.getNom() + " (PV: " + monstre.getPointsDeVie() + "/" + monstre.getPointsDeVieMax() + ")");
+        }
+
+        for (Personnage joueur : joueurs) {
+            System.out.println("[Joueur] " + joueur.getNom() + " (PV: " + joueur.getPointsDeVie() + "/" + joueur.getPointsDeVieMax() + ")");
+        }
+    }
 }

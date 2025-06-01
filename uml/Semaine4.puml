@@ -32,6 +32,7 @@ package carteDuJeu{
     + afficherEntitesDeplacables(joueurs: List<Personnage>, monstres: List<Monstre>, carteActuelle: Carte)
     + afficherErreur(message: String)
     + afficherConfirmation(message: String)
+    + afficherCiblesDisponibles(monstres: List<Monstre>, joueurs: List<Personnage>)
     }
     class Tours {
         - m_indexTourActuel : Integer
@@ -72,7 +73,7 @@ class MaitreDuJeu {
     +  ajouterObstacle()
     + deplacerElementMobile( cible :ElementMobile,  x :Integer, y : Integer)
     + demanderInt(Scanner scanner, message :  String) : Integer
-
+    + lireCommentaire( commentaire String)
 }
 
 

@@ -89,13 +89,7 @@ public class MaitreDuJeu {
 
         if (!rep.equals("y")) return;
 
-        System.out.println("\n--- Cibles disponibles ---");
-        for (Monstre m : m_monstres) {
-            System.out.println("[Monstre] " + m.getNom() + " (PV: " + m.getPointsDeVie() + "/" + m.getPointsDeVieMax() + ")");
-        }
-        for (Personnage j : joueurs) {
-            System.out.println("[Joueur] " + j.getNom() + " (PV: " + j.getPointsDeVie() + "/" + j.getPointsDeVieMax() + ")");
-        }
+        Affichage.afficherCiblesDisponibles(m_monstres, m_joueurs);
 
         System.out.print("\nTapez le nom exact de la cible : ");
         String nomCible = scanner.nextLine().trim();
@@ -143,6 +137,7 @@ public class MaitreDuJeu {
 
         Scanner scanner = new Scanner(System.in);
 
+        Affichage.afficherEntitesDeplacables( m_joueurs,m_monstres, m_carteActuelle);
         System.out.print("Entrez le nom du monstre ou joueur à déplacer : ");
         String nomCible = scanner.nextLine().trim();
 
@@ -262,4 +257,9 @@ public class MaitreDuJeu {
             }
         }
     }
+    public void lireCommentaire(String commentaire) {
+        System.out.println("📜 Récit du Maître du Jeu :");
+        System.out.println(commentaire);
+    }
+
 }

@@ -19,6 +19,7 @@ public class Tours {
     private int m_indexTourActuel;
     private int m_numeroTour;
     private MaitreDuJeu m_maitreDuJeu;
+    private StringBuilder historiqueActions;
 
     public Tours(Donjon donjon) {
         this.m_donjon = donjon;
@@ -29,6 +30,7 @@ public class Tours {
         this.m_indexTourActuel = 0;
         this.m_numeroTour = 1;
         this.m_maitreDuJeu = donjon.getMaitreDuJeu();
+        this.historiqueActions = null;
     }
 
     /**
@@ -106,10 +108,12 @@ public class Tours {
     private void jouerTourPersonnage(Personnage personnage) {
         System.out.println("C'est au tour de " + personnage.getNom() +
                 " (PV: " + personnage.getPointsDeVie() + "/" + personnage.getPointsDeVieMax() + ")");
-
+        historiqueActions = new StringBuilder();
         int actionsRestantes = 3;
 
+
         while (actionsRestantes > 0) {
+            m_donjon.getCarte().afficher();
             System.out.println("\nActions restantes : " + actionsRestantes);
             System.out.println("Actions disponibles :");
             System.out.println("1. S'équiper");
@@ -282,15 +286,19 @@ public class Tours {
             switch (choix) {
                 case 1:
                     m_maitreDuJeu.faireDmg(joueurs);
+                    historiqueActions.append("⚡ Un éclair divin fend l’obscurité du donjon, frappant sa cible avec la colère des dieux.\n");
                     break;
                 case 2:
                     m_maitreDuJeu.deplacerCibleParNom();
+                    historiqueActions.append("👁️ Des forces obscures manipulent les fils du destin et déplacent une entité dans les ténèbres du donjon.\n");
                     break;
                 case 3:
                     m_maitreDuJeu.ajouterObstacle();
+                    historiqueActions.append("🧱 Un grondement sourd résonne... un nouvel obstacle émerge pour piéger les aventuriers imprudents.\n");
                     break;
                 case 4:
                     System.out.println("Fin des actions du Maître du Jeu.");
+                    historiqueActions.append("🎭 Les forces obscures du donjon semblent être satisfaites des actions menées précedemment...\n");
                     return;
                 default:
                     System.out.println("Choix invalide, réessayez.");
@@ -317,6 +325,8 @@ public class Tours {
      */
     private boolean actionSeDeplacer(ElementMobile entite) {
         System.out.println("\n--- Action : Se déplacer ---");
+        historiqueActions.append("🧭 ").append(entite.getNom())
+        .append(" s'avança prudemment dans les couloirs sombres du donjon, prêt à affronter les monstres qui rôdent...\n");
         return m_deplacement.gererDeplacement(entite);
     }
 
@@ -367,6 +377,16 @@ public class Tours {
         Monstre cible = monstresAPortee.get(choixCible);
         Case casePersonnage = m_donjon.getCarte().getCase(personnage);
         Case caseCible = m_donjon.getCarte().getCase(cible);
+        // Mettre à jour l'historique des actions
+        historiqueActions.append(personnage.getNom())
+                .append(" pris son courage a deux mains et frappa alors le monstre ayant une apprarence de ")
+                .append(cible.getNom())
+                .append(" de manière violente.");
+
+        if (cible.estMort()) {
+            historiqueActions.append(" Il en est mort.");
+        }
+        historiqueActions.append("\n");
 
         return m_attaque.attaquer(m_donjon.getCarte(), personnage, cible, casePersonnage, caseCible);
     }
@@ -465,6 +485,9 @@ public class Tours {
         personnage.ajouterAInventaire(equipementChoisi);
         casePersonnage.retirerContenu(equipementChoisi);
 
+        // ajout commentaire au role play
+        historiqueActions.append("✨ ").append(personnage.getNom())
+        .append(" trouva en marchant une nouvelle pièce d'équipement, son éclat étincelant redonne espoir à notre héro... Pourra-il triompher des monstres avec celle-ci ?\n");
         System.out.println(personnage.getNom() + " a ramassé " + equipementChoisi.getNom());
         return true;
     }
@@ -477,9 +500,11 @@ public class Tours {
         String reponse = m_scanner.nextLine().trim().toLowerCase();
 
         if (reponse.equals("o") || reponse.equals("oui")) {
-            System.out.print("Votre commentaire : ");
-            String commentaire = m_scanner.nextLine();
-            System.out.println(">>> " + commentaire + " <<<");
+            if (historiqueActions.length() == 0) {
+                System.out.println("Vous n'avez encore rien fait.");
+            } else {
+                m_maitreDuJeu.lireCommentaire(historiqueActions.toString());
+            }
         }
     }
 
