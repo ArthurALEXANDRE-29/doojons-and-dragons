@@ -170,16 +170,15 @@ public class Tours {
                     break;
                 case 5:
                     System.out.println(personnage.getNom() + " termine son tour.");
-                    break;
+                    demanderCommentaire();
+                    actionMDJ(m_donjon.getJoueurs());
+                    return;
                 default:
                     System.out.println("Choix invalide, réessayez.");
                     continue;
             }
 
-            if (choix == 5) {
-                System.out.println(personnage.getNom() + " termine son tour.");
-                break; // Terminer le tour si l'utilisateur choisit de le faire
-            }
+            // Si l'action a été effectuée ou si le joueur a choisi de terminer son tour
             if (actionEffectuee && consommerAction) {
                 actionsRestantes--;
                 demanderCommentaire();
@@ -242,16 +241,14 @@ public class Tours {
                     break;
                 case 3:
                     System.out.println(monstre.getNom() + " termine son tour.");
+                    demanderCommentaire();
+                    actionMDJ(m_donjon.getJoueurs());
                     return;
                 default:
                     System.out.println("Choix invalide, réessayez.");
                     continue;
             }
 
-            if (choix == 3) {
-                System.out.println(monstre.getNom() + " termine son tour.");
-                return;
-            }
             if (actionEffectuee) {
                 actionsRestantes--;
                 demanderCommentaire();
