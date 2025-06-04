@@ -29,6 +29,10 @@ public class Affichage {
         System.out.println("\n--- Entités disponibles pour le déplacement ---");
 
         for (Personnage joueur : joueurs) {
+            if (!carteActuelle.contientElement(joueur)) {
+                System.out.println("[Joueur] " + joueur.getNom() + " n'est pas sur la carte.");
+                continue;
+            }
             try {
                 Case caseJoueur = carteActuelle.getCase(joueur);
                 Affichage.afficherConfirmation("[Joueur] " + joueur.getNom() + " est en (" + caseJoueur.getX() + ", " + caseJoueur.getY() + ")");
@@ -38,6 +42,10 @@ public class Affichage {
         }
 
         for (Monstre monstre : monstres) {
+            if (!carteActuelle.contientElement(monstre)) {
+                System.out.println("[Monstre] " + monstre.getNom() + " n'est pas sur la carte.");
+                continue;
+            }
             try {
                 Case caseMonstre = carteActuelle.getCase(monstre);
                 System.out.println("[Monstre] " + monstre.getNom() + " est en (" + caseMonstre.getX() + ", " + caseMonstre.getY() + ")");

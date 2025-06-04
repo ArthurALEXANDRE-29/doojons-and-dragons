@@ -98,16 +98,22 @@ public class Donjon {
     }
 
     public void initialiserCarte(int largeur, int hauteur) {
-        // Réinitialiser complètement la carte pour ce donjon
-        this.m_carte = new Carte(largeur, hauteur);
-
-        // Informer le maître du jeu de la nouvelle carte
-        m_maitreDuJeu.setCarte(m_carte);
+        if (this.m_carte == null) {
+            this.m_carte = new Carte(largeur, hauteur);
+            m_maitreDuJeu.setCarte(m_carte);
+        } else {
+            System.out.println("⚠️ Carte déjà initialisée, conservation du contenu existant");
+        }
     }
 
     // Méthode pour la mise en place du donjon
     public void miseEnPlace() {
         System.out.println("=== Mise en place du Donjon " + m_numeroDonjon + " ===");
+
+        System.out.println("=== DEBUG - Début miseEnPlace ===");
+        System.out.println("Carte actuelle du Donjon : " + m_carte);
+        System.out.println("Carte actuelle du MDJ : " + m_maitreDuJeu.getCarte());
+        System.out.println("Sont-elles identiques ? " + (m_carte == m_maitreDuJeu.getCarte()));
 
         // Nettoyer les listes précédentes
         m_monstres.clear();

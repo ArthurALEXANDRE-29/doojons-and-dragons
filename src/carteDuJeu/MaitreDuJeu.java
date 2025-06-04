@@ -56,9 +56,19 @@ public class MaitreDuJeu {
 
         for (int i = 1; i <= nombreMonstres; i++) {
             System.out.println("\nCréation du monstre #" + i);
-
-            System.out.print("Espèce : ");
-            String espece = scanner.nextLine();
+            String espece = "";
+            while (true) {
+                try {
+                    System.out.print("Entrez le nom du monstre : ");
+                    espece = scanner.nextLine().trim();
+                    if (espece.isEmpty()) {
+                        throw new IllegalArgumentException("Le nom ne peut pas être vide.");
+                    }
+                    break; // nom valide, on sort de la boucle
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Erreur : " + e.getMessage());
+                }
+            }
 
             int portee = demanderInt(scanner, "Portée (1 pour mêlée, >1 pour distance) : ");
             int maxDmg = demanderInt(scanner, "Dégâts max par dé : ");
