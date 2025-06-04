@@ -218,6 +218,10 @@ public class Tours {
 
             int choix = -1;
             while (true) {
+                if(monstre.estMort())
+                {
+                    return;
+                }
                 System.out.print("Choisissez une action : ");
                 try {
                     choix = m_scanner.nextInt();
