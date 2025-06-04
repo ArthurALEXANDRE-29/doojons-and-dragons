@@ -8,6 +8,7 @@ import carteDuJeu.personnages.equipements.armes.Arme;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class sortArmeMagique extends Sort {
     public sortArmeMagique() {
@@ -45,7 +46,23 @@ public class sortArmeMagique extends Sort {
                         System.out.println((i + 1) + ". " + armesDisponibles.get(i).getNom());
                     }
 
-                    int choix = 0; // Exemple : le joueur choisit la première arme
+                    int choix = -1;
+                    while (true) {
+                        try {
+                            Scanner scanner = new Scanner(System.in);
+                            System.out.print("Entrez le numéro de l'arme à améliorer : ");
+                            choix = scanner.nextInt() - 1;
+                            scanner.nextLine();
+
+                            if (choix >= 0 && choix < armesDisponibles.size()) {
+                                break;
+                            } else {
+                                System.out.println("Choix invalide, veuillez réessayer.");
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                        }
+                    }
                     Arme armeChoisie = armesDisponibles.get(choix);
 
                     armeChoisie.ajouterBonusAttaque(1);

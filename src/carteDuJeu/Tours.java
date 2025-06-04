@@ -4,6 +4,8 @@ import carteDuJeu.actions.*;
 import carteDuJeu.personnages.Personnage;
 import carteDuJeu.personnages.equipements.Equipement;
 import carteDuJeu.Monstres.Monstre;
+import java.util.stream.Collectors;
+import carteDuJeu.personnages.sorts.*;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -122,8 +124,9 @@ public class Tours {
             System.out.println("1. S'équiper");
             System.out.println("2. Se déplacer");
             System.out.println("3. Attaquer");
-            System.out.println("4. Ramasser un équipement");
-            System.out.println("5. Terminer le tour");
+            System.out.println("4. Lancer un sort");
+            System.out.println("5. Ramasser un équipement");
+            System.out.println("6. Terminer le tour");
 
             int choix = -1;
             while (true) {
@@ -170,6 +173,14 @@ public class Tours {
                     }
                     break;
                 case 4:
+                    actionEffectuee = actionLancerSort(personnage);
+                    if (actionEffectuee) {
+                        // Afficher la carte après le lancement du sort
+                        System.out.println("\n🪄 Carte après lancement de sort de " + personnage.getNom() + " :");
+                        m_donjon.getCarte().afficher();
+                    }
+                break;
+                case 5:
                     actionEffectuee = actionRamasserEquipement(personnage);
                     consommerAction = false;
                     if (actionEffectuee) {
@@ -178,7 +189,7 @@ public class Tours {
                         m_donjon.getCarte().afficher();
                     }
                     break;
-                case 5:
+                case 6:
                     System.out.println(personnage.getNom() + " termine son tour.");
                     demanderCommentaire();
                     actionMDJ(m_donjon.getJoueurs());
@@ -443,6 +454,253 @@ public class Tours {
         Case caseCible = m_donjon.getCarte().getCase(cible);
 
         return m_attaque.attaquer(m_donjon.getCarte(), monstre, cible, caseMonstre, caseCible);
+    }
+
+    /**
+     * Action : Lancer un sort (personnages uniquement)
+     */
+    private boolean actionLancerSort(Personnage personnage) {
+        System.out.println("\n--- Action : Lancer un sort ---");
+        //améliorer avec un getSorts dans personnages peut etre
+        if (personnage.getClasse().equals("Magicien")) {
+            System.out.println("Sorts disponibles pour le Magicien :");
+            System.out.println("1. Arme magique");
+            System.out.println("2. Boogie Woogie");
+            System.out.println("3. Guérison");
+
+            int choix = -1;
+            while (true) {
+                System.out.print("Choisissez le chiffre du sort à lancer : ");
+                try {
+                    choix = m_scanner.nextInt() - 1;
+                    m_scanner.nextLine();
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                    m_scanner.nextLine();
+                }
+            }
+
+            if (choix < 0 || choix > 2) {
+                System.out.println("Choix invalide.");
+                return false;
+            }
+
+            String nomSort = "";
+            boolean sortLance = false;
+
+            switch (choix) {
+                case 0:
+                    nomSort = "Arme magique";
+                    // Logique pour lancer le sort Arme magique
+                    sortLance = lancerSortArmeMagique(personnage);
+                    break;
+                case 1:
+                    nomSort = "Boogie Woogie";
+                    // Logique pour lancer le sort Boogie Woogie
+                    sortLance = lancerSortBoogieWoogie(personnage);
+                    break;
+                case 2:
+                    nomSort = "Guérison";
+                    // Logique pour lancer le sort de guérison
+                    sortLance = lancerSortGuerison(personnage);
+                    break;
+            }
+
+            if (sortLance) {
+                historiqueActions.append(personnage.getNom())
+                        .append(" a lancé le sort ")
+                        .append(nomSort)
+                        .append(" avec succès.\n");
+                return true;
+            } else {
+                System.out.println("Le sort n'a pas pu être lancé.");
+                return false;
+            }
+
+        } else if (personnage.getClasse().equals("Clerc")) {
+            System.out.println("Sorts disponibles pour le Clerc :");
+            System.out.println("1. Guérison");
+
+            int choix = -1;
+            while (true) {
+                System.out.print("Choisissez le chiffre du sort à lancer : ");
+                try {
+                    choix = m_scanner.nextInt() - 1;
+                    m_scanner.nextLine();
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                    m_scanner.nextLine();
+                }
+            }
+
+            if (choix != 0) {
+                System.out.println("Choix invalide.");
+                return false;
+            }
+
+            boolean sortLance = lancerSortGuerison(personnage);
+            if (sortLance) {
+                historiqueActions.append(personnage.getNom())
+                        .append(" a lancé le sort Guérison avec succès.\n");
+                return true;
+            } else {
+                System.out.println("Le sort n'a pas pu être lancé.");
+                return false;
+            }
+
+        } else {
+            System.out.println(personnage.getNom() + " ne lance aucun sort !");
+            return false;
+        }
+    }
+
+    /**
+     * Méthodes auxiliaires pour lancer les différents sorts
+     */
+    private boolean lancerSortArmeMagique(Personnage personnage) {
+        sortArmeMagique sort = new sortArmeMagique();
+
+        // Demander au joueur de choisir une cible
+        System.out.println("Choisissez un personnage pour améliorer ses armes :");
+        List<Personnage> personnagesDisponibles = m_donjon.getJoueurs();
+
+        for (int i = 0; i < personnagesDisponibles.size(); i++) {
+            Personnage p = personnagesDisponibles.get(i);
+            if (!p.estMort()) {
+                System.out.println((i + 1) + ". " + p.getNom());
+            }
+        }
+
+        int choix = -1;
+        while (true) {
+            System.out.print("Choisissez la cible : ");
+            try {
+                choix = m_scanner.nextInt() - 1;
+                m_scanner.nextLine();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                m_scanner.nextLine();
+            }
+        }
+
+        if (choix < 0 || choix >= personnagesDisponibles.size() ||
+                personnagesDisponibles.get(choix).estMort()) {
+            System.out.println("Choix invalide.");
+            return false;
+        }
+
+        ElementMobile[] cibles = {personnagesDisponibles.get(choix)};
+        return sort.lancer(m_donjon.getCarte(), personnage, cibles);
+    }
+
+    private boolean lancerSortBoogieWoogie(Personnage personnage) {
+        sortBoogieWoogie sort = new sortBoogieWoogie();
+
+        // Créer une liste de toutes les entités mobiles
+        List<ElementMobile> entitesDisponibles = new ArrayList<>();
+
+        // Ajouter les joueurs vivants
+        for (Personnage p : m_donjon.getJoueurs()) {
+            if (!p.estMort()) {
+                entitesDisponibles.add(p);
+            }
+        }
+
+        // Ajouter les monstres vivants
+        for (Monstre m : m_donjon.getMonstres()) {
+            if (!m.estMort()) {
+                entitesDisponibles.add(m);
+            }
+        }
+
+        if (entitesDisponibles.size() < 2) {
+            System.out.println("Il faut au moins 2 entités vivantes pour utiliser ce sort.");
+            return false;
+        }
+
+        System.out.println("Choisissez deux entités à échanger :");
+        for (int i = 0; i < entitesDisponibles.size(); i++) {
+            ElementMobile e = entitesDisponibles.get(i);
+            System.out.println((i + 1) + ". " + e.getNom() +
+                    (e.estPersonnage() ? " (Personnage)" : " (Monstre)"));
+        }
+
+        int choix1 = -1, choix2 = -1;
+
+        while (true) {
+            System.out.print("Choisissez la première entité : ");
+            try {
+                choix1 = m_scanner.nextInt() - 1;
+                m_scanner.nextLine();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                m_scanner.nextLine();
+            }
+        }
+
+        while (true) {
+            System.out.print("Choisissez la deuxième entité : ");
+            try {
+                choix2 = m_scanner.nextInt() - 1;
+                m_scanner.nextLine();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                m_scanner.nextLine();
+            }
+        }
+
+        if (choix1 < 0 || choix1 >= entitesDisponibles.size() ||
+                choix2 < 0 || choix2 >= entitesDisponibles.size() ||
+                choix1 == choix2) {
+            System.out.println("Choix invalide.");
+            return false;
+        }
+
+        ElementMobile[] cibles = {entitesDisponibles.get(choix1), entitesDisponibles.get(choix2)};
+        return sort.lancer(m_donjon.getCarte(), personnage, cibles);
+    }
+
+    private boolean lancerSortGuerison(Personnage personnage) {
+        sortGuerison sort = new sortGuerison();
+
+        // Demander au joueur de choisir une cible
+        System.out.println("Choisissez un personnage à soigner :");
+        List<Personnage> personnagesDisponibles = m_donjon.getJoueurs();
+
+        for (int i = 0; i < personnagesDisponibles.size(); i++) {
+            Personnage p = personnagesDisponibles.get(i);
+            if (!p.estMort() && p.getPointsDeVie() < p.getPointsDeVieMax()) {
+                System.out.println((i + 1) + ". " + p.getNom() +
+                        " (PV: " + p.getPointsDeVie() + "/" + p.getPointsDeVieMax() + ")");
+            }
+        }
+
+        int choix = -1;
+        while (true) {
+            System.out.print("Choisissez la cible : ");
+            try {
+                choix = m_scanner.nextInt() - 1;
+                m_scanner.nextLine();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrée invalide, veuillez entrer un nombre.");
+                m_scanner.nextLine();
+            }
+        }
+
+        if (choix < 0 || choix >= personnagesDisponibles.size() ||
+                personnagesDisponibles.get(choix).estMort()) {
+            System.out.println("Choix invalide.");
+            return false;
+        }
+
+        ElementMobile[] cibles = {personnagesDisponibles.get(choix)};
+        return sort.lancer(m_donjon.getCarte(), personnage, cibles);
     }
 
     /**
