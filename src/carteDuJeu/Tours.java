@@ -148,6 +148,12 @@ public class Tours {
                     if (actionEffectuee) {
                         // Afficher la carte après un déplacement
                         System.out.println("\n🚶 Carte après déplacement de " + personnage.getNom() + " :");
+                        historiqueActions.append(personnage.getNom())
+                                .append(" avance prudemment dans les sombres couloirs du donjon, ses pas résonnant sur les pierres froides. ")
+                                .append("Chaque ombre semble cacher un danger, et les grognements lointains des monstres rôdent dans l'air, ")
+                                .append("rappelant à ").append(personnage.getNom())
+                                .append(" que le danger est partout. Une sueur froide coule sur son front alors qu'il s'efforce de rester vigilant.");
+                        historiqueActions.append("\n");
 
                         m_donjon.getCarte().afficher();
                     }
@@ -323,14 +329,6 @@ public class Tours {
      */
     private boolean actionSeDeplacer(ElementMobile entite) {
         System.out.println("\n--- Action : Se déplacer ---");
-        if (entite.estPersonnage())
-        {
-            historiqueActions.append(entite.getNom())
-                    .append(" avance prudemment dans les sombres couloirs du donjon, ses pas résonnant sur les pierres froides. ")
-                    .append("Chaque ombre semble cacher un danger, et les grognements lointains des monstres rôdent dans l'air, ")
-                    .append("rappelant à ").append(entite.getNom())
-                    .append(" que le danger est partout. Une sueur froide coule sur son front alors qu'il s'efforce de rester vigilant.");
-        }
         return m_deplacement.gererDeplacement(entite);
     }
 
