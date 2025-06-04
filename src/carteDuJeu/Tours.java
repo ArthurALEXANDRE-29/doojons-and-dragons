@@ -148,6 +148,7 @@ public class Tours {
                     if (actionEffectuee) {
                         // Afficher la carte après un déplacement
                         System.out.println("\n🚶 Carte après déplacement de " + personnage.getNom() + " :");
+
                         m_donjon.getCarte().afficher();
                     }
                     break;
@@ -251,7 +252,7 @@ public class Tours {
 
             if (actionEffectuee) {
                 actionsRestantes--;
-                demanderCommentaire();
+
                 actionMDJ(m_donjon.getJoueurs());
             }
         }
@@ -322,8 +323,7 @@ public class Tours {
      */
     private boolean actionSeDeplacer(ElementMobile entite) {
         System.out.println("\n--- Action : Se déplacer ---");
-        historiqueActions.append("🧭 ").append(entite.getNom())
-        .append(" s'avança prudemment dans les couloirs sombres du donjon, prêt à affronter les monstres qui rôdent...\n");
+
         return m_deplacement.gererDeplacement(entite);
     }
 

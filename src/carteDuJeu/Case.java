@@ -52,7 +52,7 @@ public class Case {
     }
 
     public boolean estVide() {
-        return m_contenu.isEmpty();
+        return !m_estObstacle && m_contenu.isEmpty() && getElementsMobiles().isEmpty();
     }
 
     public List<ElementCarte> getContenu() {

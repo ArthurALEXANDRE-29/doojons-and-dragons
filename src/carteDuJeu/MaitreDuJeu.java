@@ -256,7 +256,7 @@ public class MaitreDuJeu {
                 scanner.nextLine();
             }
         }
-    }
+    }   
     public void lireCommentaire(String commentaire) {
         System.out.println("📜 Récit du Maître du Jeu :");
         System.out.println(commentaire);

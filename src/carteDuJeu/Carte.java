@@ -97,7 +97,7 @@ public class Carte {
             while (tentatives < maxTentatives) {
                 int x = rand.nextInt(m_largeur);
                 int y = rand.nextInt(m_hauteur);
-                if (m_cases[y][x].estVide()) {
+                if (m_cases[y][x].estVide() && !m_cases[y][x].estObstacle() && !m_cases[y][x].contientElementMobile()) {
                     m_cases[y][x].ajouterContenu(element);
                     return true;
                 }

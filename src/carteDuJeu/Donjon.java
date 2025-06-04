@@ -117,12 +117,15 @@ public class Donjon {
         System.out.println("Création des monstres du donjon " + m_numeroDonjon + "...");
         m_maitreDuJeu.phaseCreationDesMonstres();
         m_monstres = new ArrayList<>(m_maitreDuJeu.getMonstres());
+        // Placement des obstacles sur la carte
 
+        Random random = new Random();
+        m_carte.genererObstaclesAleatoires( random.nextDouble() * 0.2);
+        m_carte.afficher();
         // Vérification que des monstres ont été créés
         if (m_monstres.isEmpty()) {
             System.out.println("⚠️ Aucun monstre créé pour ce donjon !");
         }
-
         // Placement aléatoire des monstres
         System.out.println("Placement des monstres...");
         for (Monstre monstre : m_monstres) {
