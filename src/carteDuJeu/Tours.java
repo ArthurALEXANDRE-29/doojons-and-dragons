@@ -113,6 +113,9 @@ public class Tours {
 
 
         while (actionsRestantes > 0) {
+            if(personnage.estMort()) {
+                return;
+            }
             m_donjon.getCarte().afficher();
             System.out.println("\nActions restantes : " + actionsRestantes);
             System.out.println("Actions disponibles :");
@@ -192,7 +195,6 @@ public class Tours {
                 actionMDJ(m_donjon.getJoueurs());
             }
         }
-
         System.out.println(personnage.getNom() + " a épuisé ses actions pour ce tour.");
     }
 
@@ -559,20 +561,28 @@ public class Tours {
      */
     private boolean estFinDePartie() {
         boolean tousPersonnagesMorts = true;
+        historiqueActions = new StringBuilder();
+        historiqueActions.append("L'intégralités de nos héros sont mort, les monstres ont " +
+                "   triomphé de ceux-ci, le donjon restera ouvert pour que d'autres aventuriers malheureux " +
+                "y trouvent leur fin...\n");
         for (Personnage p : m_donjon.getJoueurs()) {
             if (!p.estMort()) {
                 tousPersonnagesMorts = false;
+                historiqueActions.setLength(0);
                 break;
             }
         }
-
+        // Vérifier si tous les monstres sont morts
+        historiqueActions.append("Tous les monstres sont morts, les aventuriers ont triomphé du donjon !\n");
         boolean tousMonstresMorts = true;
         for (Monstre m : m_donjon.getMonstres()) {
             if (!m.estMort()) {
                 tousMonstresMorts = false;
+                historiqueActions.setLength(0);
                 break;
             }
         }
+        // La partie est terminée si tous les personnages sont morts ou si tous les monstres sont morts
 
         return tousPersonnagesMorts || tousMonstresMorts;
     }

@@ -160,7 +160,7 @@ public class Donjon {
                 System.out.println("⚠️ Impossible de placer " + equipement.getNom() + " sur la carte");
             }
         }
-
+        m_maitreDuJeu.setCarte(m_carte); // Mettre à jour la carte du Maitre du Jeu
         // Affichage de la carte
         System.out.println("Affichage de la carte du donjon " + m_numeroDonjon + "...");
         m_carte.afficher();
