@@ -11,7 +11,7 @@ public class ChangerEquipement {
         // Afficher l'inventaire
         System.out.println("Inventaire :");
         for (int i = 0; i < personnage.getInventaire().size(); i++) {
-            System.out.println((i + 1) + ". " + personnage.getInventaire().get(i).getNom());
+            System.out.println((i + 1) + ". " + personnage.getInventaire().get(i).toString());
         }
 
         int index = -1;
