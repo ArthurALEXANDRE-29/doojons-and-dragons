@@ -1,13 +1,15 @@
 package carteDuJeu.personnages.classes;
 
-import carteDuJeu.personnages.equipements.Equipement;
-import carteDuJeu.personnages.equipements.armes.*;
-import carteDuJeu.personnages.equipements.armures.*;
+import carteDuJeu.personnages.equipements.armes.MasseDarmes;
+import carteDuJeu.personnages.equipements.armes.ArbaleteLegere;
+import carteDuJeu.personnages.equipements.armures.ArmureDEcailles;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Clerc extends Classe{
+/**
+ * Représente la classe Clerc.
+ * Le clerc possède 16 points de vie, aucun bonus de force, de dextérité ou d'initiative,
+ * et commence avec une masse d'armes, une armure d'écailles et une arbalète légère.
+ */
+public class Clerc extends Classe {
 
     public Clerc() {
         super("Clerc", 16, 0, 0, 0);
