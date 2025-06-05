@@ -34,13 +34,13 @@ public class ChangerEquipement {
             // Vérifier si l'équipement est une arme ou une armure
             if (personnage.getInventaire().get(index).estUneArme()) {
                 if (personnage.setArmeEquipee(index)) {
-                    System.out.println("Nouvelle arme équipée : " + personnage.getArmeEquipee().getNom());
+                    System.out.println("Nouvelle arme équipée : " + personnage.getArmeEquipee().toString());
                 } else {
                     System.out.println("Impossible d'équiper cette arme.");
                 }
             } else if (personnage.getInventaire().get(index).estUneArmure()) {
                 if (personnage.setArmureEquipee(index)) {
-                    System.out.println("Nouvelle armure équipée : " + personnage.getArmureEquipee().getNom());
+                    System.out.println("Nouvelle armure équipée : " + personnage.getArmureEquipee().toString());
                 } else {
                     System.out.println("Impossible d'équiper cette armure.");
                 }
