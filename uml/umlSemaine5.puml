@@ -1,0 +1,550 @@
+@startuml JeuDeRole
+
+skinparam classAttributeIconSize 0
+
+' ===== CLASSES PRINCIPALES =====
+class Jeu {
+   - m_donjonActuel: Integer
+   - NOMBRE_DONJONS_TOTAL: Integer
+   + Jeu()
+   + demarrer()
+   - creerRace(raceStr: String): Race
+   - creerClasse(classeStr: String): Classe
+   - creerTousLesEquipements(): Equipement[*]
+   - partiePerdue(): Boolean
+   - regenererPVJoueurs()
+   + finPartie()
+   + getDonjons(): Donjon[*]
+   + setDonjons(donjons: Donjon[*])
+   + getJoueurs(): Personnage[*]
+   + setJoueurs(joueurs: Personnage[*]):
+   + getMaitreDuJeu(): MaitreDuJeu
+   + setMaitreDuJeu(maitreDuJeu: MaitreDuJeu)
+   + getDonjonActuel(): Integer
+   + demanderInt(Scanner scanner, message :  String) : Integer
+
+}
+
+
+package carteDuJeu{
+    class Affichage {
+    + afficherMessageBienvenue()
+    + afficherEntitesDeplacables(joueurs: List<Personnage>, monstres: List<Monstre>, carteActuelle: Carte)
+    + afficherErreur(message: String)
+    + afficherConfirmation(message: String)
+    + afficherCiblesDisponibles(monstres: List<Monstre>, joueurs: List<Personnage>)
+    }
+    class Tours {
+        - m_indexTourActuel : Integer
+        - m_numeroTour : Integer
+        + << Create >> Tours( donjon : Donjon)
+        + commencerTours()
+        + jouerTour(entite : ElementMobile )
+        + jouerTourPersonnage(personnage : Personnage )
+        + jouerTourMonstre(monstre : Monstre )
+        + actionSEquiper(personnage : Personnage ) : Boolean
+        + actionSeDeplacer(entite : ElementMobile ) : Boolean
+        + actionAttaquer( personnage : Personnage) : Boolean
+        + actionAttaquerMonstre(monstre : Monstre ) : Boolean
+        + actionRamasserEquipement(personnage : Personnage ) : Boolean
+        + demanderCommentaire()
+        + getMonstresAPortee( personnage : Personnage ) : Monstre[*]
+        + getPersonnagesAPortee(monstre : Monstre ) : Personnage[*]
+        + estFinDePartie() : Boolean
+        + getNumeroTour() : Integer
+        + getEntiteActuelle() : ElementMobile
+        + actionMDJ( joueurs : Personnage[*])
+        + actionLancerSort(personnage : Personnage ) : Boolean
+        + lancerSortArmeMagique( personnage : Personnage) : Boolean
+        + lancerSortBoogieWoogie(personnage : Personnage ) : Boolean
+        + lancerSortGuerison( personnage : Personnage) : Boolean
+    }
+
+class MaitreDuJeu {
+    - m_nomMdj : String
+    + << Create >> MaitreDuJeu( joueurs : Personnage[*] , donjons : Donjon[*])
+    + getNomMdj() : String
+    + setCarte()
+    + getCarte() : Carte[*]
+    + phaseCreationDesMonstres()
+    + decrireContexte()
+    + getMonstres() : Monstre[*]
+
+    + deplacerCibleParNom()
+
+    + faireDmg( joueurs[Personnage])
+    + infligerDegats( cible :ElementMobile,  degats : Integer)
+    +  ajouterObstacle()
+    + deplacerElementMobile( cible :ElementMobile,  x :Integer, y : Integer)
+    + demanderInt(Scanner scanner, message :  String) : Integer
+    + lireCommentaire( commentaire String)
+}
+
+
+    Interface ElementCarte{
+        + getSymbole() : String
+        + estEquipement() : Boolean
+        + getNom() : String
+        + estElementMobile() : Boolean
+    }
+    Interface ElementMobile extends ElementCarte{
+        + getCasesMaxDeplacement() : Integer
+        + getNom() : String
+        + estPersonnage() : Boolean
+        + subirDegats(degats : Integer)
+        + estMort() Boolean
+        + getPointsDeVie() Integer
+        + getPointsDeVieMax() Integer
+        + getForce() Integer
+        + getDexterite() Integer
+        + getInitiative() Integer
+        + getSymbole() String
+        + estElementMobile() : Boolean
+    }
+
+    class Donjon {
+        - m_numeroDonjon : Integer
+         + << Create >>Donjon(maitreDuJeu MaitreDuJeu, tousLesEquipements Equipement[*], Personnage joueurs[*])
+         + miseEnPlace()
+         + initialiserEquipementsDonjon( tousLesEquipements : Equipement[*])
+         + initialiserCarte()
+         + finDonjon()
+         + deroulerDonjon() : Boolean
+         + verifierVictoire() : Boolean
+         + afficherInventaire(personnage : Personnage )
+         + getNumeroDonjon() : Integer
+         + getMaitreDuJeu() : MaitreDuJeu
+         + getGestionTours() : Tours
+         + getCarte() : Carte
+         + setCarte(carte : Carte)
+         + premierePhase()
+         + preparerEtTrierInitiative()
+         + demanderInt(Scanner scanner, message :  String) : Integer
+' a check
+         + getMonstres() : Monstre[*]
+         + setMonstres(monstres : Monstre[*])
+         + getEquipements() : Equipement[*]
+         + setEquipements(equipements : Equipement[*])
+         + getJoueurs() : Personnage[*]
+         + setJoueurs(joueurs : Personnage[*])
+         + getEntiteTour() : ElementMobile[*]
+    }
+    class Des{
+        - {static} final random : Random
+        + {static}  lancer( notation : String) : Integer
+        + {static}  lancer( nbFaces : Integer) : Integer
+        + {static} lancer( nbDes : Integer,  nbFaces: Integer) : Integer
+    }
+    class Carte {
+      - m_largeur: Integer
+      - m_hauteur: Integer
+
+      + afficherCarte()
+      + Carte(largeur: Integer, m_hauteur: Integer)
+      + getLargeur() : Integer
+      + getHauteur() : Integer
+      + contientElement(element : ElementMobile) : Boolean
+      + getCase(x: Integer, y: Integer) : Case
+      + setCase(x: Integer, y: Integer, une Case: Case)
+      + ajouterContenu(x: Integer, y: Integer, e: ElementCarte):
+      + afficher()
+      + genererObstaclesAleatoires(taux: double)
+    + parseCoordonnees(coordString: String) : Integer[]
+    + coordonneesToString(x: Integer, y: Integer) : String
+    + calculerDistance(x1: Integer, y1: Integer, x2: Integer, y2: Integer) : Integer
+
+    }
+
+    class Case {
+      - x: Integer
+      - y: Integer
+      - estObstacle: Boolean
+
+      + Case(x: Integer, y: Integer, estObstacle: Boolean)
+      + Case(x: Integer, y: Integer)
+      + getX() : Integer
+      + getY() : Integer
+      + setPosition(Integer x, Integer y)
+      + estObstacle() : Boolean
+      + setEstObstacle(estObstacle: Boolean)
+      + ajouterContenu(element: ElementCarte)
+      + retirerContenu(element: ElementCarte) : Boolean
+      + estVide() : Boolean
+      + getContenu() : ElementCarte[*]
+      + contient(element: ElementCarte) : Boolean
+      + toString() : String
+    }
+
+    package personnages {
+        class Personnage implements carteDuJeu.ElementMobile{
+            - m_nom : String
+            - m_pointsDeVie : Integer
+            - m_pointsDeVieMax : Integer
+            - m_forceBase : Integer
+            - m_forceCurrent : Integer
+            - m_dexteriteBase : Integer
+            - m_vitesseBase : Integer
+            - m_vitesseCurrent : Integer
+            - m_initiativeBase : Integer
+
+            + << Create >> Personnage(nom: String, race: Race, classe: Classe)
+            + getNom() : String
+            + getRace() : String
+            + getClasse() : String
+            + getPointsDeVie() : Integer
+            + getPointsDeVieMax() : Integer
+            + getForce() : Integer
+            + getDexterite() : Integer
+            + getVitesse() : Integer
+            + getInitiative() : Integer
+            + getInventaire() : Equipement[*]
+            + getArmeEquipee() : Arme
+            + getArmureEquipee() : Armure
+            + setArmeEquipee(index: Integer) : Boolean
+            + setArmureEquipee(index: Integer) : Boolean
+            + getCasesMaxDeplacement() : Integer
+            + getSymbole() : String
+            + subirDegats(degats : Integer)
+            + estMort() : Boolean
+            + recalculerStats()
+            + estPersonnage() : Boolean
+            + ajouterEquipement(e: Equipement)
+            + estElementMobile() : Boolean
+        }
+    package races {
+             abstract class Race {
+                - m_nomRace : String
+                - m_forceBonus : Integer
+                - m_dexteriteBonus : Integer
+                - m_vitesseBonus : Integer
+                - m_initiativeBonus : Integer
+
+                + << Create >> Race(m_nomRace: String, m_forceBonus : Integer, m_dexteriteBonus: Integer, m_vitesseBonus : Integer, m_initiativeBonus : Integer)
+                + getNomRace() : String
+                + getForceBonus() : Integer
+                + getDexteriteBonus() : Integer
+                + getVitesseBonus() : Integer
+                + getInitiativeBonus() : Integer
+            }
+            class Elfe extends Race{
+                + Elfe()
+            }
+            class Humain extends Race{
+                            + Humain()
+                        }
+            class Nain extends Race{
+                            + Nain()
+                        }
+            class Halfelin extends Race{
+                            + Halfelin()
+                        }
+        }
+        package classes
+        {
+            abstract class Classe {
+                - m_nomClasse : String
+                - m_pointsDeVie : Integer
+                - m_forceBonus : Integer
+                - m_dexteriteBonus : Integer
+                - m_initiativeBonus : Integer
+
+                + << Create >> Classe(m_nomClasse: String, m_forceBonus : Integer, m_dexteriteBonus: Integer, m_vitesseBonus : Integer, m_initiativeBonus : Integer)
+                + getNomClasse() : String
+                + getPointsDeVie() : Integer
+                + getForceBonus() : Integer
+                + getDexteriteBonus() : Integer
+                + getInitiativeBonus() : Integer
+                + getEquipementInitial() : Equipement[*]
+                #  {abstract} initialiserEquipement()
+            }
+            class Clerc extends Classe{
+                + Clerc()
+                + getEquipementInitial() : Equipement[*]
+            }
+            class Guerrier extends Classe{
+                            + Guerrier()
+                            + getEquipementInitial() : Equipement[*]
+                        }
+            class Magicien extends Classe{
+                            + Magicien()
+                            + getEquipementInitial() : Equipement[*]
+                        }
+            class Roublard extends Classe{
+                            + Roublard()
+                            + getEquipementInitial() : Equipement[*]
+                        }
+
+        }
+
+            ' ==== Sorts =====
+    package sorts{
+        abstract class Sort{
+            - m_nom : String
+            - m_description : String
+
+            + << Create >> Sort(nom : String, description : String)
+            + getNom() : String
+            + {abstract} estUtilisablePar(Classe classe) : Boolean
+            + {abstract} lancer(Carte carte, Personnage lanceur, ElementMobile[] cibles) : Boolean
+        }
+
+        class sortArmeMagique extends Sort{
+            + lancer(Carte carte, Personnage lanceur, ElementMobile[] cibles) : Boolean
+            + estUtilisablePar(Classe classe) : Boolean
+        }
+
+        class sortGuerison extends Sort{
+            + lancer(Carte carte, Personnage lanceur, ElementMobile[] cibles) : Boolean
+            + estUtilisablePar(Classe classe) : Boolean
+        }
+
+        class sortWoogieBoogie extends Sort{
+            + lancer(Carte carte, Personnage lanceur, ElementMobile[] cibles) : Boolean
+            + estUtilisablePar(Classe classe) : Boolean
+        }
+
+
+    }
+    package carteDuJeu.personnages.equipements.armes{
+                        abstract class Arme extends carteDuJeu.personnages.equipements.Equipement {
+                             - m_degats : String
+                             - m_portee : Integer
+                             - m_estLourde : Boolean
+                             - int bonusAttaque;
+                             - int bonusDegats;
+
+                             +<< Create >>Arme( m_nom : String,  m_degats : String,  m_portee : Integer,  m_estLourde : Boolean)
+                             + getDegats() : String
+                             + getPortee() : Integer
+                             + estLourde() : Boolean
+                             + toString() : String
+                             + ajouterBonusAttaque(Integer bonus)
+                             + ajouterBonusDegats(Integer bonus)
+                             + estUneArme() : Boolean
+                             + estUneArmure() : Boolean
+                            }
+                        class ArbaleteLegere extends Arme{
+                            + ArbaleteLegere()
+                            + copier() : Arme
+                            }
+                        class ArcCourt extends Arme{
+                                        + ArcCourt()
+                                        + copier() : Arme
+                                    }
+                        class Baton extends Arme{
+                                        + Baton()
+                                        + copier() : Arme
+                                                }
+                        class Fronde extends Arme{
+                                        + Fronde()
+                                        + copier() : Arme
+                                                }
+                        class EpeeLongue extends Arme{
+                                        + EpeeLongue()
+                                        + copier() : Arme
+                                                }
+                        class MasseDarmes extends Arme{
+                                        + MasseDarmes()
+                                        + copier() : Arme
+                                                }
+                        class Rapiere extends Arme{
+                                        + Rapiere()
+                                        + copier() : Arme
+                                                }
+                        class EpeeADeuxMains extends Arme{
+                                        + EpeeADeuxMains()
+                                        + copier() : Arme
+                                                }
+                    }
+package carteDuJeu.personnages.equipements{
+        abstract class Equipement implements carteDuJeu.ElementCarte{
+            - m_nom : String
+            + << Create >> Equipement(nom : String)
+            + estEquipement() : Boolean
+            + getNom() : String
+            + getSymbole() : String
+            + estUneArme() Boolean
+            + estUneArmure() Boolean
+            + {abstract} copier() : Equipement
+        }
+}
+
+package carteDuJeu.personnages.equipements.armures{
+
+                abstract class Armure extends carteDuJeu.personnages.equipements.Equipement {
+                                - m_classeArmure : Integer
+                                - m_estLourde : Boolean
+
+                                + << Create >> Armure(m_nom : String, m_classeArmure : Integer, m_estLourde : Boolean)
+                                + getClasseArmure() : Integer
+                                + estLourde() : Boolean
+                                + toString() : String
+                                + estUneArme() : Boolean
+                                + estUneArmure() : Boolean
+                            }
+
+                class Harnois extends Armure{
+                                + Harnois()
+                                + copier() : Armure
+                }
+                class ArmureDEcailles extends Armure{
+                                 + ArmureDEcailles()
+                                 + copier() : Armure
+                            }
+                class CotteDeMailles extends Armure{
+                                 + CotteDeMailles()
+                                 + copier() : Armure
+                            }
+                class DemiPlate extends Armure{
+                                 + DemiPlate()
+                                 + copier() : Armure
+                            }
+}
+
+
+    ' ===== MONSTRES =====
+    package carteDuJeu.Monstres {
+        class Monstre implements carteDuJeu.ElementMobile {
+            - m_espece : String
+            - m_numero : Integer
+            - m_portee : Integer
+            - m_maxDmg : Integer
+            - m_nbDes : Integer
+            - m_pointsDeVieMax : Integer
+            - m_pointsDeVie : Integer
+            - m_force : Integer
+            - m_dexterite : Integer
+            - m_vitesse : Integer
+            - m_classeArmure : Integer
+            - m_initiative : Integer
+
+            + << Create >> Monstre(String espece, Integer numero, Integer portee, Integer maxDmg, Integer vitesse, Integer nbDes, Integer pointsDeVieMax, Integer caracteristiqueDAttaque, Integer classeArmure, Integer initiative)
+
+            + getEspece() : String
+            + setEspece(String espece)
+            + getNumero() : Integer
+            + setNumero(Integer numero)
+            + getM_maxDmg() : Integer
+            + getNbDes() : Integer
+            + setMaxdmg(Integer dmgMax, Integer nbDes)
+            + getPortee() : Integer
+            + getCasesMaxDeplacement() : Integer
+            + setVitesse(Integer vitesse)
+            + setPorteeEtStat(Integer portee, Integer caracteristiqueDAttaque)
+            + changementCarac(Integer caracteristiqueDAttaque)
+            + getPointsDeVie() : Integer
+            + setPointDeVie(Integer pointsDeVie)
+            + setPointsDeVieMax(Integer pointsDeVie)
+            + getPointsDeVieMax() : Integer
+            + getForce() : Integer
+            + getDexterite(): Integer
+            +  getClasseArmure() : Integer
+            + setClasseArmure(Integer classeArmure)
+            +  getInitiative() : Integer
+            + setInitiative(Integer initiative)
+
+            + getSymbole() : String
+            + getNom() : String
+            + subirDegats(degats : Integer)
+            + estMort() :  Boolean
+            + estPersonnage() : Boolean
+            + estElementMobile() : Boolean
+        }
+
+
+    }
+
+package carteDuJeu.actions {
+
+    class Attaque{
+    + << Create >> Attaque(deplacement: Deplacement)
+    + attaquer(carte: Carte, attaquant: Personnage,cible: Monstre, caseAttaquant: Case, caseCible: Case) : Boolean
+    + attaquer(carte: Carte, attaquant: Monstre, cible: Personnage, caseAttaquant: Case, caseCible: Case) : Boolean
+    }
+    class Deplacement{
+
+
+    + << Create >> Deplacement(carte: Carte)
+    + trouverPosition(element: ElementMobile) : Integer[]
+    + gererDeplacement(element: ElementMobile) : Boolean
+    + parseCoordonnees(coordString: String) : Integer[]
+    + coordonneesToString(x: Integer, y: Integer) : String
+    + estDeplacementValide(xCible: Integer, yCible: int) : Boolean
+    + deplacer(xD: Integer, yD: Integer, xC: Integer, yC: Integer,element: ElementMobile, casesMax: Integer) : Boolean
+    + trouverChemin(xD: Integer, yD: Integer, xC: Integer, yC: Integer,casesMax: int) : Integer[*]
+    + estAPortee(x1: Integer, y1: Integer, x2: Integer, y2: Integer, portee: Integer) : Boolean
+    + estAPortee(e1: ElementMobile, e2: ElementMobile, portee: Integer)|: Boolean
+    }
+    class ChangerEquipement {
+        + proposerChangement(personnage: Personnage): void
+    }
+
+
+}
+
+' ===== RELATIONS =====
+Jeu --> "\n 1 \n m_maitreDuJeu" MaitreDuJeu : <<uses>>
+Jeu o-> "\n 1..* \n- m_donjons" Donjon
+Jeu o-> "\n 1..* \n- m_joueurs" Personnage
+
+MaitreDuJeu o-- "\n 1..* \n- m_carteActuelle" Carte
+MaitreDuJeu o-> "\n 1..* \n- m_monstres" Monstre
+MaitreDuJeu o-> "\n 0..* \n- m_cartem_equipements" Carte
+MaitreDuJeu o-> "\n 1..* \n- m_joueurs" Personnage
+MaitreDuJeu o-> Affichage : uses
+
+Tours o-- "\n 1 \n- m_donjon" Donjon
+Tours o-- "\n 1 \n- m_gestionEquipement" ChangerEquipement
+Tours o-- "\n 1 \n- m_deplacement" Deplacement
+Tours o-- "\n 1 \n- m_attaque" Attaque
+Tours o-- "\n 1 \n- m_maitreDuJeu" MaitreDuJeu
+Tours o-- "\n 1 \n- m_entiteActuelle" ElementMobile
+Tours ..> Sort : <<uses>>
+
+Donjon *-- "\n 1 \n- m_carte" Carte
+Donjon ..> "\n 1 \n -m_maitreDuJeu" MaitreDuJeu : <<uses>>
+Donjon ..> Tours : <<uses>>
+Donjon o-> "\n 1..* \n- m_entiteTour" ElementMobile
+Donjon o-> "\n 1..* \n- m_monstres" Monstre
+Donjon o-> "\n 0..* \n- m_equipements- m_equipements- m_equipements- m_equipements" Equipement
+Donjon o-> "\n 1..* \n- m_joueurs" Personnage
+
+
+Case *-- ElementCarte : 0..*
+Case o-> "\n 0..1 \n- m_contenu" Equipement
+Case ..> Equipement : <<uses>>
+Case ..> Monstre : <<uses>>
+Case ..> Personnage : <<uses>>
+
+Classe "1" o-- "0..*" Equipement : m_equipementInitial
+
+
+Personnage o-> "\n 0..* \n- m_inventaire" Equipement : < peut être mis dans l'inventaire
+Personnage o-> "\n 0..1 \n- m_armeEquipee" Arme : < portée par
+Personnage o-> "\n 0..1 \n- m_armureEquipee" Armure : < portée par
+Personnage ..> Des : <<uses>>
+Personnage --> "\n 0..1 \n- m_race"  Race
+Personnage --> "\n 0..1 \n- m_classe" Classe
+
+sortArmeMagique ..> Arme : <<uses>>
+
+Carte "\n 1..* \n" *--> "- m_cases" Case
+Carte ..> ElementCarte : <<uses>actions>Carte ..> Case : <<uses>>
+Carte ..> Random : <<uses>>
+
+    ' LES RELATIONS ENTRE LES CLASSES D'ACTIONS
+ChangerEquipement ..> Personnage : <<uses>>
+
+Attaque ..> Carte : <<uses>>
+Attaque ..> Case : <<uses>>
+Attaque ..> Personnage : <<uses>>
+Attaque ..> Monstre : <<uses>>
+Attaque ..> Arme : <<uses>>
+Attaque ..>"\n 1 \n m_deplacement" Deplacement : <<uses>>
+Attaque ..> Armure : <<uses>>
+Attaque ..> Des : <<uses>>
+
+Deplacement "\n0..1\n" --> "- m_carte " Carte : <<uses>>
+Deplacement --> ElementMobile : <<uses>>
+Deplacement --> Case : <<uses>>
+@enduml
