@@ -8,29 +8,52 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Gère le rôle du Maître du Jeu : création des monstres, gestion de la carte,
+ * interactions spéciales et actions administratives sur le donjon.
+ * Le Maître du Jeu contrôle la carte courante, la création des monstres et peut
+ * infliger des dégâts ou déplacer des entités.
+ */
 public class MaitreDuJeu {
     private List<Monstre> m_monstres;
     private List<Personnage> m_joueurs;
     private final String m_nomMdj = "Maitre du Jeu";
-    private Carte m_carteActuelle; // Carte du donjon actuel
+    private Carte m_carteActuelle;
 
+    /**
+     * Construit un Maître du Jeu avec la liste des joueurs.
+     * @param joueurs la liste des personnages joueurs
+     */
     public MaitreDuJeu(List<Personnage> joueurs) {
         this.m_monstres = new ArrayList<>();
-        this.m_joueurs = new ArrayList<>(joueurs); // Copier la liste des joueurs
+        this.m_joueurs = new ArrayList<>(joueurs);
         this.m_carteActuelle = null;
     }
 
+    /**
+     * Définit la carte courante contrôlée par le Maître du Jeu.
+     * @param carte la carte à contrôler
+     */
     public void setCarte(Carte carte) {
         this.m_carteActuelle = carte;
         System.out.println("Le Maître du Jeu prend contrôle d'une nouvelle carte (" +
                 carte.getLargeur() + "x" + carte.getHauteur() + ")");
-        if (m_carteActuelle != null) Affichage.afficherCarte(m_carteActuelle);
+        if (m_carteActuelle != null) {
+            Affichage.afficherCarte(java.util.Optional.ofNullable(m_carteActuelle));
+        }
     }
 
+    /**
+     * Retourne la carte actuellement contrôlée.
+     * @return la carte courante
+     */
     public Carte getCarte() {
         return m_carteActuelle;
     }
 
+    /**
+     * Affiche le contexte narratif du donjon pour les joueurs.
+     */
     public void decrireContexte() {
         System.out.println("Bienvenue dans le donjon mystérieux !");
         System.out.println("Vous incarnez des aventuriers courageux, prêts à affronter des monstres redoutables.");
@@ -38,60 +61,50 @@ public class MaitreDuJeu {
         System.out.println("Bonne chance à vous !");
     }
 
+    /**
+     * Lance la phase de création des monstres : demande à l'utilisateur les caractéristiques
+     * de chaque monstre à créer et les ajoute à la liste des monstres.
+     */
     public void phaseCreationDesMonstres() {
         Scanner scanner = new Scanner(System.in);
-
-        int nombreMonstres = 0;
-        while (true) {
-            System.out.print("Combien de monstres voulez-vous créer ? ");
-            try {
-                nombreMonstres = scanner.nextInt();
-                scanner.nextLine();
-                break;
-            } catch (InputMismatchException e) {
-                System.out.println("Entrée invalide, veuillez entrer un nombre.");
-                scanner.nextLine();
-            }
-        }
-
+        int nombreMonstres = demanderInt(scanner, "Combien de monstres voulez-vous créer ? ");
         for (int i = 1; i <= nombreMonstres; i++) {
-            System.out.println("\nCréation du monstre #" + i);
-            String espece = "";
-            while (true) {
-                try {
-                    System.out.print("Entrez le nom du monstre : ");
-                    espece = scanner.nextLine().trim();
-                    if (espece.isEmpty()) {
-                        throw new IllegalArgumentException("Le nom ne peut pas être vide.");
-                    }
-                    break; // nom valide, on sort de la boucle
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Erreur : " + e.getMessage());
-                }
-            }
-
-            int portee = demanderInt(scanner, "Portée (1 pour mêlée, >1 pour distance) : ");
-            int maxDmg = demanderInt(scanner, "Dégâts max par dé : ");
-            int nbDes = demanderInt(scanner, "Nombre de dés : ");
-            int pvMax = demanderInt(scanner, "Points de vie max : ");
-            int caracAttaque = demanderInt(scanner, "Caractéristique d'attaque (force ou dextérité selon portée) : ");
-            int classeArmure = demanderInt(scanner, "Classe d'armure : ");
-            int initiative = demanderInt(scanner, "Initiative : ");
-            int vitesse = demanderInt(scanner, "Vitesse : ");
-
-            Monstre monstre = new Monstre(
-                    espece, i, portee, maxDmg, vitesse, nbDes,
-                    pvMax, caracAttaque, classeArmure, initiative
-            );
-
+            Monstre monstre = creerMonstreInteractif(scanner, i);
             m_monstres.add(monstre);
         }
     }
 
+    /**
+     * Crée un monstre interactif en demandant les caractéristiques à l'utilisateur.
+     * @param scanner le scanner pour la saisie utilisateur
+     * @param numero le numéro du monstre (pour l'affichage)
+     * @return le monstre créé
+     */
+    private Monstre creerMonstreInteractif(Scanner scanner, int numero) {
+        String espece = demanderNomMonstre(scanner, numero);
+        int portee = demanderInt(scanner, "Portée (1 pour mêlée, >1 pour distance) : ");
+        int maxDmg = demanderInt(scanner, "Dégâts max par dé : ");
+        int nbDes = demanderInt(scanner, "Nombre de dés : ");
+        int pvMax = demanderInt(scanner, "Points de vie max : ");
+        int caracAttaque = demanderInt(scanner, "Caractéristique d'attaque (force ou dextérité selon portée) : ");
+        int classeArmure = demanderInt(scanner, "Classe d'armure : ");
+        int initiative = demanderInt(scanner, "Initiative : ");
+        int vitesse = demanderInt(scanner, "Vitesse : ");
+        return new Monstre(espece, numero, portee, maxDmg, vitesse, nbDes, pvMax, caracAttaque, classeArmure, initiative);
+    }
+
+    /**
+     * Retourne la liste des monstres créés par le Maître du Jeu.
+     * @return la liste des monstres
+     */
     public List<Monstre> getMonstres() {
         return m_monstres;
     }
 
+    /**
+     * Permet au Maître du Jeu d'infliger des dégâts à un monstre ou un joueur via la foudre divine.
+     * @param joueurs la liste des personnages joueurs pouvant être ciblés
+     */
     public void faireDmg(List<Personnage> joueurs) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Voulez-vous utiliser la foudre divine ? (y/n) ");
@@ -123,7 +136,11 @@ public class MaitreDuJeu {
         System.out.println("❌ Aucun monstre ou joueur trouvé avec ce nom.");
     }
 
-    // Méthode pour infliger des dégâts génériques
+    /**
+     * Inflige des dégâts à une cible (monstre ou joueur) et gère sa mort éventuelle.
+     * @param cible l'entité à blesser
+     * @param degats le nombre de dégâts à infliger
+     */
     private void infligerDegats(ElementMobile cible, int degats) {
         cible.subirDegats(degats);
         System.out.println("⚡ " + cible.getNom() + " a été frappé par la foudre divine et subit " + degats + " dégâts !");
@@ -140,6 +157,9 @@ public class MaitreDuJeu {
         }
     }
 
+    /**
+     * Permet de déplacer un monstre ou un joueur par son nom, après saisie utilisateur.
+     */
     public void deplacerCibleParNom() {
         if (m_carteActuelle == null) {
             System.out.println("❌ Aucune carte disponible pour le déplacement.");
@@ -148,7 +168,7 @@ public class MaitreDuJeu {
 
         Scanner scanner = new Scanner(System.in);
 
-        Affichage.afficherEntitesDeplacables( m_joueurs,m_monstres, m_carteActuelle);
+        Affichage.afficherEntitesDeplacables(m_joueurs, m_monstres, m_carteActuelle);
         System.out.print("Entrez le nom du monstre ou joueur à déplacer : ");
         String nomCible = scanner.nextLine().trim();
 
@@ -204,6 +224,12 @@ public class MaitreDuJeu {
         }
     }
 
+    /**
+     * Déplace une entité mobile (monstre ou joueur) vers une nouvelle case de la carte.
+     * @param cible l'entité à déplacer
+     * @param x la nouvelle abscisse
+     * @param y la nouvelle ordonnée
+     */
     public void deplacerElementMobile(ElementMobile cible, int x, int y) {
         if (m_carteActuelle == null) {
             System.out.println("❌ Aucune carte disponible.");
@@ -211,10 +237,8 @@ public class MaitreDuJeu {
         }
 
         try {
-            // Récupère la case actuelle de la cible
             Case caseActuelle = m_carteActuelle.getCase(cible)
                     .orElseThrow(() -> new IllegalArgumentException("Case introuvable"));
-            // Récupère la case de destination
             Case caseDestination = m_carteActuelle.getCase(x, y);
 
             caseActuelle.retirerContenu(cible);
@@ -228,6 +252,9 @@ public class MaitreDuJeu {
         }
     }
 
+    /**
+     * Permet d'ajouter un obstacle sur la carte à une position choisie par l'utilisateur.
+     */
     public void ajouterObstacle() {
         if (m_carteActuelle == null) {
             System.out.println("❌ Aucune carte disponible.");
@@ -264,6 +291,27 @@ public class MaitreDuJeu {
         System.out.println("✅ Obstacle ajouté en (" + lettreX + ", " + yUtilisateur + ").");
     }
 
+    /**
+     * Demande à l'utilisateur de saisir le nom d'un monstre.
+     * @param scanner le scanner à utiliser pour la saisie
+     * @param numero le numéro du monstre (pour l'affichage)
+     * @return le nom du monstre saisi
+     */
+    private String demanderNomMonstre(Scanner scanner, int numero) {
+        while (true) {
+            System.out.print("Entrez le nom du monstre #" + numero + " : ");
+            String nom = scanner.nextLine().trim();
+            if (!nom.isEmpty()) return nom;
+            System.out.println("Le nom ne peut pas être vide.");
+        }
+    }
+
+    /**
+     * Demande à l'utilisateur de saisir un entier avec un message personnalisé.
+     * @param scanner le scanner à utiliser pour la saisie
+     * @param message le message à afficher
+     * @return la valeur entière saisie
+     */
     private int demanderInt(Scanner scanner, String message) {
         int valeur;
         while (true) {
@@ -277,10 +325,26 @@ public class MaitreDuJeu {
                 scanner.nextLine();
             }
         }
-    }   
+    }
+
+    /**
+     * Affiche un commentaire ou une narration du Maître du Jeu.
+     * @param commentaire le texte à afficher
+     */
     public void lireCommentaire(String commentaire) {
         System.out.println("📜 Récit du Maître du Jeu :");
         System.out.println(commentaire);
     }
 
+    /*============================Section Overrides============================*/
+
+    @Override
+    public String toString() {
+        return "MaitreDuJeu{" +
+                "nom='" + m_nomMdj + '\'' +
+                ", monstres=" + m_monstres.size() +
+                ", joueurs=" + m_joueurs.size() +
+                ", carteActuelle=" + (m_carteActuelle != null ? "présente" : "absente") +
+                '}';
+    }
 }

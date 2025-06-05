@@ -179,43 +179,40 @@ public class Affichage {
      *
      * @param carte la carte à afficher (peut être null)
      */
-    public static void afficherCarte(Carte carte) {
-        if (carte == null) {
+    public static void afficherCarte(Optional<Carte> carte) {
+        if (carte == null || carte.isEmpty()) {
             System.out.println("❌ Aucune carte à afficher.");
             return;
         }
+        Carte c = carte.get();
 
         // Affiche les coordonnées X (lettres)
         System.out.print("  ");
-        for (int i = 0; i < carte.getLargeur(); i++) {
+        for (int i = 0; i < c.getLargeur(); i++) {
             System.out.printf("%4c", 'A' + i);
         }
         System.out.println();
 
         // Ligne supérieure du contour
         System.out.print("   ┌");
-        for (int x = 0; x < carte.getLargeur(); x++) {
+        for (int x = 0; x < c.getLargeur(); x++) {
             System.out.print("────");
         }
         System.out.println("┐");
 
         // Affichage du contenu de la carte
-        for (int y = 0; y < carte.getHauteur(); y++) {
-            // Coordonnée Y (nombres)
+        for (int y = 0; y < c.getHauteur(); y++) {
             System.out.printf("%2d │", y + 1);
-
-            // Contenu de chaque case de la ligne
-            for (int x = 0; x < carte.getLargeur(); x++) {
-                Case caseActuelle = carte.getCase(x, y);
+            for (int x = 0; x < c.getLargeur(); x++) {
+                Case caseActuelle = c.getCase(x, y);
                 System.out.print(caseActuelle.toString());
             }
-
             System.out.println("│");
         }
 
         // Ligne inférieure du contour
         System.out.print("   └");
-        for (int x = 0; x < carte.getLargeur(); x++) {
+        for (int x = 0; x < c.getLargeur(); x++) {
             System.out.print("────");
         }
         System.out.println("┘");

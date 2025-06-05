@@ -206,7 +206,7 @@ public class Case {
 
     /**
      * Retourne une représentation textuelle de la case pour l'affichage.
-     * - "[  ]" pour un obstacle
+     * - "[ ] " pour un obstacle
      * - Le symbole du premier élément mobile s'il y en a un
      * - Le symbole du premier élément non mobile s'il n'y a pas d'élément mobile
      * - " .  " pour une case vide
@@ -216,7 +216,7 @@ public class Case {
     @Override
     public String toString() {
         if (m_estObstacle) {
-            return "[  ]";
+            return "[ ] ";
         } else if (!m_contenu.isEmpty()) {
             for (ElementCarte element : m_contenu) {
                 if (element.estElementMobile()) {

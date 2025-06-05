@@ -1,3 +1,10 @@
+/**
+ * Représente un donjon dans le jeu, contenant une carte, des monstres, des personnages,
+ * des équipements, et la gestion des tours.
+ * Gère l'initialisation du donjon, le placement des entités, la phase d'équipement,
+ * le déroulement des combats, et la vérification des conditions de victoire.
+ */
+
 package carteDuJeu;
 
 import carteDuJeu.actions.ChangerEquipement;
@@ -7,9 +14,20 @@ import carteDuJeu.monstres.*;
 
 import java.util.*;
 
+/**
+ * Représente un Donjon dans le jeu.
+ * Un donjon est constitué d'une carte, de monstres, d'équipements et de personnages joueurs.
+ * Il est contrôlé par un maître du jeu, et gère les phases d'équipement, de placement et de combat.
+ *
+ * Responsabilités principales :
+ * - Initialisation de la carte et des équipements
+ * - Placement des entités (joueurs, monstres, équipements)
+ * - Gestion des tours de jeu via {@link Tours}
+ * - Évaluation de la victoire ou défaite à la fin du donjon
+ *
+ * Le donjon utilise des interactions console pour la configuration et les phases de jeu.
+ */
 public class Donjon {
-
-    // Attributs privés
     private int m_numeroDonjon;
     private Carte m_carte;
     private MaitreDuJeu m_maitreDuJeu;
@@ -19,25 +37,29 @@ public class Donjon {
     private List<ElementMobile> m_entiteTour;
     private Tours m_gestionTours;
 
-    // Constructeur
+    /**
+     * Crée un donjon avec son numéro, un maître du jeu, une liste d'équipements,
+     * et les personnages/joueurs qui y participeront.
+     * @param numeroDonjon numéro identifiant le donjon
+     * @param maitreDuJeu maître du jeu responsable de ce donjon
+     * @param tousLesEquipements liste globale des équipements disponibles
+     * @param joueurs liste des personnages participant au donjon
+     */
     public Donjon(int numeroDonjon, MaitreDuJeu maitreDuJeu, List<Equipement> tousLesEquipements, List<Personnage> joueurs) {
         this.m_numeroDonjon = numeroDonjon;
         this.m_maitreDuJeu = maitreDuJeu;
-        this.m_joueurs = new ArrayList<>(joueurs); // Copie défensive
+        this.m_joueurs = new ArrayList<>(joueurs);
         this.m_monstres = new ArrayList<>();
         this.m_equipements = new ArrayList<>();
         this.m_entiteTour = new ArrayList<>();
-
-        // Initialisation de la carte spécifique à ce donjon
         initialiserCartePersonnalisee();
-
-        // Initialisation des équipements du donjon
         initialiserEquipementsDonjon(tousLesEquipements);
-
-        // Initialisation du gestionnaire de tours
         this.m_gestionTours = new Tours(this);
     }
 
+    /**
+     * Initialise la carte du donjon selon le choix de l'utilisateur (par défaut ou personnalisée).
+     */
     private void initialiserCartePersonnalisee() {
         Scanner scanner = new Scanner(System.in);
 
@@ -65,7 +87,6 @@ public class Donjon {
                     break;
             }
         } else {
-            // Configuration personnalisée
             try {
                 int largeur = demanderInt(scanner, "Quelle largeur pour le donjon " + m_numeroDonjon + " ? ( < 25) : ");
                 int hauteur = demanderInt(scanner, "Quelle hauteur pour le donjon " + m_numeroDonjon + " ? ( < 25) : ");
@@ -79,6 +100,11 @@ public class Donjon {
         }
     }
 
+    /**
+     * Initialise les équipements du donjon à partir de la liste globale.
+     *
+     * @param tousLesEquipements la liste de tous les équipements disponibles
+     */
     private void initialiserEquipementsDonjon(List<Equipement> tousLesEquipements) {
         try {
             Scanner scanner = new Scanner(System.in);
@@ -97,6 +123,12 @@ public class Donjon {
         }
     }
 
+    /**
+     * Initialise la carte du donjon avec la largeur et la hauteur spécifiées.
+     *
+     * @param largeur la largeur de la carte
+     * @param hauteur la hauteur de la carte
+     */
     public void initialiserCarte(int largeur, int hauteur) {
         if (this.m_carte == null) {
             this.m_carte = new Carte(largeur, hauteur);
@@ -106,7 +138,10 @@ public class Donjon {
         }
     }
 
-    // Méthode pour la mise en place du donjon
+    /**
+     * Prépare le donjon en nettoyant les listes, générant les obstacles, plaçant monstres, joueurs et équipements.
+     * Met à jour la carte du maître du jeu.
+     */
     public void miseEnPlace() {
         System.out.println("=== Mise en place du Donjon " + m_numeroDonjon + " ===");
 
@@ -122,7 +157,7 @@ public class Donjon {
 
         Random random = new Random();
         m_carte.genererObstaclesAleatoires( random.nextDouble() * 0.125); // 12.5% d'obstacles
-        Affichage.afficherCarte(m_carte);
+        Affichage.afficherCarte(java.util.Optional.ofNullable(m_carte));
         // Vérification que des monstres ont été créés
         if (m_monstres.isEmpty()) {
             System.out.println("⚠️ Aucun monstre créé pour ce donjon !");
@@ -158,11 +193,15 @@ public class Donjon {
         m_maitreDuJeu.setCarte(m_carte); // Mettre à jour la carte du Maitre du Jeu
         // Affichage de la carte
         System.out.println("Affichage de la carte du donjon " + m_numeroDonjon + "...");
-        Affichage.afficherCarte(m_carte);
+        Affichage.afficherCarte(java.util.Optional.ofNullable(m_carte));
         System.out.println("Le donjon " + m_numeroDonjon + " est en place !");
     }
 
-    // Méthode principale pour dérouler le donjon
+    /**
+     * Déroule le donjon : prépare l'initiative, lance les tours et vérifie la victoire.
+     *
+     * @return true si le donjon est réussi, false sinon
+     */
     public boolean deroulerDonjon() {
         System.out.println("=== Début du combat dans le donjon " + m_numeroDonjon + " ===");
 
@@ -188,7 +227,9 @@ public class Donjon {
     }
 
     /**
-     * Vérifie les conditions de victoire
+     * Vérifie les conditions de victoire du donjon.
+     *
+     * @return true si tous les monstres sont morts, false si un joueur est mort
      */
     private boolean verifierVictoire() {
         boolean unJoueurMort = m_joueurs.stream().anyMatch(ElementMobile::estMort);
@@ -208,7 +249,7 @@ public class Donjon {
     }
 
     /**
-     * Phase d'équipement avant le combat
+     * Gère la phase d'équipement pour chaque joueur avant le début du donjon.
      */
     public void premierePhase() {
         Scanner scanner = new Scanner(System.in);
@@ -260,14 +301,15 @@ public class Donjon {
 
         System.out.println("Tous les joueurs vivants sont prêts pour le donjon " + m_numeroDonjon + ".\n");
     }
+
     /**
-     * Prépare et trie l'ordre d'initiative
+     * Prépare et trie l'ordre d'initiative des entités mobiles du donjon.
      */
     public void preparerEtTrierInitiative() {
         Random random = new Random();
         m_entiteTour.clear();
 
-        // Ajouter seulement les entités vivantes
+        // Ajouter seulement les entités mobiles
         for (Personnage joueur : m_joueurs) {
             if (!joueur.estMort()) {
                 m_entiteTour.add(joueur);
@@ -303,7 +345,7 @@ public class Donjon {
     }
 
     /**
-     * Méthode appelée à la fin du donjon pour nettoyer
+     * Affiche les statistiques finales et l'état des personnages à la fin du donjon.
      */
     public void finDonjon() {
         System.out.println("\n=== Fin du donjon " + m_numeroDonjon + " ===");
@@ -324,6 +366,13 @@ public class Donjon {
         }
     }
 
+    /**
+     * Demande à l'utilisateur de saisir un entier avec un message personnalisé.
+     *
+     * @param scanner le scanner à utiliser pour la saisie
+     * @param message le message à afficher
+     * @return la valeur entière saisie
+     */
     private int demanderInt(Scanner scanner, String message) {
         int valeur;
         while (true) {
@@ -340,50 +389,111 @@ public class Donjon {
     }
 
     // Getters et setters
+
+    /**
+     * Retourne le numéro du donjon.
+     *
+     * @return le numéro du donjon
+     */
     public int getNumeroDonjon() {
         return m_numeroDonjon;
     }
 
+    /**
+     * Retourne la carte du donjon.
+     *
+     * @return la carte du donjon
+     */
     public Carte getCarte() {
         return m_carte;
     }
 
+    /**
+     * Définit la carte du donjon.
+     *
+     * @param carte la nouvelle carte
+     */
     public void setCarte(Carte carte) {
         this.m_carte = carte;
     }
 
+    /**
+     * Retourne la liste des monstres du donjon.
+     *
+     * @return la liste des monstres
+     */
     public List<Monstre> getMonstres() {
         return m_monstres;
     }
 
+    /**
+     * Définit la liste des monstres du donjon.
+     *
+     * @param monstres la nouvelle liste de monstres
+     */
     public void setMonstres(List<Monstre> monstres) {
         this.m_monstres = new ArrayList<>(monstres);
     }
 
+    /**
+     * Retourne la liste des équipements du donjon.
+     *
+     * @return la liste des équipements
+     */
     public List<Equipement> getEquipements() {
         return m_equipements;
     }
 
+    /**
+     * Définit la liste des équipements du donjon.
+     *
+     * @param equipements la nouvelle liste d'équipements
+     */
     public void setEquipements(List<Equipement> equipements) {
         this.m_equipements = new ArrayList<>(equipements);
     }
 
+    /**
+     * Récupère la liste des joueurs du donjon.
+     *
+     * @return la liste des joueurs
+     */
     public List<Personnage> getJoueurs() {
         return m_joueurs;
     }
 
+    /**
+     * Définit la liste des joueurs du donjon.
+     *
+     * @param joueurs la nouvelle liste de joueurs
+     */
     public void setJoueurs(List<Personnage> joueurs) {
         this.m_joueurs = new ArrayList<>(joueurs);
     }
 
+    /**
+     * Retourne la liste des entités pour l'ordre de tour.
+     *
+     * @return la liste des entités du tour
+     */
     public List<ElementMobile> getEntiteTour() {
         return m_entiteTour;
     }
 
+    /**
+     * Retourne le maître du jeu associé à ce donjon.
+     *
+     * @return le maître du jeu
+     */
     public MaitreDuJeu getMaitreDuJeu() {
         return m_maitreDuJeu;
     }
 
+    /**
+     * Retourne le gestionnaire de tours du donjon.
+     *
+     * @return le gestionnaire de tours
+     */
     public Tours getGestionTours() {
         return m_gestionTours;
     }
