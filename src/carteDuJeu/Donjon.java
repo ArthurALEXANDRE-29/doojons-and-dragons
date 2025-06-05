@@ -110,11 +110,6 @@ public class Donjon {
     public void miseEnPlace() {
         System.out.println("=== Mise en place du Donjon " + m_numeroDonjon + " ===");
 
-        System.out.println("=== DEBUG - Début miseEnPlace ===");
-        System.out.println("Carte actuelle du Donjon : " + m_carte);
-        System.out.println("Carte actuelle du MDJ : " + m_maitreDuJeu.getCarte());
-        System.out.println("Sont-elles identiques ? " + (m_carte == m_maitreDuJeu.getCarte()));
-
         // Nettoyer les listes précédentes
         m_monstres.clear();
         m_entiteTour.clear();

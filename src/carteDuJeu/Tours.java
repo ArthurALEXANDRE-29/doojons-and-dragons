@@ -4,7 +4,6 @@ import carteDuJeu.actions.*;
 import carteDuJeu.personnages.Personnage;
 import carteDuJeu.personnages.equipements.Equipement;
 import carteDuJeu.Monstres.Monstre;
-import java.util.stream.Collectors;
 import carteDuJeu.personnages.sorts.*;
 
 import java.util.ArrayList;
@@ -265,7 +264,6 @@ public class Tours {
                     break;
                 case 3:
                     System.out.println(monstre.getNom() + " termine son tour.");
-                    demanderCommentaire();
                     actionMDJ(m_donjon.getJoueurs());
                     return;
                 default:

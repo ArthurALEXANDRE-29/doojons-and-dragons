@@ -60,8 +60,9 @@ public class Affichage {
     }
 
     public static void afficherConfirmation(String message) {
-        System.out.println("✅ " + message);
+        System.out.println(message);
     }
+    
     public static void afficherCiblesDisponibles(List<Monstre> monstres, List<Personnage> joueurs) {
         System.out.println("\n--- Cibles disponibles ---");
 
