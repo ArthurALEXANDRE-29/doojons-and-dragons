@@ -60,6 +60,8 @@ package carteDuJeu{
         + lancerSortArmeMagique( personnage : Personnage) : Boolean
         + lancerSortBoogieWoogie(personnage : Personnage ) : Boolean
         + lancerSortGuerison( personnage : Personnage) : Boolean
+
+        - actionVoirInventaire( personnage : Personnage) : Boolean
         + toString() : String
     }
 
