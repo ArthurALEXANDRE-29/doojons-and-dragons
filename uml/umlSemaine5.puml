@@ -33,6 +33,7 @@ package carteDuJeu{
     + afficherErreur(message: String)
     + afficherConfirmation(message: String)
     + afficherCiblesDisponibles(monstres: List<Monstre>, joueurs: List<Personnage>)
+    + afficherInventaire(personnage : Personnage )Affichage
     }
     class Tours {
         - m_indexTourActuel : Integer
@@ -111,7 +112,7 @@ class MaitreDuJeu {
          + finDonjon()
          + deroulerDonjon() : Boolean
          + verifierVictoire() : Boolean
-         + afficherInventaire(personnage : Personnage )
+
          + getNumeroDonjon() : Integer
          + getMaitreDuJeu() : MaitreDuJeu
          + getGestionTours() : Tours
@@ -288,17 +289,17 @@ class MaitreDuJeu {
             + {abstract} lancer(Carte carte, Personnage lanceur, ElementMobile[] cibles) : Boolean
         }
 
-        class sortArmeMagique extends Sort{
+        class SortArmeMagique extends Sort{
             + lancer(Carte carte, Personnage lanceur, ElementMobile[] cibles) : Boolean
             + estUtilisablePar(Classe classe) : Boolean
         }
 
-        class sortGuerison extends Sort{
+        class SortGuerison extends Sort{
             + lancer(Carte carte, Personnage lanceur, ElementMobile[] cibles) : Boolean
             + estUtilisablePar(Classe classe) : Boolean
         }
 
-        class sortWoogieBoogie extends Sort{
+        class SortWoogieBoogie extends Sort{
             + lancer(Carte carte, Personnage lanceur, ElementMobile[] cibles) : Boolean
             + estUtilisablePar(Classe classe) : Boolean
         }
@@ -528,7 +529,7 @@ Personnage ..> Des : <<uses>>
 Personnage --> "\n 0..1 \n- m_race"  Race
 Personnage --> "\n 0..1 \n- m_classe" Classe
 
-sortArmeMagique ..> Arme : <<uses>>
+SortArmeMagique ..> Arme : <<uses>>
 
 Carte "\n 1..* \n" *--> "- m_cases" Case
 Carte ..> ElementCarte : <<uses>actions>Carte ..> Case : <<uses>>
