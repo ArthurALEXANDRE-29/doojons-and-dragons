@@ -11,6 +11,10 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Gère la boucle principale des tours de jeu, l'enchaînement des actions des entités,
+ * et les interactions avec le Maître du Jeu.
+ */
 public class Tours {
     private Donjon m_donjon;
     private Scanner m_scanner;
@@ -22,6 +26,10 @@ public class Tours {
     private MaitreDuJeu m_maitreDuJeu;
     private StringBuilder historiqueActions;
 
+    /**
+     * Constructeur de la classe Tours.
+     * @param donjon le donjon dans lequel se déroule la partie
+     */
     public Tours(Donjon donjon) {
         this.m_donjon = donjon;
         this.m_scanner = new Scanner(System.in);
@@ -35,7 +43,7 @@ public class Tours {
     }
 
     /**
-     * Lance la boucle principale des tours de jeu
+     * Lance la boucle principale des tours de jeu.
      */
     public void commencerTours() {
         System.out.println("\n=== DÉBUT DES TOURS DE JEU ===\n");
@@ -91,7 +99,8 @@ public class Tours {
     }
 
     /**
-     * Gère le tour d'une entité (personnage ou monstre)
+     * Gère le tour d'une entité (personnage ou monstre).
+     * @param entite l'entité dont c'est le tour
      */
     private void jouerTour(ElementMobile entite) {
         System.out.println(">>> Tour de " + entite.getNom() + " <<<");
@@ -104,7 +113,8 @@ public class Tours {
     }
 
     /**
-     * Gère le tour d'un personnage (joueur)
+     * Gère le tour d'un personnage (joueur).
+     * @param personnage le personnage joueur
      */
     private void jouerTourPersonnage(Personnage personnage) {
         System.out.println("C'est au tour de " + personnage.getNom() +
@@ -127,11 +137,11 @@ public class Tours {
             System.out.println("5. Ramasser un équipement");
             System.out.println("6. Terminer le tour");
 
-            int choix = -1;
+            int choixAction = -1;
             while (true) {
                 System.out.print("Choisissez une action : ");
                 try {
-                    choix = m_scanner.nextInt();
+                    choixAction = m_scanner.nextInt();
                     m_scanner.nextLine(); // Consommer la ligne
                     break;
                 } catch (InputMismatchException e) {
@@ -143,7 +153,7 @@ public class Tours {
             boolean actionEffectuee = false;
             boolean consommerAction = true;
 
-            switch (choix) {
+            switch (choixAction) {
                 case 1:
                     actionEffectuee = actionSEquiper(personnage);
                     consommerAction = false;
@@ -208,9 +218,9 @@ public class Tours {
         System.out.println(personnage.getNom() + " a épuisé ses actions pour ce tour.");
     }
 
-
     /**
-     * Gère le tour d'un monstre (contrôlé par le maître du jeu)
+     * Gère le tour d'un monstre (contrôlé par le maître du jeu).
+     * @param monstre le monstre à jouer
      */
     private void jouerTourMonstre(Monstre monstre) {
         System.out.println("C'est au tour du monstre " + monstre.getNom() +
@@ -226,7 +236,7 @@ public class Tours {
             System.out.println("2. Attaquer");
             System.out.println("3. Terminer le tour");
 
-            int choix = -1;
+            int choixAction = -1;
             while (true) {
                 if(monstre.estMort())
                 {
@@ -234,7 +244,7 @@ public class Tours {
                 }
                 System.out.print("Choisissez une action : ");
                 try {
-                    choix = m_scanner.nextInt();
+                    choixAction = m_scanner.nextInt();
                     m_scanner.nextLine(); // Consommer la ligne
                     break;
                 } catch (InputMismatchException e) {
@@ -245,7 +255,7 @@ public class Tours {
 
             boolean actionEffectuee = false;
 
-            switch (choix) {
+            switch (choixAction) {
                 case 1:
                     actionEffectuee = actionSeDeplacer(monstre);
                     if (actionEffectuee) {
@@ -281,6 +291,10 @@ public class Tours {
         System.out.println(monstre.getNom() + " a épuisé ses actions pour ce tour.");
     }
 
+    /**
+     * Permet au Maître du Jeu d'effectuer des actions spéciales.
+     * @param joueurs la liste des joueurs
+     */
     public void actionMDJ(List<Personnage> joueurs) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -289,11 +303,11 @@ public class Tours {
             System.out.println("2. Déplacer un monstre ou joueur");
             System.out.println("3. Ajouter un obstacle");
             System.out.println("4. Terminer l'action du Maître du Jeu");
-            int choix = -1;
+            int choixAction = -1;
             while (true) {
                 System.out.print("Choisissez une action : ");
                 try {
-                    choix = m_scanner.nextInt();
+                    choixAction = m_scanner.nextInt();
                     m_scanner.nextLine(); // Consommer la ligne
                     break;
                 } catch (InputMismatchException e) {
@@ -302,7 +316,7 @@ public class Tours {
                 }
             }
 
-            switch (choix) {
+            switch (choixAction) {
                 case 1:
                     m_maitreDuJeu.faireDmg(joueurs);
                     historiqueActions.append("⚡ Un éclair divin fend l’obscurité du donjon, frappant sa cible avec la colère des dieux.\n");
@@ -326,7 +340,9 @@ public class Tours {
     }
 
     /**
-     * Action : S'équiper (personnages uniquement)
+     * Action : S'équiper (personnages uniquement).
+     * @param personnage le personnage qui souhaite s'équiper
+     * @return true si l'action a été effectuée, false sinon
      */
     private boolean actionSEquiper(Personnage personnage) {
         if (personnage.getInventaire().isEmpty()) {
@@ -340,7 +356,9 @@ public class Tours {
     }
 
     /**
-     * Action : Se déplacer
+     * Action : Se déplacer.
+     * @param entite l'entité à déplacer
+     * @return true si le déplacement a eu lieu, false sinon
      */
     private boolean actionSeDeplacer(ElementMobile entite) {
         System.out.println("\n--- Action : Se déplacer ---");
@@ -348,7 +366,9 @@ public class Tours {
     }
 
     /**
-     * Action : Attaquer (personnage)
+     * Action : Attaquer (personnage).
+     * @param personnage le personnage attaquant
+     * @return true si l'attaque a eu lieu, false sinon
      */
     private boolean actionAttaquer(Personnage personnage) {
         System.out.println("\n--- Action : Attaquer ---");
@@ -413,7 +433,9 @@ public class Tours {
     }
 
     /**
-     * Action : Attaquer (monstre)
+     * Action : Attaquer (monstre).
+     * @param monstre le monstre attaquant
+     * @return true si l'attaque a eu lieu, false sinon
      */
     private boolean actionAttaquerMonstre(Monstre monstre) {
         System.out.println("\n--- Action : Attaquer ---");
@@ -461,7 +483,9 @@ public class Tours {
     }
 
     /**
-     * Action : Lancer un sort (personnages uniquement)
+     * Action : Lancer un sort (personnages uniquement).
+     * @param personnage le personnage lançant le sort
+     * @return true si le sort a été lancé, false sinon
      */
     private boolean actionLancerSort(Personnage personnage) {
         System.out.println("\n--- Action : Lancer un sort ---");
@@ -472,11 +496,11 @@ public class Tours {
             System.out.println("2. Boogie Woogie");
             System.out.println("3. Guérison");
 
-            int choix = -1;
+            int choixSort = -1;
             while (true) {
                 System.out.print("Choisissez le chiffre du sort à lancer : ");
                 try {
-                    choix = m_scanner.nextInt() - 1;
+                    choixSort = m_scanner.nextInt() - 1;
                     m_scanner.nextLine();
                     break;
                 } catch (InputMismatchException e) {
@@ -485,7 +509,7 @@ public class Tours {
                 }
             }
 
-            if (choix < 0 || choix > 2) {
+            if (choixSort < 0 || choixSort > 2) {
                 System.out.println("Choix invalide.");
                 return false;
             }
@@ -493,7 +517,7 @@ public class Tours {
             String nomSort = "";
             boolean sortLance = false;
 
-            switch (choix) {
+            switch (choixSort) {
                 case 0:
                     nomSort = "Arme magique";
                     // Logique pour lancer le sort Arme magique
@@ -526,11 +550,11 @@ public class Tours {
             System.out.println("Sorts disponibles pour le Clerc :");
             System.out.println("1. Guérison");
 
-            int choix = -1;
+            int choixSort = -1;
             while (true) {
                 System.out.print("Choisissez le chiffre du sort à lancer : ");
                 try {
-                    choix = m_scanner.nextInt() - 1;
+                    choixSort = m_scanner.nextInt() - 1;
                     m_scanner.nextLine();
                     break;
                 } catch (InputMismatchException e) {
@@ -539,7 +563,7 @@ public class Tours {
                 }
             }
 
-            if (choix != 0) {
+            if (choixSort != 0) {
                 System.out.println("Choix invalide.");
                 return false;
             }
@@ -561,7 +585,9 @@ public class Tours {
     }
 
     /**
-     * Méthodes auxiliaires pour lancer les différents sorts
+     * Lance le sort Arme Magique.
+     * @param personnage le magicien lançant le sort
+     * @return true si le sort a été lancé, false sinon
      */
     private boolean lancerSortArmeMagique(Personnage personnage) {
         SortArmeMagique sort = new SortArmeMagique();
@@ -577,11 +603,11 @@ public class Tours {
             }
         }
 
-        int choix = -1;
+        int choixCible = -1;
         while (true) {
             System.out.print("Choisissez la cible : ");
             try {
-                choix = m_scanner.nextInt() - 1;
+                choixCible = m_scanner.nextInt() - 1;
                 m_scanner.nextLine();
                 break;
             } catch (InputMismatchException e) {
@@ -590,16 +616,21 @@ public class Tours {
             }
         }
 
-        if (choix < 0 || choix >= personnagesDisponibles.size() ||
-                personnagesDisponibles.get(choix).estMort()) {
+        if (choixCible < 0 || choixCible >= personnagesDisponibles.size() ||
+                personnagesDisponibles.get(choixCible).estMort()) {
             System.out.println("Choix invalide.");
             return false;
         }
 
-        ElementMobile[] cibles = {personnagesDisponibles.get(choix)};
+        ElementMobile[] cibles = {personnagesDisponibles.get(choixCible)};
         return sort.lancer(m_donjon.getCarte(), personnage, cibles);
     }
 
+    /**
+     * Lance le sort Boogie Woogie.
+     * @param personnage le magicien lançant le sort
+     * @return true si le sort a été lancé, false sinon
+     */
     private boolean lancerSortBoogieWoogie(Personnage personnage) {
         SortBoogieWoogie sort = new SortBoogieWoogie();
 
@@ -632,12 +663,12 @@ public class Tours {
                     (e.estPersonnage() ? " (Personnage)" : " (Monstre)"));
         }
 
-        int choix1 = -1, choix2 = -1;
+        int choixCible1 = -1, choixCible2 = -1;
 
         while (true) {
             System.out.print("Choisissez la première entité : ");
             try {
-                choix1 = m_scanner.nextInt() - 1;
+                choixCible1 = m_scanner.nextInt() - 1;
                 m_scanner.nextLine();
                 break;
             } catch (InputMismatchException e) {
@@ -649,7 +680,7 @@ public class Tours {
         while (true) {
             System.out.print("Choisissez la deuxième entité : ");
             try {
-                choix2 = m_scanner.nextInt() - 1;
+                choixCible2 = m_scanner.nextInt() - 1;
                 m_scanner.nextLine();
                 break;
             } catch (InputMismatchException e) {
@@ -658,17 +689,22 @@ public class Tours {
             }
         }
 
-        if (choix1 < 0 || choix1 >= entitesDisponibles.size() ||
-                choix2 < 0 || choix2 >= entitesDisponibles.size() ||
-                choix1 == choix2) {
+        if (choixCible1 < 0 || choixCible1 >= entitesDisponibles.size() ||
+                choixCible2 < 0 || choixCible2 >= entitesDisponibles.size() ||
+                choixCible1 == choixCible2) {
             System.out.println("Choix invalide.");
             return false;
         }
 
-        ElementMobile[] cibles = {entitesDisponibles.get(choix1), entitesDisponibles.get(choix2)};
+        ElementMobile[] cibles = {entitesDisponibles.get(choixCible1), entitesDisponibles.get(choixCible2)};
         return sort.lancer(m_donjon.getCarte(), personnage, cibles);
     }
 
+    /**
+     * Lance le sort de Guérison.
+     * @param personnage le personnage lançant le sort
+     * @return true si le sort a été lancé, false sinon
+     */
     private boolean lancerSortGuerison(Personnage personnage) {
         SortGuerison sort = new SortGuerison();
 
@@ -684,11 +720,11 @@ public class Tours {
             }
         }
 
-        int choix = -1;
+        int choixCible = -1;
         while (true) {
             System.out.print("Choisissez la cible : ");
             try {
-                choix = m_scanner.nextInt() - 1;
+                choixCible = m_scanner.nextInt() - 1;
                 m_scanner.nextLine();
                 break;
             } catch (InputMismatchException e) {
@@ -697,18 +733,20 @@ public class Tours {
             }
         }
 
-        if (choix < 0 || choix >= personnagesDisponibles.size() ||
-                personnagesDisponibles.get(choix).estMort()) {
+        if (choixCible < 0 || choixCible >= personnagesDisponibles.size() ||
+                personnagesDisponibles.get(choixCible).estMort()) {
             System.out.println("Choix invalide.");
             return false;
         }
 
-        ElementMobile[] cibles = {personnagesDisponibles.get(choix)};
+        ElementMobile[] cibles = {personnagesDisponibles.get(choixCible)};
         return sort.lancer(m_donjon.getCarte(), personnage, cibles);
     }
 
     /**
-     * Action : Ramasser un équipement (personnages uniquement)
+     * Action : Ramasser un équipement (personnages uniquement).
+     * @param personnage le personnage qui ramasse l'équipement
+     * @return true si un équipement a été ramassé, false sinon
      */
     private boolean actionRamasserEquipement(Personnage personnage) {
         System.out.println("\n--- Action : Ramasser un équipement ---");
@@ -734,11 +772,11 @@ public class Tours {
             System.out.println((i + 1) + ". " + equipementsSurCase.get(i).getNom());
         }
 
-        int choix = -1;
+        int choixCible = -1;
         while (true) {
             System.out.print("Choisissez le chiffre de l'équipement à récuperer : ");
             try {
-                choix = m_scanner.nextInt() - 1;
+                choixCible = m_scanner.nextInt() - 1;
                 m_scanner.nextLine();
                 break;
             } catch (InputMismatchException e) {
@@ -747,12 +785,12 @@ public class Tours {
             }
         }
 
-        if (choix < 0 || choix >= equipementsSurCase.size()) {
+        if (choixCible < 0 || choixCible >= equipementsSurCase.size()) {
             System.out.println("Choix invalide.");
             return false;
         }
 
-        Equipement equipementChoisi = equipementsSurCase.get(choix);
+        Equipement equipementChoisi = equipementsSurCase.get(choixCible);
         personnage.ajouterAInventaire(equipementChoisi);
         casePersonnage.retirerContenu(equipementChoisi);
 
@@ -779,56 +817,10 @@ public class Tours {
         }
     }
 
-    /**
-     * Obtient la liste des monstres à portée d'un personnage
-     */
-    private List<Monstre> getMonstresAPortee(Personnage personnage) {
-        List<Monstre> monstresAPortee = new ArrayList<>();
-        Case casePersonnage = m_donjon.getCarte().getCase(personnage)
-                .orElseThrow(() -> new IllegalArgumentException("Case du personnage introuvable"));
-        int porteeArme = personnage.getArmeEquipee().getPortee();
-
-        for (Monstre monstre : m_donjon.getMonstres()) {
-            if (!monstre.estMort()) {
-                Case caseMonstre = m_donjon.getCarte().getCase(monstre)
-                        .orElseThrow(() -> new IllegalArgumentException("Case du monstre introuvable"));
-                if (m_donjon.getCarte().estAPortee(
-                        casePersonnage.getX(), casePersonnage.getY(),
-                        caseMonstre.getX(), caseMonstre.getY(),
-                        porteeArme)) {
-                    monstresAPortee.add(monstre);
-                }
-            }
-        }
-        return monstresAPortee;
-    }
 
     /**
-     * Obtient la liste des personnages à portée d'un monstre
-     */
-    private List<Personnage> getPersonnagesAPortee(Monstre monstre) {
-        List<Personnage> personnagesAPortee = new ArrayList<>();
-        Case caseMonstre = m_donjon.getCarte().getCase(monstre)
-                .orElseThrow(() -> new IllegalArgumentException("Case du monstre introuvable"));
-        int porteeMonstre = monstre.getPortee();
-
-        for (Personnage personnage : m_donjon.getJoueurs()) {
-            if (!personnage.estMort()) {
-                Case casePersonnage = m_donjon.getCarte().getCase(personnage)
-                        .orElseThrow(() -> new IllegalArgumentException("Case du personnage introuvable"));
-                if (m_donjon.getCarte().estAPortee(
-                        caseMonstre.getX(), caseMonstre.getY(),
-                        casePersonnage.getX(), casePersonnage.getY(),
-                        porteeMonstre)) {
-                    personnagesAPortee.add(personnage);
-                }
-            }
-        }
-        return personnagesAPortee;
-    }
-
-    /**
-     * Vérifie si la partie est terminée
+     * Vérifie si la partie est terminée.
+     * @return true si la partie est finie, false sinon
      */
     private boolean estFinDePartie() {
         boolean tousPersonnagesMorts = true;
@@ -859,14 +851,84 @@ public class Tours {
     }
 
     // Getters
+    /**
+     * Retourne le numéro du tour actuel.
+     * @return le numéro du tour
+     */
     public int getNumeroTour() {
         return m_numeroTour;
     }
 
+    /**
+     * Retourne l'entité actuellement en train de jouer.
+     * @return l'entité actuelle ou null si aucune
+     */
     public ElementMobile getEntiteActuelle() {
         if (m_indexTourActuel >= 0 && m_indexTourActuel < m_donjon.getEntiteTour().size()) {
             return m_donjon.getEntiteTour().get(m_indexTourActuel);
         }
         return null;
+    }
+
+    /**
+     * Vérifie si la partie est terminée.
+     * @return true si la partie est finie, false sinon
+     */
+    private List<Personnage> getPersonnagesAPortee(Monstre monstre) {
+        List<Personnage> personnagesAPortee = new ArrayList<>();
+        Case caseMonstre = m_donjon.getCarte().getCase(monstre)
+                .orElseThrow(() -> new IllegalArgumentException("Case du monstre introuvable"));
+        int porteeMonstre = monstre.getPortee();
+
+        for (Personnage personnage : m_donjon.getJoueurs()) {
+            if (!personnage.estMort()) {
+                Case casePersonnage = m_donjon.getCarte().getCase(personnage)
+                        .orElseThrow(() -> new IllegalArgumentException("Case du personnage introuvable"));
+                if (m_donjon.getCarte().estAPortee(
+                        caseMonstre.getX(), caseMonstre.getY(),
+                        casePersonnage.getX(), casePersonnage.getY(),
+                        porteeMonstre)) {
+                    personnagesAPortee.add(personnage);
+                }
+            }
+        }
+        return personnagesAPortee;
+    }
+
+    /**
+     * Obtient la liste des monstres à portée d'un personnage.
+     * @param personnage le personnage attaquant
+     * @return la liste des monstres à portée
+     */
+    private List<Monstre> getMonstresAPortee(Personnage personnage) {
+        List<Monstre> monstresAPortee = new ArrayList<>();
+        Case casePersonnage = m_donjon.getCarte().getCase(personnage)
+                .orElseThrow(() -> new IllegalArgumentException("Case du personnage introuvable"));
+        int porteeArme = personnage.getArmeEquipee().getPortee();
+
+        for (Monstre monstre : m_donjon.getMonstres()) {
+            if (!monstre.estMort()) {
+                Case caseMonstre = m_donjon.getCarte().getCase(monstre)
+                        .orElseThrow(() -> new IllegalArgumentException("Case du monstre introuvable"));
+                if (m_donjon.getCarte().estAPortee(
+                        casePersonnage.getX(), casePersonnage.getY(),
+                        caseMonstre.getX(), caseMonstre.getY(),
+                        porteeArme)) {
+                    monstresAPortee.add(monstre);
+                }
+            }
+        }
+        return monstresAPortee;
+    }
+
+    /*============================Section Overrides============================*/
+
+    @Override
+    public String toString() {
+        return "Tours{" +
+                "numeroTour=" + m_numeroTour +
+                ", indexTourActuel=" + m_indexTourActuel +
+                ", donjon=" + (m_donjon != null ? m_donjon.toString() : "null") +
+                '}';
     }
 }
