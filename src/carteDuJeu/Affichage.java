@@ -4,7 +4,9 @@ import java.util.List;
 
 import carteDuJeu.personnages.Personnage;
 import carteDuJeu.Monstres.Monstre;
+import carteDuJeu.personnages.equipements.Equipement;
 import carteDuJeu.Carte;
+
 /**
  * Classe pour gérer l'affichage des messages et des entités dans le jeu.
  */
@@ -73,5 +75,24 @@ public class Affichage {
         for (Personnage joueur : joueurs) {
             System.out.println("[Joueur] " + joueur.getNom() + " (PV: " + joueur.getPointsDeVie() + "/" + joueur.getPointsDeVieMax() + ")");
         }
+    }
+    /**
+     * Affiche l'inventaire d'un personnage
+     */
+    public void afficherInventaire(Personnage personnage) {
+        System.out.println("\n--- Inventaire de " + personnage.getNom() + " ---");
+        if (personnage.getInventaire().isEmpty()) {
+            System.out.println("Inventaire vide.");
+        } else {
+            for (int i = 0; i < personnage.getInventaire().size(); i++) {
+                Equipement equip = personnage.getInventaire().get(i);
+                if (equip.estUneArme()) {
+                    System.out.println((i + 1) + ". " + equip.getNom() + " (Arme)");
+                } else if (equip.estUneArmure()) {
+                    System.out.println((i + 1) + ". " + equip.getNom() + " (Armure)");
+                }
+            }
+        }
+        System.out.println("----------------------------------------");
     }
 }

@@ -244,7 +244,8 @@ public class Donjon {
                         gestionEquipement.proposerChangement(joueur);
                         break;
                     case 2:
-                        afficherInventaire(joueur);
+                        Affichage affichage = new Affichage();
+                        affichage.afficherInventaire(joueur);
                         break;
                     case 3:
                         continuer = false;
@@ -259,27 +260,6 @@ public class Donjon {
 
         System.out.println("Tous les joueurs vivants sont prêts pour le donjon " + m_numeroDonjon + ".\n");
     }
-
-    /**
-     * Affiche l'inventaire d'un personnage
-     */
-    private void afficherInventaire(Personnage personnage) {
-        System.out.println("\n--- Inventaire de " + personnage.getNom() + " ---");
-        if (personnage.getInventaire().isEmpty()) {
-            System.out.println("Inventaire vide.");
-        } else {
-            for (int i = 0; i < personnage.getInventaire().size(); i++) {
-                Equipement equip = personnage.getInventaire().get(i);
-                if (equip.estUneArme()) {
-                    System.out.println((i + 1) + ". " + equip.getNom() + " (Arme)");
-                } else if (equip.estUneArmure()) {
-                    System.out.println((i + 1) + ". " + equip.getNom() + " (Armure)");
-                }
-            }
-        }
-        System.out.println("----------------------------------------");
-    }
-
     /**
      * Prépare et trie l'ordre d'initiative
      */
