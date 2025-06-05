@@ -13,6 +13,7 @@ public class Carte {
     private final int m_largeur;
     private final int m_hauteur;
     final Case[][] m_cases;
+    private boolean m_carteParDefaut = false;
 
     /**
      * Constructeur de la carte.
@@ -265,6 +266,24 @@ public class Carte {
      */
     public static int calculerDistance(int x1, int y1, int x2, int y2) {
         return Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
+    }
+
+    /**
+     * Retourne si la carte est la carte par défaut.
+     *
+     * @return true si c'est la carte par défaut, false sinon
+     */
+    public boolean isCarteParDefaut() {
+        return m_carteParDefaut;
+    }
+
+    /**
+     * Définit si la carte est la carte par défaut.
+     *
+     * @param carteParDefaut true pour définir comme carte par défaut, false sinon
+     */
+    public void setCarteParDefaut(boolean carteParDefaut) {
+        this.m_carteParDefaut = carteParDefaut;
     }
 
     /**

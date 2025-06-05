@@ -41,18 +41,19 @@ public class Jeu {
         // Créer les joueurs d'abord
         m_joueurs = new ArrayList<>();
         for (int i = 1; i <= nbJoueurs; i++) {
+
             System.out.print("Nom du joueur #" + i + " : ");
-            String nom = scanner.nextLine();
+            String nom = scanner.nextLine().trim();
+            while (nom.isEmpty()) {
+                System.out.println("Le nom ne peut pas être vide. Veuillez réessayer.");
+                System.out.print("Nom du joueur #" + i + " : ");
+                nom = scanner.nextLine().trim();
+            }
 
-            System.out.println("Races disponibles : Humain, Nain, Elfe, Halfelin");
-            System.out.print("Race du joueur #" + i + " : ");
-            String raceStr = scanner.nextLine();
-            Race race = creerRace(raceStr);
-
-            System.out.println("Classes disponibles : Guerrier, Clerc, Magicien, Roublard");
-            System.out.print("Classe du joueur #" + i + " : ");
-            String classeStr = scanner.nextLine();
-            Classe classe = creerClasse(classeStr);
+            System.out.print("Choix de la race du joueur #" + i + " : ");
+            Race race = creerRace(scanner);
+            System.out.print("Choix de la classe du joueur #" + i + " : ");
+            Classe classe = creerClasse(scanner);
 
             m_joueurs.add(new Personnage(nom, race, classe));
         }
@@ -73,43 +74,51 @@ public class Jeu {
 
     /**
      * Crée une instance de Race à partir d'une chaîne de caractères.
-     * @param raceStr le nom de la race
+     * @param scanner le scanner utilisé pour la saisie
      * @return l'objet Race correspondant
      */
-    private Race creerRace(String raceStr) {
-        switch (raceStr.toLowerCase()) {
-            case "humain":
-                return new Humain();
-            case "nain":
-                return new Nain();
-            case "elfe":
-                return new Elfe();
-            case "halfelin":
-                return new Halfelin();
-            default:
-                System.out.println("Race inconnue, création d'un Humain par défaut");
-                return new Humain();
+    private Race creerRace(Scanner scanner) {
+        while (true) {
+            System.out.println("Races disponibles : Humain, Nain, Elfe, Halfelin");
+            System.out.print("Race du joueur : ");
+            String raceStr = scanner.nextLine();
+            switch (raceStr.toLowerCase()) {
+                case "humain":
+                    return new Humain();
+                case "nain":
+                    return new Nain();
+                case "elfe":
+                    return new Elfe();
+                case "halfelin":
+                    return new Halfelin();
+                default:
+                    System.out.println("Race inconnue, veuillez réessayer.");
+            }
         }
     }
 
     /**
      * Crée une instance de Classe à partir d'une chaîne de caractères.
-     * @param classeStr le nom de la classe
+     * @param scanner le scanner utilisé pour la saisie
      * @return l'objet Classe correspondant
      */
-    private Classe creerClasse(String classeStr) {
-        switch (classeStr.toLowerCase()) {
-            case "guerrier":
-                return new Guerrier();
-            case "clerc":
-                return new Clerc();
-            case "magicien":
-                return new Magicien();
-            case "roublard":
-                return new Roublard();
-            default:
-                System.out.println("Classe inconnue, création d'un Guerrier par défaut");
-                return new Guerrier();
+    private Classe creerClasse(Scanner scanner) {
+        while (true) {
+            System.out.println("Classes disponibles : Guerrier, Clerc, Magicien, Roublard");
+            System.out.print("Classe du joueur : ");
+            String classeStr = scanner.nextLine();
+            switch (classeStr.toLowerCase()) {
+                case "guerrier":
+                    return new Guerrier();
+                case "clerc":
+                    return new Clerc();
+                case "magicien":
+                    return new Magicien();
+                case "roublard":
+                    return new Roublard();
+                default:
+                    System.out.println("Classe inconnue, veuillez réessayer.");
+            }
         }
     }
 
@@ -178,7 +187,6 @@ public class Jeu {
                     System.out.println("Les personnages récupèrent tous leurs points de vie !");
                     System.out.println("Préparez-vous pour le prochain donjon...");
                 }
-
                 m_donjonActuel++;
             } else {
                 System.out.println("\n💀 Échec du donjon " + (m_donjonActuel + 1));

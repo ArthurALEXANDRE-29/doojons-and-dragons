@@ -169,29 +169,30 @@ public class MaitreDuJeu {
         Scanner scanner = new Scanner(System.in);
 
         Affichage.afficherEntitesDeplacables(m_joueurs, m_monstres, m_carteActuelle);
-        System.out.print("Entrez le nom du monstre ou joueur à déplacer : ");
-        String nomCible = scanner.nextLine().trim();
 
         ElementMobile cible = null;
+        while (cible == null) {
+            System.out.print("Entrez le nom du monstre ou joueur à déplacer : ");
+            String nomCible = scanner.nextLine().trim();
 
-        for (Monstre m : m_monstres) {
-            if (m.getNom().equalsIgnoreCase(nomCible)) {
-                cible = m;
-                break;
-            }
-        }
-        if (cible == null) {
-            for (Personnage j : m_joueurs) {
-                if (j.getNom().equalsIgnoreCase(nomCible)) {
-                    cible = j;
+            for (Monstre m : m_monstres) {
+                if (m.getNom().equalsIgnoreCase(nomCible)) {
+                    cible = m;
                     break;
                 }
             }
-        }
+            if (cible == null) {
+                for (Personnage j : m_joueurs) {
+                    if (j.getNom().equalsIgnoreCase(nomCible)) {
+                        cible = j;
+                        break;
+                    }
+                }
+            }
 
-        if (cible == null) {
-            System.out.println("❌ Aucun monstre ou joueur trouvé avec ce nom.");
-            return;
+            if (cible == null) {
+                System.out.println("❌ Aucun monstre ou joueur trouvé avec ce nom. Veuillez réessayer.");
+            }
         }
 
         Case caseActuelle;
@@ -204,23 +205,33 @@ public class MaitreDuJeu {
             return;
         }
 
-        System.out.print("Entrez la nouvelle coordonnée X (lettre de A à " + (char)('A' + m_carteActuelle.getLargeur() - 1) + ") : ");
-        char lettreX = scanner.next().toUpperCase().charAt(0);
-        int newX = lettreX - 'A';
+        boolean coordonneesValides = false;
+        while (!coordonneesValides) {
+            System.out.print("Entrez la nouvelle coordonnée X (lettre de A à " + (char)('A' + m_carteActuelle.getLargeur() - 1) + ") : ");
+            String input = scanner.nextLine().trim().toUpperCase();
 
-        int newYUtilisateur = demanderInt(scanner, "Entrez la nouvelle coordonnée Y (nombre de 1 à " + m_carteActuelle.getHauteur() + ") : ");
-        int newY = newYUtilisateur - 1;
+            if (input.length() != 1) {
+                System.out.println("❌ Veuillez entrer une seule lettre.");
+                continue;
+            }
 
-        if (newX < 0 || newX >= m_carteActuelle.getLargeur() || newY < 0 || newY >= m_carteActuelle.getHauteur()) {
-            System.out.println("❌ Coordonnées en dehors de la carte.");
-        } else if (newX == caseActuelle.getX() && newY == caseActuelle.getY()) {
-            System.out.println("❌ La cible est déjà à cette position.");
-        } else if (!m_carteActuelle.estCaseAccessible(newX, newY)) {
-            System.out.println("❌ Déplacement impossible : la case (" + newX + ", " + newY + ") n'est pas accessible.");
-        }
-        else {
-            System.out.println("Déplacement de " + cible.getNom() + " vers (" + newX + ", " + newY + ")");
-            deplacerElementMobile(cible, newX, newY);
+            char lettreX = input.charAt(0);
+            int newX = lettreX - 'A';
+
+            int newYUtilisateur = demanderInt(scanner, "Entrez la nouvelle coordonnée Y (nombre de 1 à " + m_carteActuelle.getHauteur() + ") : ");
+            int newY = newYUtilisateur - 1;
+
+            if (!m_carteActuelle.coordonneesValides(newX, newY)) {
+                System.out.println("❌ Coordonnées en dehors de la carte. Veuillez réessayer.");
+            } else if (newX == caseActuelle.getX() && newY == caseActuelle.getY()) {
+                System.out.println("❌ La cible est déjà à cette position. Veuillez choisir une autre case.");
+            } else if (!m_carteActuelle.estCaseAccessible(newX, newY)) {
+                System.out.println("❌ Déplacement impossible : la case (" + newX + ", " + newY + ") n'est pas accessible. Veuillez choisir une autre case.");
+            } else {
+                System.out.println("Déplacement de " + cible.getNom() + " vers la case (" + newX + ", " + newY + ")");
+                deplacerElementMobile(cible, newX, newY);
+                coordonneesValides = true;
+            }
         }
     }
 
@@ -262,33 +273,44 @@ public class MaitreDuJeu {
         }
 
         Scanner scanner = new Scanner(System.in);
+        boolean obstacleAjoute = false;
 
-        System.out.print("Entrez la coordonnée X de l'obstacle (lettre de A à " + (char)('A' + m_carteActuelle.getLargeur() - 1) + ") : ");
-        char lettreX = scanner.next().toUpperCase().charAt(0);
-        int x = lettreX - 'A';
+        while (!obstacleAjoute) {
+            System.out.print("Entrez la coordonnée X de l'obstacle (lettre de A à " + (char)('A' + m_carteActuelle.getLargeur() - 1) + ") : ");
+            String input = scanner.nextLine().trim().toUpperCase();
 
-        int yUtilisateur = demanderInt(scanner, "Entrez la coordonnée Y de l'obstacle (nombre de 1 à " + m_carteActuelle.getHauteur() + ") : ");
-        int y = yUtilisateur - 1;
+            if (input.length() != 1) {
+                System.out.println("❌ Veuillez entrer une seule lettre. Réessayez.");
+                continue;
+            }
 
-        if (x < 0 || x >= m_carteActuelle.getLargeur() || y < 0 || y >= m_carteActuelle.getHauteur()) {
-            System.out.println("❌ Coordonnées invalides.");
-            return;
+            char lettreX = input.charAt(0);
+            int x = lettreX - 'A';
+
+            int yUtilisateur = demanderInt(scanner, "Entrez la coordonnée Y de l'obstacle (nombre de 1 à " + m_carteActuelle.getHauteur() + ") : ");
+            int y = yUtilisateur - 1;
+
+            if (!m_carteActuelle.coordonneesValides(x, y)) {
+                System.out.println("❌ Coordonnées invalides. Veuillez réessayer.");
+                continue;
+            }
+
+            Case caseCible = m_carteActuelle.getCase(x, y);
+
+            if (caseCible.estObstacle()) {
+                System.out.println("❌ Il y a déjà un obstacle à cet endroit. Choisissez une autre case.");
+                continue;
+            }
+
+            if (!caseCible.estVide()) {
+                System.out.println("❌ La case est occupée par un élément mobile, impossible de poser un obstacle. Choisissez une autre case.");
+                continue;
+            }
+
+            caseCible.setEstObstacle(true);
+            System.out.println("✅ Obstacle ajouté en (" + lettreX + ", " + yUtilisateur + ").");
+            obstacleAjoute = true;
         }
-
-        Case caseCible = m_carteActuelle.getCase(x, y);
-
-        if (caseCible.estObstacle()) {
-            System.out.println("❌ Il y a déjà un obstacle à cet endroit.");
-            return;
-        }
-
-        if (!caseCible.estVide()) {
-            System.out.println("❌ La case est occupée par un élément mobile, impossible de poser un obstacle.");
-            return;
-        }
-
-        caseCible.setEstObstacle(true);
-        System.out.println("✅ Obstacle ajouté en (" + lettreX + ", " + yUtilisateur + ").");
     }
 
     /**
@@ -298,12 +320,15 @@ public class MaitreDuJeu {
      * @return le nom du monstre saisi
      */
     private String demanderNomMonstre(Scanner scanner, int numero) {
-        while (true) {
+        String nom = "";
+        while (nom.trim().isEmpty()) {
             System.out.print("Entrez le nom du monstre #" + numero + " : ");
-            String nom = scanner.nextLine().trim();
-            if (!nom.isEmpty()) return nom;
-            System.out.println("Le nom ne peut pas être vide.");
+            nom = scanner.nextLine().trim();
+            if (nom.isEmpty()) {
+                System.out.println("Le nom ne peut pas être vide. Veuillez réessayer.");
+            }
         }
+        return nom;
     }
 
     /**

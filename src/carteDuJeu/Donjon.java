@@ -64,38 +64,64 @@ public class Donjon {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Configuration du Donjon " + m_numeroDonjon);
-        System.out.println("Voulez-vous utiliser une carte par défaut ? (o/n)");
-        String choix = scanner.nextLine().toLowerCase();
+
+        String choix = "";
+        while (!choix.equals("o") && !choix.equals("n")) {
+            System.out.println("Voulez-vous utiliser une carte par défaut ? (o/n)");
+            choix = scanner.nextLine().toLowerCase().trim();
+            if (!choix.equals("o") && !choix.equals("n")) {
+                System.out.println("Réponse invalide. Veuillez répondre par 'o' pour oui ou 'n' pour non.");
+            }
+        }
 
         if (choix.equals("o")) {
-            // Cartes par défaut selon le numéro du donjon
+            Random random = new Random();
             switch (m_numeroDonjon) {
                 case 1:
-                    initialiserCarte(15, 10); // Donjon 1: petite carte
-                    System.out.println("Carte par défaut du Donjon 1 : Caverne étroite (15x10)");
+                    initialiserCarte(8, 10);
+                    m_carte.setCarteParDefaut(true);
+                    System.out.println("Carte par défaut du Donjon 1 : Caverne étroite");
+                    m_carte.genererObstaclesAleatoires(random.nextDouble() * 0.05);
                     break;
                 case 2:
-                    initialiserCarte(20, 15); // Donjon 2: carte moyenne
-                    System.out.println("Carte par défaut du Donjon 2 : Salle du trône (20x15)");
+                    initialiserCarte(14, 12);
+                    m_carte.setCarteParDefaut(true);
+                    System.out.println("Carte par défaut du Donjon 2 : Salle du trône");
+                    m_carte.genererObstaclesAleatoires(random.nextDouble() * 0.075);
                     break;
                 case 3:
-                    initialiserCarte(25, 25); // Donjon 3: grande carte
-                    System.out.println("Carte par défaut du Donjon 3 : Antre du dragon (25x25)");
+                    initialiserCarte(21, 24);
+                    m_carte.setCarteParDefaut(true);
+                    System.out.println("Carte par défaut du Donjon 3 : Antre du dragon");
+                    m_carte.genererObstaclesAleatoires(random.nextDouble() * 0.14);
+
                     break;
                 default:
                     initialiserCarte(20, 15);
+                    m_carte.setCarteParDefaut(true);
                     break;
             }
         } else {
-            try {
-                int largeur = demanderInt(scanner, "Quelle largeur pour le donjon " + m_numeroDonjon + " ? ( < 25) : ");
-                int hauteur = demanderInt(scanner, "Quelle hauteur pour le donjon " + m_numeroDonjon + " ? ( < 25) : ");
-                largeur = Math.max(1, Math.min(25, largeur));
-                hauteur = Math.max(1, Math.min(25, hauteur));
-                initialiserCarte(largeur, hauteur);
-            } catch (Exception e) {
-                System.out.println("Erreur lors de la configuration, utilisation des valeurs par défaut.");
-                initialiserCarte(20, 15);
+            boolean carteValide = false;
+            while (!carteValide) {
+                try {
+                    int largeur = demanderInt(scanner, "Quelle largeur pour le donjon " + m_numeroDonjon + " ? (1-25) : ");
+                    int hauteur = demanderInt(scanner, "Quelle hauteur pour le donjon " + m_numeroDonjon + " ? (1-25) : ");
+                    int obstacles = demanderInt(scanner, "Pourcentage d'obstacles (0-100) : ");
+                    if (obstacles < 0 || obstacles > 100) {
+                        System.out.println("Le pourcentage d'obstacles doit être compris entre 0 et 100. Veuillez réessayer.");
+                        continue;
+                    }
+                    if (largeur < 1 || largeur > 25 || hauteur < 1 || hauteur > 25) {
+                        System.out.println("Les dimensions doivent être comprises entre 1 et 25. Veuillez réessayer.");
+                    } else {
+                        initialiserCarte(largeur, hauteur);
+                        m_carte.genererObstaclesAleatoires(obstacles / 100.0);
+                        carteValide = true;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Erreur lors de la saisie. Veuillez réessayer.");
+                }
             }
         }
     }
@@ -108,7 +134,28 @@ public class Donjon {
     private void initialiserEquipementsDonjon(List<Equipement> tousLesEquipements) {
         try {
             Scanner scanner = new Scanner(System.in);
-            int nbEquipementsSouhaites = demanderInt(scanner, "Combien d'équipements dans le donjon " + m_numeroDonjon + " ? (recommandé: " + (2 + m_numeroDonjon) + ") ");
+            int nbEquipementsSouhaites;
+            boolean carteParDefaut = m_carte != null && m_carte.isCarteParDefaut();
+
+            if (carteParDefaut) {
+                // Nombre d'équipements défini selon la carte par défaut
+                switch (m_numeroDonjon) {
+                    case 1:
+                        nbEquipementsSouhaites = 3;
+                        break;
+                    case 2:
+                        nbEquipementsSouhaites = 9;
+                        break;
+                    case 3:
+                        nbEquipementsSouhaites = 16;
+                        break;
+                    default:
+                        nbEquipementsSouhaites = 4;
+                }
+                System.out.println(nbEquipementsSouhaites + " équipements ajoutés automatiquement au donjon " + m_numeroDonjon);
+            } else {
+                nbEquipementsSouhaites = demanderInt(scanner, "Combien d'équipements dans le donjon " + m_numeroDonjon + " ?");
+            }
 
             Random random = new Random();
             for (int i = 0; i < nbEquipementsSouhaites && !tousLesEquipements.isEmpty(); i++) {
@@ -153,10 +200,6 @@ public class Donjon {
         System.out.println("Création des monstres du donjon " + m_numeroDonjon + "...");
         m_maitreDuJeu.phaseCreationDesMonstres();
         m_monstres = new ArrayList<>(m_maitreDuJeu.getMonstres());
-        // Placement des obstacles sur la carte
-
-        Random random = new Random();
-        m_carte.genererObstaclesAleatoires( random.nextDouble() * 0.125); // 12.5% d'obstacles
         Affichage.afficherCarte(java.util.Optional.ofNullable(m_carte));
         // Vérification que des monstres ont été créés
         if (m_monstres.isEmpty()) {
