@@ -190,8 +190,14 @@ public class MaitreDuJeu {
         int newY = newYUtilisateur - 1;
 
         if (newX < 0 || newX >= m_carteActuelle.getLargeur() || newY < 0 || newY >= m_carteActuelle.getHauteur()) {
-            System.out.println("❌ Coordonnées invalides.");
-        } else {
+            System.out.println("❌ Coordonnées en dehors de la carte.");
+        } else if (newX == caseActuelle.getX() && newY == caseActuelle.getY()) {
+            System.out.println("❌ La cible est déjà à cette position.");
+        } else if (!m_carteActuelle.estCaseAccessible(newX, newY)) {
+            System.out.println("❌ Déplacement impossible : la case (" + newX + ", " + newY + ") n'est pas accessible.");
+        }
+        else {
+            System.out.println("Déplacement de " + cible.getNom() + " vers (" + newX + ", " + newY + ")");
             deplacerElementMobile(cible, newX, newY);
         }
     }
