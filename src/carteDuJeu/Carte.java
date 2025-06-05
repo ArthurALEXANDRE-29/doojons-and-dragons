@@ -319,13 +319,13 @@ public class Carte {
      *
      * @param x coordonnée x (colonne, 0-25 pour A-Z)
      * @param y coordonnée y (ligne, 0+ pour 1+)
-     * @return Optional contenant la chaîne de coordonnées si valide, Optional.empty() sinon
+     * @return la chaîne de coordonnées si valide, "Position invalide" sinon
      */
-    public static Optional<String> coordonneesToString(int x, int y) {
+    public static String coordonneesToString(int x, int y) {
         if (x < 0 || x >= 26 || y < 0) {
-            return Optional.empty();
+            return "Position invalide";
         }
-        return Optional.of((char) ('A' + x) + String.valueOf(y + 1));
+        return (char) ('A' + x) + String.valueOf(y + 1);
     }
 
     /**
