@@ -5,6 +5,7 @@ public class Harnois extends Armure {
     {
         super("Harnois", 12, true);
     }
+    @Override
     public Armure copier() {
         Harnois copie = new Harnois();
         return copie;

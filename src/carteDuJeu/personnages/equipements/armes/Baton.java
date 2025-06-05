@@ -7,6 +7,7 @@ public class Baton extends Arme{
     public Baton() {
         super("Bâton", 6, 1, false,1);
     }
+    @Override
     public Arme copier() {
         Baton copie = new Baton();
         return copie;

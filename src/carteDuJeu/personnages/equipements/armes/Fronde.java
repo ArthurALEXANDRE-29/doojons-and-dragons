@@ -6,6 +6,7 @@ public class Fronde extends Arme {
         super("Fronde", 4, 6, false,1);
     }
 
+    @Override
     public Arme copier() {
         Fronde copie = new Fronde();
         return copie;
