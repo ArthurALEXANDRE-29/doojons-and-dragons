@@ -25,4 +25,7 @@ public abstract class Equipement implements ElementCarte {
     public boolean estEquipement() {
         return true;
     }
+    public boolean estElementMobile() {
+        return false;
+    }
 }

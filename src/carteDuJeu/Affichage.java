@@ -3,16 +3,12 @@ package carteDuJeu;
 import java.util.List;
 
 import carteDuJeu.personnages.Personnage;
-import carteDuJeu.Monstres.Monstre;
+import carteDuJeu.monstres.Monstre;
 import carteDuJeu.personnages.equipements.Equipement;
-import carteDuJeu.Carte;
 
 /**
  * Classe pour gérer l'affichage des messages et des entités dans le jeu.
  */
-
-
-
 public class Affichage {
 
     public static void afficherMessageBienvenue() {
@@ -64,7 +60,7 @@ public class Affichage {
     public static void afficherConfirmation(String message) {
         System.out.println(message);
     }
-    
+
     public static void afficherCiblesDisponibles(List<Monstre> monstres, List<Personnage> joueurs) {
         System.out.println("\n--- Cibles disponibles ---");
 
@@ -76,6 +72,7 @@ public class Affichage {
             System.out.println("[Joueur] " + joueur.getNom() + " (PV: " + joueur.getPointsDeVie() + "/" + joueur.getPointsDeVieMax() + ")");
         }
     }
+
     /**
      * Affiche l'inventaire d'un personnage
      */
@@ -93,5 +90,50 @@ public class Affichage {
                 }
             }
         }
+    }
+
+    /**
+     * Affiche la carte de jeu avec ses coordonnées et son contenu
+     */
+    public static void afficherCarte(Carte carte) {
+        if (carte == null) {
+            System.out.println("❌ Aucune carte à afficher.");
+            return;
+        }
+
+        // Affiche les coordonnées X
+        System.out.print("  ");
+        for (int i = 0; i < carte.getLargeur(); i++) {
+            System.out.printf("%4c", 'A' + i);
+        }
+        System.out.println();
+
+        // Ligne supérieure du contour
+        System.out.print("   ┌");
+        for (int x = 0; x < carte.getLargeur(); x++) {
+            System.out.print("────");
+        }
+        System.out.println("┐");
+
+        // Affichage du contenu de la carte
+        for (int y = 0; y < carte.getHauteur(); y++) {
+            // Coordonnée Y
+            System.out.printf("%2d │", y + 1);
+
+            // Contenu de la ligne
+            for (int x = 0; x < carte.getLargeur(); x++) {
+                Case caseActuelle = carte.getCase(x, y);
+                System.out.print(caseActuelle.toString());
+            }
+
+            System.out.println("│");
+        }
+
+        // Ligne inférieure du contour
+        System.out.print("   └");
+        for (int x = 0; x < carte.getLargeur(); x++) {
+            System.out.print("────");
+        }
+        System.out.println("┘");
     }
 }

@@ -4,7 +4,7 @@ import carteDuJeu.Des;
 import carteDuJeu.Carte;
 import carteDuJeu.Case;
 import carteDuJeu.personnages.Personnage;
-import carteDuJeu.Monstres.Monstre;
+import carteDuJeu.monstres.Monstre;
 import carteDuJeu.personnages.equipements.armes.Arme;
 import carteDuJeu.personnages.equipements.armures.Armure;
 

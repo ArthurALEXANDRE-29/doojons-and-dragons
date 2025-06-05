@@ -26,6 +26,7 @@ public class SortGuerison extends Sort {
         return true;
     }
 
+    @Override
     public boolean estUtilisablePar(Classe classe) {
         return classe.getNomClasse().equals("Clerc") || classe.getNomClasse().equals("Magicien");
     }

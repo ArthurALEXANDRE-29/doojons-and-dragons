@@ -77,6 +77,7 @@ public class SortArmeMagique extends Sort {
         return true;
     }
 
+    @Override
     public boolean estUtilisablePar(Classe classe) {
         return classe.getNomClasse().equals("Magicien");
     }

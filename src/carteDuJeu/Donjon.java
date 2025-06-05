@@ -3,7 +3,7 @@ package carteDuJeu;
 import carteDuJeu.actions.ChangerEquipement;
 import carteDuJeu.personnages.equipements.*;
 import carteDuJeu.personnages.*;
-import carteDuJeu.Monstres.*;
+import carteDuJeu.monstres.*;
 
 import java.util.*;
 
@@ -122,7 +122,7 @@ public class Donjon {
 
         Random random = new Random();
         m_carte.genererObstaclesAleatoires( random.nextDouble() * 0.2);
-        m_carte.afficher();
+        Affichage.afficherCarte(m_carte);
         // Vérification que des monstres ont été créés
         if (m_monstres.isEmpty()) {
             System.out.println("⚠️ Aucun monstre créé pour ce donjon !");
@@ -158,7 +158,7 @@ public class Donjon {
         m_maitreDuJeu.setCarte(m_carte); // Mettre à jour la carte du Maitre du Jeu
         // Affichage de la carte
         System.out.println("Affichage de la carte du donjon " + m_numeroDonjon + "...");
-        m_carte.afficher();
+        Affichage.afficherCarte(m_carte);
         System.out.println("Le donjon " + m_numeroDonjon + " est en place !");
     }
 

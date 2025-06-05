@@ -1,6 +1,6 @@
 package carteDuJeu;
 
-import carteDuJeu.Monstres.Monstre;
+import carteDuJeu.monstres.Monstre;
 import carteDuJeu.personnages.Personnage;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class MaitreDuJeu {
         this.m_carteActuelle = carte;
         System.out.println("Le Maître du Jeu prend contrôle d'une nouvelle carte (" +
                 carte.getLargeur() + "x" + carte.getHauteur() + ")");
-        if (m_carteActuelle != null) m_carteActuelle.afficher();
+        if (m_carteActuelle != null) Affichage.afficherCarte(m_carteActuelle);
     }
 
     public Carte getCarte() {

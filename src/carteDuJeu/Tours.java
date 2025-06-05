@@ -3,7 +3,7 @@ package carteDuJeu;
 import carteDuJeu.actions.*;
 import carteDuJeu.personnages.Personnage;
 import carteDuJeu.personnages.equipements.Equipement;
-import carteDuJeu.Monstres.Monstre;
+import carteDuJeu.monstres.Monstre;
 import carteDuJeu.personnages.sorts.*;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class Tours {
 
         // Afficher la carte au début du combat
         System.out.println("État initial de la carte :");
-        m_donjon.getCarte().afficher();
+        Affichage.afficherCarte(m_donjon.getCarte());
         System.out.println("\n" + "=".repeat(50) + "\n");
 
         while (!estFinDePartie()) {
@@ -59,7 +59,7 @@ public class Tours {
 
                 // Afficher la carte au début de chaque tour d'entité
                 System.out.println("\n📍 État de la carte avant le tour de " + entiteActuelle.getNom() + " :");
-                m_donjon.getCarte().afficher();
+                Affichage.afficherCarte(m_donjon.getCarte());
                 System.out.println();
 
                 jouerTour(entiteActuelle);
@@ -78,14 +78,14 @@ public class Tours {
             // Afficher la carte après chaque tour complet
             if (!estFinDePartie()) {
                 System.out.println("📊 État de la carte après le tour " + (m_numeroTour - 1) + " :");
-                m_donjon.getCarte().afficher();
+                Affichage.afficherCarte(m_donjon.getCarte());
                 System.out.println("\n" + "=".repeat(80) + "\n");
             }
         }
 
         // Afficher la carte finale
         System.out.println("🏁 État final de la carte :");
-        m_donjon.getCarte().afficher();
+        Affichage.afficherCarte(m_donjon.getCarte());
 
         m_donjon.finDonjon();
     }
@@ -117,7 +117,7 @@ public class Tours {
             if(personnage.estMort()) {
                 return;
             }
-            m_donjon.getCarte().afficher();
+            Affichage.afficherCarte(m_donjon.getCarte());
             System.out.println("\nActions restantes : " + actionsRestantes);
             System.out.println("Actions disponibles :");
             System.out.println("1. S'équiper");
@@ -160,7 +160,7 @@ public class Tours {
                                 .append(" que le danger est partout. Une sueur froide coule sur son front alors qu'il s'efforce de rester vigilant.");
                         historiqueActions.append("\n");
 
-                        m_donjon.getCarte().afficher();
+                        Affichage.afficherCarte(m_donjon.getCarte());
                     }
                     break;
                 case 3:
@@ -168,7 +168,7 @@ public class Tours {
                     if (actionEffectuee) {
                         // Afficher la carte après une attaque (pour voir les effets)
                         System.out.println("\n⚔️ Carte après attaque de " + personnage.getNom() + " :");
-                        m_donjon.getCarte().afficher();
+                        Affichage.afficherCarte(m_donjon.getCarte());
                     }
                     break;
                 case 4:
@@ -176,7 +176,7 @@ public class Tours {
                     if (actionEffectuee) {
                         // Afficher la carte après le lancement du sort
                         System.out.println("\n🪄 Carte après lancement de sort de " + personnage.getNom() + " :");
-                        m_donjon.getCarte().afficher();
+                        Affichage.afficherCarte(m_donjon.getCarte());
                     }
                 break;
                 case 5:
@@ -185,7 +185,7 @@ public class Tours {
                     if (actionEffectuee) {
                         // Afficher la carte après ramassage d'équipement
                         System.out.println("\n📦 Carte après ramassage d'équipement :");
-                        m_donjon.getCarte().afficher();
+                        Affichage.afficherCarte(m_donjon.getCarte());
                     }
                     break;
                 case 6:
@@ -251,7 +251,7 @@ public class Tours {
                     if (actionEffectuee) {
                         // Afficher la carte après déplacement du monstre
                         System.out.println("\n👹 Carte après déplacement de " + monstre.getNom() + " :");
-                        m_donjon.getCarte().afficher();
+                        Affichage.afficherCarte(m_donjon.getCarte());
                     }
                     break;
                 case 2:
@@ -259,7 +259,7 @@ public class Tours {
                     if (actionEffectuee) {
                         // Afficher la carte après attaque du monstre
                         System.out.println("\n🗡️ Carte après attaque de " + monstre.getNom() + " :");
-                        m_donjon.getCarte().afficher();
+                        Affichage.afficherCarte(m_donjon.getCarte());
                     }
                     break;
                 case 3:

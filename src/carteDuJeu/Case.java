@@ -109,6 +109,8 @@ public class Case {
         return !m_estObstacle && !contientElementMobile();
     }
 
+    /*============================Section Overrides============================*/
+
     @Override
     public String toString() {
         if (m_estObstacle) {

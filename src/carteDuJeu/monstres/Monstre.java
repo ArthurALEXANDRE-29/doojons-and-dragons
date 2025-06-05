@@ -1,6 +1,5 @@
-package carteDuJeu.Monstres;
+package carteDuJeu.monstres;
 
-import carteDuJeu.ElementCarte;
 import carteDuJeu.ElementMobile;
 
 public class Monstre implements ElementMobile {
@@ -103,7 +102,6 @@ public class Monstre implements ElementMobile {
         }
     }
 
-
     public void changementCarac(int caracteristiqueDAttaque) {
         if (m_portee != 1) {
             m_dexterite = caracteristiqueDAttaque;
@@ -149,6 +147,11 @@ public class Monstre implements ElementMobile {
         this.m_initiative = initiative;
     }
 
+    public String getNom() {
+        return m_espece + "#" + m_numero;
+    }
+
+    /*============================Section Overrides============================*/
 
     @Override
     public String getSymbole() {
@@ -158,10 +161,7 @@ public class Monstre implements ElementMobile {
         return " " + String.valueOf(m_espece.charAt(0)) + m_numero + " ";
     }
 
-    public String getNom() {
-        return m_espece + "#" + m_numero;
-    }
-
+    @Override
     public void subirDegats(int degats) {
         m_pointsDeVie -= degats;
         if (m_pointsDeVie < 0) {
@@ -169,16 +169,41 @@ public class Monstre implements ElementMobile {
         }
     }
 
+    @Override
     public boolean estMort() {
         return m_pointsDeVie <= 0;
     }
 
+    @Override
     public boolean estPersonnage() {
         return false;
     }
 
+    @Override
     public boolean estElementMobile() {
         return true;
     }
-}
 
+    @Override
+    public boolean estEquipement() {
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Monstre{" +
+                "espece='" + m_espece + '\'' +
+                ", numero=" + m_numero +
+                ", portee=" + m_portee +
+                ", maxDmg=" + m_maxDmg +
+                ", nbDes=" + m_nbDes +
+                ", pointsDeVieMax=" + m_pointsDeVieMax +
+                ", pointsDeVie=" + m_pointsDeVie +
+                ", force=" + m_force +
+                ", dexterite=" + m_dexterite +
+                ", vitesse=" + m_vitesse +
+                ", classeArmure=" + m_classeArmure +
+                ", initiative=" + m_initiative +
+                '}';
+    }
+}

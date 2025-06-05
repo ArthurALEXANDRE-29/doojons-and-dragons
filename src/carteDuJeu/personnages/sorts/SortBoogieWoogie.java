@@ -36,6 +36,7 @@ public class SortBoogieWoogie extends Sort {
         return true;
     }
 
+    @Override
     public boolean estUtilisablePar(Classe classe) {
         return classe.getNomClasse().equals("Magicien");
     }

@@ -104,7 +104,6 @@ public class Carte {
                 tentatives++;
             }
 
-
             throw new Exception("Impossible d'ajouter l'élément : aucune case vide disponible.");
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -222,41 +221,6 @@ public class Carte {
             throw new IllegalArgumentException("Coordonnées invalides pour la conversion");
         }
         return (char) ('A' + x) + String.valueOf(y + 1);
-    }
-
-    public void afficher() {
-        // Affiche les coordonnées X
-        System.out.print("  ");
-        for (int i = 0; i < m_largeur; i++) {
-            System.out.printf("%4c", 'A' + i);
-        }
-        System.out.println();
-
-        // Ligne supérieure du contour
-        System.out.print("   ┌");
-        for (int x = 0; x < m_largeur; x++) {
-            System.out.print("────");
-        }
-        System.out.println("┐");
-
-        for (int y = 0; y < m_hauteur; y++) {
-            // Coordonnée Y
-            System.out.printf("%2d │", y+1);
-
-            // Contenu de la ligne
-            for (int x = 0; x < m_largeur; x++) {
-                System.out.print(m_cases[y][x].toString());
-            }
-
-            System.out.println("│");
-        }
-
-        // Ligne inférieure du contour
-        System.out.print("   └");
-        for (int x = 0; x < m_largeur; x++) {
-            System.out.print("────");
-        }
-        System.out.println("┘");
     }
 
     public void genererObstaclesAleatoires(double tauxObstacle) {
