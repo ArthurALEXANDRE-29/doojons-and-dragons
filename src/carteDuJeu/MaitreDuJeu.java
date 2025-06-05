@@ -8,10 +8,8 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-import static carteDuJeu.Tours.demanderCommentaire;
-
 /**
- * Gère le rôle du Maître du Jeu : création des monstres, gestion de la carte,
+ * Gère le rôle du Maître du Jeu : création des monstres, gestion de la carte,
  * interactions spéciales et actions administratives sur le donjon.
  * Le Maître du Jeu contrôle la carte courante, la création des monstres et peut
  * infliger des dégâts ou déplacer des entités.

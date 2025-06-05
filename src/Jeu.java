@@ -28,6 +28,8 @@ public class Jeu {
     public Jeu() {
         m_donjonActuel = 0;
 
+        messageBienvenue();
+
         // Demander le nombre de joueurs AVANT de créer les donjons
         int nbJoueurs = 0;
         Scanner scanner = new Scanner(System.in);
@@ -70,6 +72,38 @@ public class Jeu {
             System.out.println("\n=== Configuration du Donjon " + i + " ===");
             m_donjons.add(new Donjon(i, m_maitreDuJeu, tousLesEquipements, m_joueurs));
         }
+    }
+
+    /**
+     * Affiche un message de bienvenue au joueur.
+     */
+    private void messageBienvenue() {
+        System.out.println("\u001B[31m╔═══════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║                                                                               ║");
+        System.out.println("║    ██████╗ ██╗   ██╗███╗   ██╗ ██████╗ ███████╗ ██████╗ ███╗   ██╗███████╗    ║");
+        System.out.println("║    ██╔══██╗██║   ██║████╗  ██║██╔════╝ ██╔════╝██╔═══██╗████╗  ██║██╔════╝    ║");
+        System.out.println("║    ██║  ██║██║   ██║██╔██╗ ██║██║  ███╗█████╗  ██║   ██║██╔██╗ ██║███████╗    ║");
+        System.out.println("║    ██║  ██║██║   ██║██║╚██╗██║██║   ██║██╔══╝  ██║   ██║██║╚██╗██║╚════██║    ║");
+        System.out.println("║    ██████╔╝╚██████╔╝██║ ╚████║╚██████╔╝███████╗╚██████╔╝██║ ╚████║███████║    ║");
+        System.out.println("║    ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝    ║");
+        System.out.println("║                                       &                                       ║");
+        System.out.println("║          ██████╗ ██████╗  █████╗  ██████╗  ██████╗ ███╗   ██╗███████╗         ║");
+        System.out.println("║          ██╔══██╗██╔══██╗██╔══██╗██╔════╝ ██╔═══██╗████╗  ██║██╔════╝         ║");
+        System.out.println("║          ██║  ██║██████╔╝███████║██║  ███╗██║   ██║██╔██╗ ██║███████╗         ║");
+        System.out.println("║          ██║  ██║██╔══██╗██╔══██║██║   ██║██║   ██║██║╚██╗██║╚════██║         ║");
+        System.out.println("║          ██████╔╝██║  ██║██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║███████║         ║");
+        System.out.println("║          ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝         ║");
+        System.out.println("║                                                                               ║");
+        System.out.println("╚═══════════════════════════════════════════════════════════════════════════════╝\u001B[0m");
+        System.out.println();
+        System.out.println("Les ténèbres s'étendent sur le royaume. Trois donjons maudits se dressent devant vous,");
+        System.out.println("chacun grouillant de créatures maléfiques qui terrorisent les terres. Votre mission");
+        System.out.println("est simple mais mortelle : pénétrer dans chaque donjon et éliminer toute forme de");
+        System.out.println("vie hostile. Aucune créature ne doit survivre. Seule l'extermination totale brisera");
+        System.out.println("la malédiction qui ronge ces lieux. Préparez-vous à affronter l'horreur.");
+        System.out.println();
+        System.out.println("Que votre lame soit aiguisée et votre courage inébranlable...");
+        System.out.println();
     }
 
     /**
