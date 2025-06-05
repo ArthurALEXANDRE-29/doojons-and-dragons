@@ -6,7 +6,7 @@ import carteDuJeu.personnages.equipements.armures.ArmureDEcailles;
 
 /**
  * Représente la classe Clerc.
- * Le clerc possède 16 points de vie, aucun bonus de force, de dextérité ou d'initiative,
+ * Le clerc possède 16 points de vie,
  * et commence avec une masse d'armes, une armure d'écailles et une arbalète légère.
  */
 public class Clerc extends Classe {
