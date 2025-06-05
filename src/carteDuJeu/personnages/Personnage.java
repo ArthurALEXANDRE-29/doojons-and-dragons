@@ -357,8 +357,8 @@ public class Personnage implements ElementMobile {
     @Override
     public String toString() {
         return  m_nom + '\n' +
-                "  Race :  " + (m_race != null ? m_race.getNomRace() + '|' : "inconnue") +
-                "  Classe : " + (m_classe != null ? m_classe.getNomClasse() : "inconnue") + '\n' +
+                "  Race : " + (m_race != null ? m_race.getNomRace() + " | " : "inconnue") +
+                "Classe : " + (m_classe != null ? m_classe.getNomClasse() : "inconnue") + '\n' +
                 "    PV : " + m_pointsDeVie + "/" + m_pointsDeVieMax + '\n' +
                 "    Force : " + m_forceCurrent + '\n' +
                 "    Dextérité : " + m_dexteriteBase + '\n' +

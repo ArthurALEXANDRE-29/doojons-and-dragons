@@ -797,7 +797,6 @@ public class Tours {
         // Récupérer tous les équipements présents sur la case
         List<Equipement> equipementsSurCase = new ArrayList<>();
         for (ElementCarte element : casePersonnage.getContenu()) {
-            System.out.println("Type: " + element.getClass() + ", estEquipement: " + element.estEquipement());
             if (element.estEquipement()) {
                 equipementsSurCase.add((Equipement) element);
             }

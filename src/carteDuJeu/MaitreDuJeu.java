@@ -255,9 +255,11 @@ public class MaitreDuJeu {
             caseActuelle.retirerContenu(cible);
             caseDestination.ajouterContenu(cible);
 
-            System.out.println(cible.getNom() + " déplacé en (" + x + ", " + y + ").");
+            char lettreX = (char) ('A' + x);
+            int numeroY = y + 1;
+            System.out.println(cible.getNom() + " a été déplacé en " + lettreX + numeroY + ".");
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("❌ Déplacement impossible : coordonnées (" + x + "," + y + ") hors de la carte.");
+            System.out.println("❌ Déplacement impossible : coordonnées hors de la carte.");
         } catch (IllegalArgumentException e) {
             System.out.println("❌ Déplacement impossible : " + e.getMessage());
         }
@@ -303,7 +305,7 @@ public class MaitreDuJeu {
             }
 
             if (!caseCible.estVide()) {
-                System.out.println("❌ La case est occupée par un élément mobile, impossible de poser un obstacle. Choisissez une autre case.");
+                System.out.println("❌ La case est occupée par un personnage, monstre ou équipement. Impossible de poser un obstacle. Choisissez une autre case.");
                 continue;
             }
 
