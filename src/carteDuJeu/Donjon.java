@@ -11,6 +11,8 @@ import carteDuJeu.actions.ChangerEquipement;
 import carteDuJeu.personnages.equipements.*;
 import carteDuJeu.personnages.*;
 import carteDuJeu.monstres.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import java.util.*;
 
@@ -75,25 +77,27 @@ public class Donjon {
         }
 
         if (choix.equals("o")) {
-            Random random = new Random();
             switch (m_numeroDonjon) {
                 case 1:
                     initialiserCarte(8, 10);
                     m_carte.setCarteParDefaut(true);
                     System.out.println("Carte par défaut du Donjon 1 : Caverne étroite");
-                    m_carte.genererObstaclesAleatoires(random.nextDouble() * 0.05);
+                    m_carte.genererObstaclesAleatoires(0.08);
+                    Affichage.afficherCarte(java.util.Optional.ofNullable(m_carte));
                     break;
                 case 2:
                     initialiserCarte(14, 12);
                     m_carte.setCarteParDefaut(true);
                     System.out.println("Carte par défaut du Donjon 2 : Salle du trône");
-                    m_carte.genererObstaclesAleatoires(random.nextDouble() * 0.075);
+                    m_carte.genererObstaclesAleatoires(0.075);
+                    Affichage.afficherCarte(java.util.Optional.ofNullable(m_carte));
                     break;
                 case 3:
                     initialiserCarte(21, 24);
                     m_carte.setCarteParDefaut(true);
                     System.out.println("Carte par défaut du Donjon 3 : Antre du dragon");
-                    m_carte.genererObstaclesAleatoires(random.nextDouble() * 0.14);
+                    m_carte.genererObstaclesAleatoires(0.14);
+                    Affichage.afficherCarte(java.util.Optional.ofNullable(m_carte));
 
                     break;
                 default:
@@ -152,7 +156,6 @@ public class Donjon {
                     default:
                         nbEquipementsSouhaites = 4;
                 }
-                System.out.println(nbEquipementsSouhaites + " équipements ajoutés automatiquement au donjon " + m_numeroDonjon);
             } else {
                 nbEquipementsSouhaites = demanderInt(scanner, "Combien d'équipements dans le donjon " + m_numeroDonjon + " ?");
             }
@@ -200,7 +203,6 @@ public class Donjon {
         System.out.println("Création des monstres du donjon " + m_numeroDonjon + "...");
         m_maitreDuJeu.phaseCreationDesMonstres();
         m_monstres = new ArrayList<>(m_maitreDuJeu.getMonstres());
-        Affichage.afficherCarte(java.util.Optional.ofNullable(m_carte));
         // Vérification que des monstres ont été créés
         if (m_monstres.isEmpty()) {
             System.out.println("⚠️ Aucun monstre créé pour ce donjon !");
@@ -249,8 +251,8 @@ public class Donjon {
         System.out.println("=== Début du combat dans le donjon " + m_numeroDonjon + " ===");
 
         // Vérifications préliminaires
-        if (m_joueurs.stream().allMatch(ElementMobile::estMort)) {
-            System.out.println("💀 Tous les joueurs sont morts ! Impossible de commencer le donjon.");
+        if (m_joueurs.stream().anyMatch(ElementMobile::estMort)) {
+            System.out.println("💀 Un ou plusieurs joueurs sont morts ! Impossible de commencer le donjon.");
             return false;
         }
 
@@ -306,13 +308,7 @@ public class Donjon {
                 continue;
             }
 
-            System.out.println("Joueur : " + joueur.getNom());
-            System.out.println("Classe : " + joueur.getClasse() + " | Race : " + joueur.getRace());
-            System.out.println("PV: " + joueur.getPointsDeVie() + "/" + joueur.getPointsDeVieMax());
-            System.out.println("Arme équipée : " +
-                    (joueur.getArmeEquipee() != null ? joueur.getArmeEquipee().getNom() : "Aucune"));
-            System.out.println("Armure équipée : " +
-                    (joueur.getArmureEquipee() != null ? joueur.getArmureEquipee().getNom() : "Aucune"));
+            System.out.println(joueur.toString());
 
             boolean continuer = true;
             while (continuer) {
@@ -365,16 +361,22 @@ public class Donjon {
             }
         }
 
-        // Trier la liste par initiative totale (lancer + initiative de base)
+        // Map pour stocker les initiatives calculées
+        Map<ElementMobile, Integer> initiativesCalculees = new HashMap<>();
+
+        // Calculer l'initiative de chaque entité UNE SEULE FOIS
+        for (ElementMobile entite : m_entiteTour) {
+            int lancer = random.nextInt(20) + 1;
+            int initiativeTotal = lancer + entite.getInitiative();
+            initiativesCalculees.put(entite, initiativeTotal);
+
+            System.out.println(entite.getNom() + " lance " + lancer + " + " + entite.getInitiative() + " = " + initiativeTotal);
+        }
+
+        // Trier la liste par initiative totale (ordre décroissant)
         m_entiteTour.sort((e1, e2) -> {
-            int lancerE1 = random.nextInt(20) + 1;
-            int lancerE2 = random.nextInt(20) + 1;
-            int initiativeE1 = lancerE1 + e1.getInitiative();
-            int initiativeE2 = lancerE2 + e2.getInitiative();
-
-            System.out.println(e1.getNom() + " lance " + lancerE1 + " + " + e1.getInitiative() + " = " + initiativeE1);
-            System.out.println(e2.getNom() + " lance " + lancerE2 + " + " + e2.getInitiative() + " = " + initiativeE2);
-
+            int initiativeE1 = initiativesCalculees.get(e1);
+            int initiativeE2 = initiativesCalculees.get(e2);
             return Integer.compare(initiativeE2, initiativeE1); // Ordre décroissant
         });
 
@@ -382,7 +384,8 @@ public class Donjon {
         for (int i = 0; i < m_entiteTour.size(); i++) {
             ElementMobile entite = m_entiteTour.get(i);
             String type = entite.estPersonnage() ? "[JOUEUR]" : "[MONSTRE]";
-            System.out.println((i + 1) + ". " + type + " " + entite.getNom());
+            int initiative = initiativesCalculees.get(entite);
+            System.out.println((i + 1) + ". " + type + " " + entite.getNom() + " (Initiative: " + initiative + ")");
         }
         System.out.println("--------------------------------------------------------\n");
     }

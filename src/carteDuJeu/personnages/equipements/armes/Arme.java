@@ -116,7 +116,6 @@ public abstract class Arme extends Equipement {
         return getNom() +
                 " | dégâts : " + m_degats +
                 " | portée : " + m_portee +
-                " | arme lourde : " + armeLourde() +
                 " | dés d'attaque : " + m_desMax +
                 " | bonus dés : " + m_bonusAttaque +
                 " | bonus dégâts : " + m_bonusDegats;

@@ -131,7 +131,9 @@ public class Affichage {
 
         // Affichage des monstres
         for (Monstre monstre : monstres) {
-            System.out.println("[Monstre] " + monstre.getNom() + " (PV: " + monstre.getPointsDeVie() + "/" + monstre.getPointsDeVieMax() + ")");
+            if (!monstre.estMort()) {
+                System.out.println("[Monstre] " + monstre.getNom() + " (PV: " + monstre.getPointsDeVie() + "/" + monstre.getPointsDeVieMax() + ")");
+            }
         }
 
         // Affichage des joueurs
