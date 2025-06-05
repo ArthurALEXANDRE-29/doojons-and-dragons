@@ -38,9 +38,6 @@ public class MaitreDuJeu {
         this.m_carteActuelle = carte;
         System.out.println("Le Maître du Jeu prend contrôle d'une nouvelle carte (" +
                 carte.getLargeur() + "x" + carte.getHauteur() + ")");
-        if (m_carteActuelle != null) {
-            Affichage.afficherCarte(java.util.Optional.ofNullable(m_carteActuelle));
-        }
     }
 
     /**
@@ -66,12 +63,16 @@ public class MaitreDuJeu {
      * de chaque monstre à créer et les ajoute à la liste des monstres.
      */
     public void phaseCreationDesMonstres() {
+        m_monstres.clear();
         Scanner scanner = new Scanner(System.in);
         int nombreMonstres = demanderInt(scanner, "Combien de monstres voulez-vous créer ? ");
         for (int i = 1; i <= nombreMonstres; i++) {
             Monstre monstre = creerMonstreInteractif(scanner, i);
             m_monstres.add(monstre);
+            System.out.println("Monstre " + monstre.getEspece() + " (ID: " + monstre.getNumero() + ") a été crée avec succès.");
+            System.out.println("-------------------------------------------\n");
         }
+        System.out.println("Création du/des monstre(s) terminée(s). " + m_monstres.size() + " monstres créés.");
     }
 
     /**
@@ -107,10 +108,10 @@ public class MaitreDuJeu {
      */
     public void faireDmg(List<Personnage> joueurs) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Voulez-vous utiliser la foudre divine ? (y/n) ");
+        System.out.print("Voulez-vous utiliser la foudre divine ? (o/n) ");
         String rep = scanner.nextLine().trim().toLowerCase();
 
-        if (!rep.equals("y")) return;
+        if (!rep.equals("o")) return;
 
         Affichage.afficherCiblesDisponibles(m_monstres, m_joueurs);
 

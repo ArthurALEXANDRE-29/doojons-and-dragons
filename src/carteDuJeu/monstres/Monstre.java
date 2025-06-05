@@ -227,19 +227,11 @@ public class Monstre implements ElementMobile {
 
     @Override
     public String toString() {
-        return "Monstre{" +
-                "espece='" + m_espece + '\'' +
-                ", numero=" + m_numero +
-                ", portee=" + m_portee +
-                ", maxDmg=" + m_maxDmg +
-                ", nbDes=" + m_nbDes +
-                ", pointsDeVieMax=" + m_pointsDeVieMax +
-                ", pointsDeVie=" + m_pointsDeVie +
-                ", force=" + m_force +
-                ", dexterite=" + m_dexterite +
-                ", vitesse=" + m_vitesse +
-                ", classeArmure=" + m_classeArmure +
-                ", initiative=" + m_initiative +
-                '}';
+        return  m_espece + '\n' +
+                "  Portee : " + m_portee + '\n' +
+                "  PointsDeVie : " + m_pointsDeVie + '\n' +
+                "  Force : " + m_force + '\n' +
+                "  Dexterite : " + m_dexterite + '\n' +
+                "  Vitesse : " + m_vitesse;
     }
 }

@@ -356,17 +356,15 @@ public class Personnage implements ElementMobile {
      */
     @Override
     public String toString() {
-        return "Personnage{" +
-                "nom='" + m_nom + '\'' +
-                ", race=" + (m_race != null ? m_race.getNomRace() : "inconnue") +
-                ", classe=" + (m_classe != null ? m_classe.getNomClasse() : "inconnue") +
-                ", PV=" + m_pointsDeVie + "/" + m_pointsDeVieMax +
-                ", force=" + m_forceCurrent +
-                ", dextérité=" + m_dexteriteBase +
-                ", vitesse=" + m_vitesseCurrent +
-                ", arme=" + (m_armeEquipee != null ? m_armeEquipee.getNom() : "aucune") +
-                ", armure=" + (m_armureEquipee != null ? m_armureEquipee.getNom() : "aucune") +
-                ", inventaire=" + m_inventaire.size() +
-                '}';
+        return  m_nom + '\n' +
+                "  Race :  " + (m_race != null ? m_race.getNomRace() + '|' : "inconnue") +
+                "  Classe : " + (m_classe != null ? m_classe.getNomClasse() : "inconnue") + '\n' +
+                "    PV : " + m_pointsDeVie + "/" + m_pointsDeVieMax + '\n' +
+                "    Force : " + m_forceCurrent + '\n' +
+                "    Dextérité : " + m_dexteriteBase + '\n' +
+                "    Vitesse : " + m_vitesseCurrent + '\n' +
+                "    Arme : " + (m_armeEquipee != null ? m_armeEquipee.toString() : "aucune") + '\n' +
+                "    Armure : " + (m_armureEquipee != null ? m_armureEquipee.toString() : "aucune") + '\n' +
+                "    Inventaire : " + m_inventaire.size() + " équipement(s)";
     }
 }

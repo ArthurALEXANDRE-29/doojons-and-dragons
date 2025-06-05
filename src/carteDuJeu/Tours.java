@@ -117,17 +117,15 @@ public class Tours {
      * @param personnage le personnage joueur
      */
     private void jouerTourPersonnage(Personnage personnage) {
-        System.out.println("C'est au tour de " + personnage.getNom() +
-                " (PV: " + personnage.getPointsDeVie() + "/" + personnage.getPointsDeVieMax() + ")");
         historiqueActions = new StringBuilder();
         int actionsRestantes = 3;
-
 
         while (actionsRestantes > 0) {
             if(personnage.estMort()) {
                 return;
             }
             Affichage.afficherCarte(java.util.Optional.ofNullable(m_donjon.getCarte()));
+            System.out.println("\nC'est au tour de " + personnage.toString());
             System.out.println("\nActions restantes : " + actionsRestantes);
             System.out.println("Actions disponibles :");
             System.out.println("1. S'équiper");
@@ -135,7 +133,8 @@ public class Tours {
             System.out.println("3. Attaquer");
             System.out.println("4. Lancer un sort");
             System.out.println("5. Ramasser un équipement");
-            System.out.println("6. Terminer le tour");
+            System.out.println("6. Voir l'inventaire");
+            System.out.println("7. Terminer le tour");
 
             int choixAction = -1;
             while (true) {
@@ -164,10 +163,10 @@ public class Tours {
                         // Afficher la carte après un déplacement
                         System.out.println("\n🚶 Carte après déplacement de " + personnage.getNom() + " :");
                         historiqueActions.append(personnage.getNom())
-                                .append(" avance prudemment dans les sombres couloirs du donjon, ses pas résonnant sur les pierres froides. ")
-                                .append("Chaque ombre semble cacher un danger, et les grognements lointains des monstres rôdent dans l'air, ")
-                                .append("rappelant à ").append(personnage.getNom())
-                                .append(" que le danger est partout. Une sueur froide coule sur son front alors qu'il s'efforce de rester vigilant.");
+                                .append(" avance prudemment dans les sombres couloirs du donjon, ses pas résonnant sur les pierres froides. \n")
+                                .append("Chaque ombre semble cacher un danger, et les grognements lointains des monstres rôdent dans l'air, \n")
+                                .append("rappelant à ").append(personnage.getNom() + "\n")
+                                .append("que le danger est partout.");
                         historiqueActions.append("\n");
 
                         Affichage.afficherCarte(java.util.Optional.ofNullable(m_donjon.getCarte()));
@@ -185,7 +184,7 @@ public class Tours {
                     actionEffectuee = actionLancerSort(personnage);
                     if (actionEffectuee) {
                         // Afficher la carte après le lancement du sort
-                        System.out.println("\n🪄 Carte après lancement de sort de " + personnage.getNom() + " :");
+                        System.out.println("\n \uD83E\uDDD9 Carte après lancement de sort de " + personnage.getNom() + " :");
                         Affichage.afficherCarte(java.util.Optional.ofNullable(m_donjon.getCarte()));
                     }
                 break;
@@ -199,6 +198,10 @@ public class Tours {
                     }
                     break;
                 case 6:
+                    actionEffectuee = actionVoirInventaire(personnage);
+                    consommerAction = false;
+                    break;
+                case 7:
                     System.out.println(personnage.getNom() + " termine son tour.");
                     demanderCommentaire();
                     actionMDJ(m_donjon.getJoueurs());
@@ -223,13 +226,11 @@ public class Tours {
      * @param monstre le monstre à jouer
      */
     private void jouerTourMonstre(Monstre monstre) {
-        System.out.println("C'est au tour du monstre " + monstre.getNom() +
-                " (PV: " + monstre.getPointsDeVie() + "/" + monstre.getPointsDeVieMax() + ")");
         System.out.println("Maître du jeu, contrôlez ce monstre.");
-
         int actionsRestantes = 3;
 
         while (actionsRestantes > 0) {
+            System.out.println("C'est au tour du monstre "+ monstre.toString());
             System.out.println("\nActions restantes pour " + monstre.getNom() + " : " + actionsRestantes);
             System.out.println("Actions disponibles :");
             System.out.println("1. Se déplacer");
@@ -290,6 +291,7 @@ public class Tours {
 
         System.out.println(monstre.getNom() + " a épuisé ses actions pour ce tour.");
     }
+
 
     /**
      * Permet au Maître du Jeu d'effectuer des actions spéciales.
@@ -363,6 +365,25 @@ public class Tours {
     private boolean actionSeDeplacer(ElementMobile entite) {
         System.out.println("\n--- Action : Se déplacer ---");
         return m_deplacement.gererDeplacement(entite);
+    }
+
+    /**
+     * Action : Voir l'inventaire (personnages uniquement).
+     * @param personnage le personnage qui consulte son inventaire
+     * @return true si l'inventaire a été affiché, false sinon
+     */
+    private boolean actionVoirInventaire(Personnage personnage) {
+        System.out.println("\n----- Inventaire de " + personnage.getNom() + " -----");
+        if (personnage.getInventaire().isEmpty()) {
+            System.out.println(personnage.getNom() + " n'a aucun équipement dans son inventaire.\n\n");
+            return false;
+        }
+
+        for (Equipement equipement : personnage.getInventaire()) {
+            System.out.println("- " + equipement.toString() + "\n");
+            System.out.println("------------------------------------------------------\n\n");
+        }
+        return true;
     }
 
     /**
@@ -925,10 +946,9 @@ public class Tours {
 
     @Override
     public String toString() {
-        return "Tours{" +
+        return "Tours : " +
                 "numeroTour=" + m_numeroTour +
                 ", indexTourActuel=" + m_indexTourActuel +
-                ", donjon=" + (m_donjon != null ? m_donjon.toString() : "null") +
-                '}';
+                ", donjon=" + (m_donjon != null ? m_donjon.toString() : "null");
     }
 }
