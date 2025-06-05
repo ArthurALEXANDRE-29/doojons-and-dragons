@@ -6,18 +6,28 @@ import carteDuJeu.ElementMobile;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Gère les déplacements d'un élément mobile sur la carte.
+ * Cette classe permet de gérer les déplacements interactifs ou automatiques,
+ * de vérifier la validité d'un déplacement et d'afficher les cases accessibles.
+ */
 public class Deplacement {
     private final Carte m_carte;
     private final Scanner m_scanner;
 
+    /**
+     * Construit un gestionnaire de déplacement pour une carte donnée.
+     * @param carte Carte de jeu
+     */
     public Deplacement(Carte carte) {
         this.m_carte = carte;
         this.m_scanner = new Scanner(System.in);
     }
 
     /**
-     * Gère le déplacement interactif d'un élément
-     * C'est la seule vraie responsabilité de cette classe
+     * Gère le déplacement interactif d'un élément mobile.
+     * @param element Élément à déplacer
+     * @return true si le déplacement a eu lieu, false sinon
      */
     public boolean gererDeplacement(ElementMobile element) {
         int[] position;
@@ -88,7 +98,11 @@ public class Deplacement {
     }
 
     /**
-     * Vérifie si un élément peut se déplacer vers une position donnée
+     * Vérifie si un élément peut se déplacer vers une position donnée.
+     * @param element Élément à déplacer
+     * @param xCible Abscisse de la case cible
+     * @param yCible Ordonnée de la case cible
+     * @return true si le déplacement est possible, false sinon
      */
     public boolean peutSeDeplacer(ElementMobile element, int xCible, int yCible) {
         int[] position = m_carte.trouverPosition(element)
@@ -116,7 +130,8 @@ public class Deplacement {
     }
 
     /**
-     * Affiche les cases accessibles pour un élément
+     * Affiche les cases accessibles pour un élément mobile.
+     * @param element Élément concerné
      */
     public void afficherCasesAccessibles(ElementMobile element) {
         int[] position = m_carte.trouverPosition(element)
@@ -147,7 +162,11 @@ public class Deplacement {
     }
 
     /**
-     * Déplace un élément automatiquement vers une destination si possible
+     * Déplace automatiquement un élément vers une destination donnée.
+     * @param element Élément à déplacer
+     * @param xCible Coordonnée X de la destination
+     * @param yCible Coordonnée Y de la destination
+     * @return true si le déplacement a eu lieu, false sinon
      */
     public boolean deplacerAutomatiquement(ElementMobile element, int xCible, int yCible) {
         if (!peutSeDeplacer(element, xCible, yCible)) {
@@ -157,7 +176,10 @@ public class Deplacement {
     }
 
     /**
-     * Déplace un élément automatiquement vers une destination donnée en string
+     * Déplace automatiquement un élément vers une destination donnée sous forme de chaîne.
+     * @param element Élément à déplacer
+     * @param destination Destination sous forme de chaîne (ex: "A5")
+     * @return true si le déplacement a eu lieu, false sinon
      */
     public boolean deplacerAutomatiquement(ElementMobile element, String destination) {
         try {
@@ -167,5 +189,16 @@ public class Deplacement {
         } catch (IllegalArgumentException e) {
             return false;
         }
+    }
+
+    /**
+     * Retourne une représentation textuelle du gestionnaire de déplacement.
+     * @return Chaîne décrivant l'objet Deplacement
+     */
+    @Override
+    public String toString() {
+        return "Deplacement{" +
+                "carte=" + (m_carte != null ? m_carte.toString() : "null") +
+                '}';
     }
 }

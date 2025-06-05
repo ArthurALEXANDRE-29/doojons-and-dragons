@@ -8,14 +8,32 @@ import carteDuJeu.monstres.Monstre;
 import carteDuJeu.personnages.equipements.armes.Arme;
 import carteDuJeu.personnages.equipements.armures.Armure;
 
+/**
+ * Gère les actions d'attaque entre personnages et monstres sur la carte.
+ * Permet de réaliser des attaques, de vérifier la portée et d'appliquer les dégâts.
+ */
 public class Attaque {
 
+    /** Gestionnaire de déplacement utilisé pour certaines vérifications. */
     private final Deplacement m_deplacement;
 
+    /**
+     * Construit un gestionnaire d'attaque avec le gestionnaire de déplacement associé.
+     * @param deplacement Gestionnaire de déplacement
+     */
     public Attaque(Deplacement deplacement) {
         this.m_deplacement = deplacement;
     }
 
+    /**
+     * Permet à un personnage d'attaquer un monstre.
+     * @param carte Carte de jeu
+     * @param attaquant Personnage attaquant
+     * @param cible Monstre ciblé
+     * @param caseAttaquant Case du personnage attaquant
+     * @param caseCible Case du monstre ciblé
+     * @return true si l'attaque a eu lieu, false sinon
+     */
     public boolean attaquer(Carte carte, Personnage attaquant, Monstre cible, Case caseAttaquant, Case caseCible) {
         Arme arme = attaquant.getArmeEquipee();
         if (arme == null) {
@@ -57,6 +75,15 @@ public class Attaque {
         return true;
     }
 
+    /**
+     * Permet à un monstre d'attaquer un personnage.
+     * @param carte Carte de jeu
+     * @param attaquant Monstre attaquant
+     * @param cible Personnage ciblé
+     * @param caseAttaquant Case du monstre attaquant
+     * @param caseCible Case du personnage ciblé
+     * @return true si l'attaque a eu lieu, false sinon
+     */
     public boolean attaquer(Carte carte, Monstre attaquant, Personnage cible, Case caseAttaquant, Case caseCible) {
         if (!carte.estAPortee(caseAttaquant.getX(), caseAttaquant.getY(),
                 caseCible.getX(), caseCible.getY(), attaquant.getPortee())) {
@@ -95,5 +122,14 @@ public class Attaque {
         }
 
         return true;
+    }
+
+    /**
+     * Retourne une représentation textuelle de l'objet Attaque.
+     * @return Chaîne décrivant l'objet Attaque
+     */
+    @Override
+    public String toString() {
+        return "Attaque{deplacement=" + (m_deplacement != null ? m_deplacement.toString() : "null") + "}";
     }
 }

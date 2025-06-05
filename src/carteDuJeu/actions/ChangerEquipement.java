@@ -3,8 +3,17 @@ package carteDuJeu.actions;
 import carteDuJeu.personnages.Personnage;
 import java.util.Scanner;
 
+/**
+ * Gère le changement d'équipement d'un personnage.
+ * Permet à l'utilisateur de choisir un équipement à équiper depuis l'inventaire du personnage.
+ */
 public class ChangerEquipement {
 
+    /**
+     * Propose à l'utilisateur de changer l'équipement du personnage.
+     * Affiche l'inventaire et permet de sélectionner une arme ou une armure à équiper.
+     * @param personnage Le personnage dont l'équipement doit être changé
+     */
     public void proposerChangement(Personnage personnage) {
         Scanner scanner = new Scanner(System.in);
 
@@ -50,5 +59,14 @@ public class ChangerEquipement {
         } catch (Exception e) {
             System.out.println("Erreur lors du changement d'équipement : " + e.getMessage());
         }
+    }
+
+    /**
+     * Retourne une représentation textuelle de l'objet ChangerEquipement.
+     * @return Chaîne décrivant l'objet ChangerEquipement
+     */
+    @Override
+    public String toString() {
+        return "ChangerEquipement : permet de changer l'équipement d'un personnage.";
     }
 }
