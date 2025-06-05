@@ -392,7 +392,8 @@ public class Tours {
         }
 
         Monstre cible = monstresAPortee.get(choixCible);
-        Case casePersonnage = m_donjon.getCarte().getCase(personnage);
+        Carte carte = m_donjon.getCarte();
+        Case casePersonnage = carte.getCase(personnage);
         Case caseCible = m_donjon.getCarte().getCase(cible);
         // Mettre à jour l'historique des actions
         historiqueActions.append(personnage.getNom())

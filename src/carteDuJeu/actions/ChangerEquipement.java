@@ -11,7 +11,7 @@ public class ChangerEquipement {
         // Afficher l'inventaire
         System.out.println("Inventaire :");
         for (int i = 0; i < personnage.getInventaire().size(); i++) {
-            System.out.println((i + 1) + ". " + personnage.getInventaire().get(i).toString());
+            System.out.println((i + 1) + ". " + personnage.getInventaire(i).toString());
         }
 
         int index = -1;
@@ -32,13 +32,13 @@ public class ChangerEquipement {
 
         try {
             // Vérifier si l'équipement est une arme ou une armure
-            if (personnage.getInventaire().get(index).estUneArme()) {
+            if (personnage.getInventaire(index).estUneArme()) {
                 if (personnage.setArmeEquipee(index)) {
                     System.out.println("Nouvelle arme équipée : " + personnage.getArmeEquipee().toString());
                 } else {
                     System.out.println("Impossible d'équiper cette arme.");
                 }
-            } else if (personnage.getInventaire().get(index).estUneArmure()) {
+            } else if (personnage.getInventaire(index).estUneArmure()) {
                 if (personnage.setArmureEquipee(index)) {
                     System.out.println("Nouvelle armure équipée : " + personnage.getArmureEquipee().toString());
                 } else {

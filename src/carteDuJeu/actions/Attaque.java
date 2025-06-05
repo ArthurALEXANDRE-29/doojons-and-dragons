@@ -82,7 +82,9 @@ public class Attaque {
             if (cible.estMort()) {
                 System.out.println(cible.getNom() + " est mort !");
                 try {
-                    Case c = carte.getCase(caseCible.getX(), caseCible.getY());
+                    int x = caseCible.getX();
+                    int y = caseCible.getY();
+                    Case c = carte.getCase(x, y);
                     c.retirerContenu(cible);
                 } catch (Exception e) {
                     System.out.println("Erreur lors du retrait de la cible de la case : " + e.getMessage());
