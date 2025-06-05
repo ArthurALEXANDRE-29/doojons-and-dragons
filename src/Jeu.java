@@ -10,6 +10,11 @@ import carteDuJeu.personnages.equipements.armures.*;
 import carteDuJeu.personnages.equipements.armes.*;
 import carteDuJeu.personnages.races.*;
 
+/**
+ * Classe principale qui gère le déroulement global du jeu DOOnjon&Dragon.
+ * Elle orchestre la création des joueurs, des donjons, le déroulement des parties,
+ * la gestion des victoires/défaites et la régénération des personnages.
+ */
 public class Jeu {
     private List<Donjon> m_donjons;
     private List<Personnage> m_joueurs;
@@ -17,23 +22,19 @@ public class Jeu {
     private int m_donjonActuel; // Index du donjon en cours
     private static final int NOMBRE_DONJONS_TOTAL = 3;
 
+    /**
+     * Constructeur du jeu. Initialise les joueurs, le maître du jeu, les équipements et les donjons.
+     */
     public Jeu() {
         m_donjonActuel = 0;
 
         // Demander le nombre de joueurs AVANT de créer les donjons
-        Scanner scanner = new Scanner(System.in);
         int nbJoueurs = 0;
+        Scanner scanner = new Scanner(System.in);
         while (nbJoueurs < 1) {
-            System.out.print("Combien de joueurs voulez-vous créer ? (minimum 1) ");
-            try {
-                nbJoueurs = scanner.nextInt();
-                scanner.nextLine(); // Consommer le reste de la ligne
-                if (nbJoueurs < 1) {
-                    System.out.println("Le nombre de joueurs doit être au moins 1. Veuillez réessayer.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Entrée invalide, veuillez entrer un nombre entier.");
-                scanner.nextLine(); // Consommer l'entrée incorrecte
+            nbJoueurs = demanderInt(scanner, "Combien de joueurs voulez-vous créer ? (minimum 1) ");
+            if (nbJoueurs < 1) {
+                System.out.println("Le nombre de joueurs doit être au moins 1. Veuillez réessayer.");
             }
         }
 
@@ -70,6 +71,11 @@ public class Jeu {
         }
     }
 
+    /**
+     * Crée une instance de Race à partir d'une chaîne de caractères.
+     * @param raceStr le nom de la race
+     * @return l'objet Race correspondant
+     */
     private Race creerRace(String raceStr) {
         switch (raceStr.toLowerCase()) {
             case "humain":
@@ -86,6 +92,11 @@ public class Jeu {
         }
     }
 
+    /**
+     * Crée une instance de Classe à partir d'une chaîne de caractères.
+     * @param classeStr le nom de la classe
+     * @return l'objet Classe correspondant
+     */
     private Classe creerClasse(String classeStr) {
         switch (classeStr.toLowerCase()) {
             case "guerrier":
@@ -102,6 +113,10 @@ public class Jeu {
         }
     }
 
+    /**
+     * Crée la liste de tous les équipements disponibles dans le jeu.
+     * @return la liste des équipements
+     */
     private List<Equipement> creerTousLesEquipements() {
         List<Equipement> equipements = new ArrayList<>();
 
@@ -130,6 +145,9 @@ public class Jeu {
         return equipements;
     }
 
+    /**
+     * Démarre la partie et gère la boucle principale des donjons.
+     */
     public void demarrer() {
         System.out.println("La partie commence !");
         m_maitreDuJeu.decrireContexte();
@@ -172,6 +190,10 @@ public class Jeu {
         finPartie();
     }
 
+    /**
+     * Vérifie si la partie est perdue (si un ou plusieurs personnages sont morts).
+     * @return true si la partie est perdue, false sinon
+     */
     private boolean partiePerdue() {
         for (Personnage joueur : m_joueurs) {
             if (joueur.estMort()) {
@@ -181,12 +203,18 @@ public class Jeu {
         return false;
     }
 
+    /**
+     * Régénère les points de vie de tous les joueurs à leur maximum.
+     */
     private void regenererPVJoueurs() {
         for (Personnage joueur : m_joueurs) {
             joueur.setPointsDeVie(joueur.getPointsDeVieMax());
         }
     }
 
+    /**
+     * Affiche le message de fin de partie selon la victoire ou la défaite.
+     */
     public void finPartie() {
         System.out.println("\n" + "=".repeat(60));
         if (m_donjonActuel >= NOMBRE_DONJONS_TOTAL) {
@@ -195,13 +223,19 @@ public class Jeu {
             System.out.println("Les aventuriers sont devenus des légendes !");
         } else {
             System.out.println("💀 VOUS AVEZ PERDU !");
-            System.out.println("Cause de la défaite : Un ou plusieurs personnages sont morts au donjon " + (m_donjonActuel + 1));
+            System.out.println("Un de vos compagnon est mort dans le donjon " + (m_donjonActuel + 1));
             System.out.println("Les aventuriers ont péri dans les profondeurs...");
         }
         System.out.println("=".repeat(60));
         System.out.println("Merci d'avoir joué à DOOnjon&Dragon !");
     }
 
+    /**
+     * Demande à l'utilisateur de saisir un entier avec gestion des erreurs.
+     * @param scanner le scanner utilisé pour la saisie
+     * @param message le message à afficher
+     * @return la valeur entière saisie
+     */
     private int demanderInt(Scanner scanner, String message) {
         int valeur;
         while (true) {
@@ -218,31 +252,72 @@ public class Jeu {
     }
 
     // Getters et setters
+
+    /**
+     * Retourne la liste des donjons.
+     * @return la liste des donjons
+     */
     public List<Donjon> getDonjons() {
         return m_donjons;
     }
 
+    /**
+     * Définit la liste des donjons.
+     * @param donjons la nouvelle liste de donjons
+     */
     public void setDonjons(List<Donjon> donjons) {
         this.m_donjons = donjons;
     }
 
+    /**
+     * Retourne la liste des joueurs.
+     * @return la liste des joueurs
+     */
     public List<Personnage> getJoueurs() {
         return m_joueurs;
     }
 
+    /**
+     * Définit la liste des joueurs.
+     * @param joueurs la nouvelle liste de joueurs
+     */
     public void setJoueurs(List<Personnage> joueurs) {
         this.m_joueurs = joueurs;
     }
 
+    /**
+     * Retourne le maître du jeu.
+     * @return le maître du jeu
+     */
     public MaitreDuJeu getMaitreDuJeu() {
         return m_maitreDuJeu;
     }
 
+    /**
+     * Définit le maître du jeu.
+     * @param maitreDuJeu le nouveau maître du jeu
+     */
     public void setMaitreDuJeu(MaitreDuJeu maitreDuJeu) {
         this.m_maitreDuJeu = maitreDuJeu;
     }
 
+    /**
+     * Retourne l'index du donjon actuel.
+     * @return l'index du donjon actuel
+     */
     public int getDonjonActuel() {
         return m_donjonActuel;
+    }
+
+    /*============================Section Overrides============================*/
+
+    @Override
+    public String toString() {
+        return "Jeu{" +
+                "donjonActuel=" + m_donjonActuel +
+                ", nombreDonjons=" + (m_donjons != null ? m_donjons.size() : 0) +
+                ", joueurs=" + (m_joueurs != null ? m_joueurs.toString() : "Aucun joueurs") +
+                ", maitreDuJeu=" + (m_maitreDuJeu != null ? m_maitreDuJeu.toString() : "Aucun maitre du jeu") +
+                '}';
     }
 }
