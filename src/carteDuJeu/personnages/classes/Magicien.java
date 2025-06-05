@@ -5,7 +5,7 @@ import carteDuJeu.personnages.equipements.armes.Fronde;
 
 /**
  * Représente la classe Magicien.
- * Le magicien possède 12 points de vie, aucun bonus de force, de dextérité ou d'initiative,
+ * Le magicien possède 12 points de vie,
  * et commence avec un bâton et une fronde.
  */
 public class Magicien extends Classe {

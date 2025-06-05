@@ -5,7 +5,7 @@ import carteDuJeu.personnages.equipements.armes.ArcCourt;
 
 /**
  * Représente la classe Roublard.
- * Le roublard possède 16 points de vie, un bonus de dextérité de 1, un bonus d'initiative de 1,
+ * Le roublard possède 16 points de vie,
  * et commence avec une rapière et un arc court.
  */
 public class Roublard extends Classe {

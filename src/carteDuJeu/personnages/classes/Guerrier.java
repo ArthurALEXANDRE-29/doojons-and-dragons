@@ -6,7 +6,7 @@ import carteDuJeu.personnages.equipements.armures.CotteDeMailles;
 
 /**
  * Représente la classe Guerrier.
- * Le guerrier possède 20 points de vie, un bonus de force de 1, aucun bonus de dextérité ou d'initiative,
+ * Le guerrier possède 20 points de vie,
  * et commence avec une cotte de mailles, une épée longue et une arbalète légère.
  */
 public class Guerrier extends Classe {
