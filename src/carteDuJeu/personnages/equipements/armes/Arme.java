@@ -31,6 +31,9 @@ public abstract class Arme extends Equipement {
     public boolean estLourde() {
         return m_estLourde;
     }
+    public String armeLourde() {
+        return (m_estLourde)? "oui" : "non";
+    }
 
     public int getDes() {
         return m_desMax;
@@ -40,14 +43,14 @@ public abstract class Arme extends Equipement {
 
     @Override
     public String toString() {
-        return "Arme{" +
-                "nom='" + getNom() + '\'' +
-                ", degats='" + m_degats + '\'' +
-                ", portee=" + m_portee +
-                ", estLourde=" + m_estLourde +
-                ", bonusAttaque=" + m_bonusAttaque +
-                ", bonusDegats=" + m_bonusDegats +
-                '}';
+        return getNom() +
+                "\n degats : " + m_degats +
+                "\n portee : " + m_portee +
+                "\n est lourde : " + armeLourde() +
+                "\n dés d'attaque : " + m_desMax +
+                "\n bonus dés : " + m_bonusAttaque +
+                "\n bonus dégâts : " + m_bonusDegats;
+
     }
     public void ajouterBonusAttaque(int bonus) {
         this.m_bonusAttaque += bonus;

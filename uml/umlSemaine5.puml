@@ -322,6 +322,7 @@ class MaitreDuJeu {
                              + ajouterBonusDegats(Integer bonus)
                              + estUneArme() : Boolean
                              + estUneArmure() : Boolean
+                             + armeLourde() : String
                             }
                         class ArbaleteLegere extends Arme{
                             + ArbaleteLegere()
@@ -381,6 +382,7 @@ package carteDuJeu.personnages.equipements.armures{
                                 + toString() : String
                                 + estUneArme() : Boolean
                                 + estUneArmure() : Boolean
+                                + armeLourde() : String
                             }
 
                 class Harnois extends Armure{

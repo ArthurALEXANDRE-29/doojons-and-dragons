@@ -21,14 +21,15 @@ public abstract class Armure extends Equipement {
     public boolean estLourde() {
         return m_estLourde;
     }
+    public String armureLourde() {
+        return (m_estLourde)? "oui" : "non";
+    }
 
     @Override
     public String toString() {
-        return "Armure{" +
-                "nom='" + getNom() + '\'' +
-                ", classeArmure=" + m_classeArmure +
-                ", estLourde=" + m_estLourde +
-                '}';
+        return getNom() +
+                "classe d'armure : " + m_classeArmure +
+                "est une armure lourde :" + armureLourde();
     }
 
     public boolean estUneArme() {
