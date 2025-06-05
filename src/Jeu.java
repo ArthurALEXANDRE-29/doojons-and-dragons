@@ -226,13 +226,15 @@ public class Jeu {
     public void finPartie() {
         System.out.println("\n" + "=".repeat(60));
         if (m_donjonActuel >= NOMBRE_DONJONS_TOTAL) {
-            System.out.println("🏆 FÉLICITATIONS ! VOUS AVEZ GAGNÉ !");
-            System.out.println("Vous avez triomphé des " + NOMBRE_DONJONS_TOTAL + " donjons !");
-            System.out.println("Les aventuriers sont devenus des légendes !");
+            System.out.println("🏆 Félicitations ! Vous avez réussi à terminer tous les donjons !");
+            System.out.println("Vos héros ont triomphé des ténèbres et des monstres qui les habitaient. ");
+            System.out.println("Les donjons sont désormais scellé, et la paix revient dans le royaume. ");
+            System.out.println("Vos personnages sont devenus des légendes\n");
         } else {
-            System.out.println("💀 VOUS AVEZ PERDU !");
-            System.out.println("Un de vos compagnon est mort dans le donjon " + (m_donjonActuel + 1));
-            System.out.println("Les aventuriers ont péri dans les profondeurs...");
+            System.out.println("💀 L'intégralité de nos héros ont succombé aux ténèbres... ");
+            System.out.println("Les monstres ont triomphé dans ce ballet macabre. ");
+            System.out.println("Le donjon restera ouvert, attendant que d'autres aventuriers ");
+            System.out.println("téméraires viennent y trouver leur destin funeste...\n");
         }
         System.out.println("=".repeat(60));
         System.out.println("Merci d'avoir joué à DOOnjon&Dragon !");

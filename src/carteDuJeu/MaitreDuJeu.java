@@ -8,6 +8,8 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import static carteDuJeu.Tours.demanderCommentaire;
+
 /**
  * Gère le rôle du Maître du Jeu : création des monstres, gestion de la carte,
  * interactions spéciales et actions administratives sur le donjon.
@@ -145,7 +147,6 @@ public class MaitreDuJeu {
     private void infligerDegats(ElementMobile cible, int degats) {
         cible.subirDegats(degats);
         System.out.println("⚡ " + cible.getNom() + " a été frappé par la foudre divine et subit " + degats + " dégâts !");
-
         if (cible.estMort()) {
             System.out.println("💀 " + cible.getNom() + " est mort !");
             if (m_carteActuelle != null && m_carteActuelle.contientElement(cible)) {

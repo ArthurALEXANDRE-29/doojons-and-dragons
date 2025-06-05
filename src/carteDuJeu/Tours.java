@@ -39,7 +39,7 @@ public class Tours {
         this.m_indexTourActuel = 0;
         this.m_numeroTour = 1;
         this.m_maitreDuJeu = donjon.getMaitreDuJeu();
-        this.historiqueActions = null;
+        this.historiqueActions = new StringBuilder();
     }
 
     /**
@@ -162,12 +162,11 @@ public class Tours {
                     if (actionEffectuee) {
                         // Afficher la carte après un déplacement
                         System.out.println("\n🚶 Carte après déplacement de " + personnage.getNom() + " :");
-                        historiqueActions.append(personnage.getNom())
-                                .append(" avance prudemment dans les sombres couloirs du donjon, ses pas résonnant sur les pierres froides. \n")
-                                .append("Chaque ombre semble cacher un danger, et les grognements lointains des monstres rôdent dans l'air, \n")
-                                .append("rappelant à ").append(personnage.getNom() + "\n")
-                                .append("que le danger est partout.");
-                        historiqueActions.append("\n");
+                        historiqueActions.append("🚶‍♂️ Les pas de ").append(personnage.getNom())
+                                .append(" résonnent dans les couloirs sombres du donjon, chaque pierre froide ")
+                                .append("sous ses pieds murmurant des secrets oubliés. Les ombres dansent ")
+                                .append("autour de notre héros, et les échos lointains de créatures tapies ")
+                                .append("dans l'obscurité rappellent constamment que le danger rôde.\n");
 
                         Affichage.afficherCarte(java.util.Optional.ofNullable(m_donjon.getCarte()));
                     }
@@ -184,10 +183,10 @@ public class Tours {
                     actionEffectuee = actionLancerSort(personnage);
                     if (actionEffectuee) {
                         // Afficher la carte après le lancement du sort
-                        System.out.println("\n \uD83E\uDDD9 Carte après lancement de sort de " + personnage.getNom() + " :");
+                        System.out.println("\n🧙 Carte après lancement de sort de " + personnage.getNom() + " :");
                         Affichage.afficherCarte(java.util.Optional.ofNullable(m_donjon.getCarte()));
                     }
-                break;
+                    break;
                 case 5:
                     actionEffectuee = actionRamasserEquipement(personnage);
                     consommerAction = false;
@@ -321,19 +320,30 @@ public class Tours {
             switch (choixAction) {
                 case 1:
                     m_maitreDuJeu.faireDmg(joueurs);
-                    historiqueActions.append("⚡ Un éclair divin fend l’obscurité du donjon, frappant sa cible avec la colère des dieux.\n");
+                    historiqueActions.append("⚡ Un fracas assourdissant déchire le silence du donjon ! ")
+                            .append("Un éclair divin, pur et terrible, transperce les ténèbres pour ")
+                            .append("frapper sa cible d'une colère céleste. La lumière aveuglante ")
+                            .append("révèle brièvement les secrets cachés dans l'obscurité.\n");
                     break;
                 case 2:
                     m_maitreDuJeu.deplacerCibleParNom();
-                    historiqueActions.append("👁️ Des forces obscures manipulent les fils du destin et déplacent une entité dans les ténèbres du donjon.\n");
+                    historiqueActions.append("🌀 Des forces mystérieuses s'éveillent dans les profondeurs... ")
+                            .append("Invisible et impitoyable, une main spectrale saisit sa proie et ")
+                            .append("la déplace selon la volonté du destin. Les pierres du donjon ")
+                            .append("tremblent sous le poids de cette magie ancienne.\n");
                     break;
                 case 3:
                     m_maitreDuJeu.ajouterObstacle();
-                    historiqueActions.append("🧱 Un grondement sourd résonne... un nouvel obstacle émerge pour piéger les aventuriers imprudents.\n");
+                    historiqueActions.append("🗿 Un grondement sourd résonne dans les entrailles du donjon... ")
+                            .append("La terre se fissure et un obstacle surgit du néant, ")
+                            .append("comme si le donjon lui-même conspirait contre les intrus. ")
+                            .append("Les murs semblent ricaner d'une joie malveillante.\n");
                     break;
                 case 4:
                     System.out.println("Fin des actions du Maître du Jeu.");
-                    historiqueActions.append("🎭 Les forces obscures du donjon semblent être satisfaites des actions menées précedemment...\n");
+                    historiqueActions.append("🎭 Les forces obscures du donjon se retirent dans l'ombre, ")
+                            .append("satisfaites de leur œuvre. Un silence pesant s'installe, ")
+                            .append("chargé de promesses sinistres pour la suite de l'aventure...\n");
                     return;
                 default:
                     System.out.println("Choix invalide, réessayez.");
@@ -440,17 +450,23 @@ public class Tours {
                 .orElseThrow(() -> new IllegalArgumentException("Case de la cible introuvable"));
 
         // Mettre à jour l'historique des actions
-        historiqueActions.append(personnage.getNom())
-                .append(" pris son courage a deux mains et frappa alors le monstre ayant une apprarence de ")
-                .append(cible.getNom())
-                .append(" de manière violente.");
+        historiqueActions.append("⚔️ ").append(personnage.getNom())
+                .append(" brandit son arme avec une détermination farouche ! Ses yeux brillent ")
+                .append("d'une lueur guerrière tandis qu'il attaque ")
+                .append(cible.getNom()).append(", prêt à tout pour survivre dans ce donjon maudit. ");
 
-        if (cible.estMort()) {
-            historiqueActions.append(" Il en est mort.");
+        // Effectuer l'attaque et vérifier si la cible est morte
+        boolean attaqueReussie = m_attaque.attaquer(m_donjon.getCarte(), personnage, cible, casePersonnage, caseCible);
+
+        if (attaqueReussie && cible.estMort()) {
+            historiqueActions.append("Un cri perçant déchire l'air ! Le monstre ")
+                    .append(cible.getNom())
+                    .append(" s'effondre dans un râle d'agonie, ses dernières forces s'échappant ")
+                    .append("comme un souffle dans la nuit. La victoire a un goût amer dans ce lieu maudit.");
         }
         historiqueActions.append("\n");
 
-        return m_attaque.attaquer(m_donjon.getCarte(), personnage, cible, casePersonnage, caseCible);
+        return attaqueReussie;
     }
 
     /**
@@ -557,10 +573,11 @@ public class Tours {
             }
 
             if (sortLance) {
-                historiqueActions.append(personnage.getNom())
-                        .append(" a lancé le sort ")
-                        .append(nomSort)
-                        .append(" avec succès.\n");
+                historiqueActions.append("✨ ").append(personnage.getNom())
+                        .append(" lève les mains vers les voûtes sombres du donjon, ses doigts ")
+                        .append("crépitant d'énergie mystique. Les incantations anciennes résonnent ")
+                        .append("dans l'air tandis qu'il invoque le sort '").append(nomSort)
+                        .append("', pliant la réalité à sa volonté arcane.\n");
                 return true;
             } else {
                 System.out.println("Le sort n'a pas pu être lancé.");
@@ -591,8 +608,11 @@ public class Tours {
 
             boolean sortLance = lancerSortGuerison(personnage);
             if (sortLance) {
-                historiqueActions.append(personnage.getNom())
-                        .append(" a lancé le sort Guérison avec succès.\n");
+                historiqueActions.append("🕊️ ").append(personnage.getNom())
+                        .append(" ferme les yeux et joint ses mains dans une prière fervente. ")
+                        .append("Une aura dorée l'enveloppe tandis qu'il canalise la bénédiction divine, ")
+                        .append("faisant naître des fils de lumière purificatrice qui dansent autour ")
+                        .append("de sa cible, chassant la douleur et restaurant l'espoir.\n");
                 return true;
             } else {
                 System.out.println("Le sort n'a pas pu être lancé.");
@@ -637,8 +657,8 @@ public class Tours {
             }
         }
 
-        if (choixCible < 0 || choixCible >= personnagesDisponibles.size() ||
-                personnagesDisponibles.get(choixCible).estMort()) {
+        if ( (choixCible < 0 || choixCible >= personnagesDisponibles.size() ||
+                personnagesDisponibles.get(choixCible).estMort())) {
             System.out.println("Choix invalide.");
             return false;
         }
@@ -817,7 +837,9 @@ public class Tours {
 
         // ajout commentaire au role play
         historiqueActions.append("✨ ").append(personnage.getNom())
-        .append(" trouva en marchant une nouvelle pièce d'équipement, son éclat étincelant redonne espoir à notre héro... Pourra-il triompher des monstres avec celle-ci ?\n");
+                .append(" découvre ").append(equipementChoisi.getNom())
+                .append(" abandonné dans les ombres du donjon. Son éclat mystérieux ")
+                .append("redonne espoir à notre héros... Pourra-t-il triompher des monstres avec cet objet ?\n");
         System.out.println(personnage.getNom() + " a ramassé " + equipementChoisi.getNom());
         return true;
     }
@@ -857,7 +879,10 @@ public class Tours {
             }
         }
         // Vérifier si tous les monstres sont morts
-        historiqueActions.append("Tous les monstres sont morts, les aventuriers ont triomphé du donjon !\n");
+        historiqueActions.append("Tous les monstres gisent vaincus ! Nos vaillants aventuriers ")
+                .append("ont triomphé des ténèbres qui hantaient ce donjon maudit. ")
+                .append("La lumière perce enfin l'obscurité, et les héros peuvent ")
+                .append("repartir, chargés de gloire et de trésors !\n");
         boolean tousMonstresMorts = true;
         for (Monstre m : m_donjon.getMonstres()) {
             if (!m.estMort()) {
