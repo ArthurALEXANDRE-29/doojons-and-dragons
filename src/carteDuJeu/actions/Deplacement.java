@@ -22,7 +22,8 @@ public class Deplacement {
     public boolean gererDeplacement(ElementMobile element) {
         int[] position;
         try {
-            position = m_carte.trouverPosition(element);
+            position = m_carte.trouverPosition(element)
+                    .orElseThrow(() -> new IllegalArgumentException("Position introuvable"));
         } catch (Exception e) {
             System.out.println("Erreur lors de la recherche de la position : " + e.getMessage());
             return false;
@@ -57,7 +58,8 @@ public class Deplacement {
             }
 
             try {
-                int[] coordonnees = m_carte.parseCoordonnees(destination);
+                int[] coordonnees = m_carte.parseCoordonnees(destination.toUpperCase())
+                        .orElseThrow(() -> new IllegalArgumentException("Coordonnées invalides"));
                 int xCible = coordonnees[0];
                 int yCible = coordonnees[1];
 
@@ -89,7 +91,8 @@ public class Deplacement {
      * Vérifie si un élément peut se déplacer vers une position donnée
      */
     public boolean peutSeDeplacer(ElementMobile element, int xCible, int yCible) {
-        int[] position = m_carte.trouverPosition(element);
+        int[] position = m_carte.trouverPosition(element)
+                .orElseThrow(() -> new IllegalArgumentException("Position introuvable"));
         if (position == null) return false;
 
         int xActuel = position[0];
@@ -116,7 +119,8 @@ public class Deplacement {
      * Affiche les cases accessibles pour un élément
      */
     public void afficherCasesAccessibles(ElementMobile element) {
-        int[] position = m_carte.trouverPosition(element);
+        int[] position = m_carte.trouverPosition(element)
+                .orElseThrow(() -> new IllegalArgumentException("Position introuvable"));
         if (position == null) return;
 
         List<int[]> casesAccessibles = m_carte.getCasesAccessibles(
@@ -157,7 +161,8 @@ public class Deplacement {
      */
     public boolean deplacerAutomatiquement(ElementMobile element, String destination) {
         try {
-            int[] coords = m_carte.parseCoordonnees(destination.toUpperCase());
+            int[] coords = m_carte.parseCoordonnees(destination.toUpperCase())
+                    .orElseThrow(() -> new IllegalArgumentException("Coordonnées invalides"));
             return deplacerAutomatiquement(element, coords[0], coords[1]);
         } catch (IllegalArgumentException e) {
             return false;

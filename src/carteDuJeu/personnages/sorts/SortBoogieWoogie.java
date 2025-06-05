@@ -21,19 +21,24 @@ public class SortBoogieWoogie extends Sort {
 
         if (cible1 == null || cible2 == null) return false;
 
-        Case case1 = carte.getCase(cible1);
-        Case case2 = carte.getCase(cible2);
-        if (case1 == null || case2 == null) return false;
+        try {
+            Case case1 = carte.getCase(cible1)
+                    .orElseThrow(() -> new IllegalArgumentException("Case de la cible 1 introuvable"));
+            Case case2 = carte.getCase(cible2)
+                    .orElseThrow(() -> new IllegalArgumentException("Case de la cible 2 introuvable"));
 
-        // Retirer les entités de leurs cases
-        case1.retirerContenu(cible1);
-        case2.retirerContenu(cible2);
+            // Retirer les entités de leurs cases
+            case1.retirerContenu(cible1);
+            case2.retirerContenu(cible2);
 
-        // Placer chaque entité dans la case de l'autre
-        carte.ajouterContenu(case1.getX(), case1.getY(), cible2);
-        carte.ajouterContenu(case2.getX(), case2.getY(), cible1);
+            // Placer chaque entité dans la case de l'autre
+            carte.ajouterContenu(case1.getX(), case1.getY(), cible2);
+            carte.ajouterContenu(case2.getX(), case2.getY(), cible1);
 
-        return true;
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     @Override

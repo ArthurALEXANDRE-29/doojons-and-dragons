@@ -131,7 +131,8 @@ public class MaitreDuJeu {
         if (cible.estMort()) {
             System.out.println("💀 " + cible.getNom() + " est mort !");
             if (m_carteActuelle != null && m_carteActuelle.contientElement(cible)) {
-                Case caseCible = m_carteActuelle.getCase(cible);
+                Case caseCible = m_carteActuelle.getCase(cible)
+                        .orElseThrow(() -> new IllegalArgumentException("Case introuvable"));
                 if (caseCible != null) {
                     caseCible.retirerContenu(cible);
                 }
@@ -175,7 +176,8 @@ public class MaitreDuJeu {
 
         Case caseActuelle;
         try {
-            caseActuelle = m_carteActuelle.getCase(cible);
+            caseActuelle = m_carteActuelle.getCase(cible)
+                    .orElseThrow(() -> new IllegalArgumentException("Case introuvable"));
             System.out.println(cible.getNom() + " est actuellement en (" + caseActuelle.getX() + ", " + caseActuelle.getY() + ")");
         } catch (IllegalArgumentException e) {
             System.out.println("❌ Impossible de trouver la case actuelle de la cible.");
@@ -209,8 +211,11 @@ public class MaitreDuJeu {
         }
 
         try {
+            // Récupère la case actuelle de la cible
+            Case caseActuelle = m_carteActuelle.getCase(cible)
+                    .orElseThrow(() -> new IllegalArgumentException("Case introuvable"));
+            // Récupère la case de destination
             Case caseDestination = m_carteActuelle.getCase(x, y);
-            Case caseActuelle = m_carteActuelle.getCase(cible);
 
             caseActuelle.retirerContenu(cible);
             caseDestination.ajouterContenu(cible);

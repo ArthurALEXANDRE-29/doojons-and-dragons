@@ -393,8 +393,11 @@ public class Tours {
 
         Monstre cible = monstresAPortee.get(choixCible);
         Carte carte = m_donjon.getCarte();
-        Case casePersonnage = carte.getCase(personnage);
-        Case caseCible = m_donjon.getCarte().getCase(cible);
+        Case casePersonnage = carte.getCase(personnage)
+                .orElseThrow(() -> new IllegalArgumentException("Case du personnage introuvable"));
+        Case caseCible = m_donjon.getCarte().getCase(cible)
+                .orElseThrow(() -> new IllegalArgumentException("Case de la cible introuvable"));
+
         // Mettre à jour l'historique des actions
         historiqueActions.append(personnage.getNom())
                 .append(" pris son courage a deux mains et frappa alors le monstre ayant une apprarence de ")
@@ -449,8 +452,10 @@ public class Tours {
         }
 
         Personnage cible = personnagesAPortee.get(choixCible);
-        Case caseMonstre = m_donjon.getCarte().getCase(monstre);
-        Case caseCible = m_donjon.getCarte().getCase(cible);
+        Case caseMonstre = m_donjon.getCarte().getCase(monstre)
+                .orElseThrow(() -> new IllegalArgumentException("Case du monstre introuvable"));
+        Case caseCible = m_donjon.getCarte().getCase(cible)
+                .orElseThrow(() -> new IllegalArgumentException("Case de la cible introuvable"));
 
         return m_attaque.attaquer(m_donjon.getCarte(), monstre, cible, caseMonstre, caseCible);
     }
@@ -708,7 +713,8 @@ public class Tours {
     private boolean actionRamasserEquipement(Personnage personnage) {
         System.out.println("\n--- Action : Ramasser un équipement ---");
 
-        Case casePersonnage = m_donjon.getCarte().getCase(personnage);
+        Case casePersonnage = m_donjon.getCarte().getCase(personnage)
+                .orElseThrow(() -> new IllegalArgumentException("Case du personnage introuvable"));
         // Récupérer tous les équipements présents sur la case
         List<Equipement> equipementsSurCase = new ArrayList<>();
         for (ElementCarte element : casePersonnage.getContenu()) {
@@ -778,12 +784,14 @@ public class Tours {
      */
     private List<Monstre> getMonstresAPortee(Personnage personnage) {
         List<Monstre> monstresAPortee = new ArrayList<>();
-        Case casePersonnage = m_donjon.getCarte().getCase(personnage);
+        Case casePersonnage = m_donjon.getCarte().getCase(personnage)
+                .orElseThrow(() -> new IllegalArgumentException("Case du personnage introuvable"));
         int porteeArme = personnage.getArmeEquipee().getPortee();
 
         for (Monstre monstre : m_donjon.getMonstres()) {
             if (!monstre.estMort()) {
-                Case caseMonstre = m_donjon.getCarte().getCase(monstre);
+                Case caseMonstre = m_donjon.getCarte().getCase(monstre)
+                        .orElseThrow(() -> new IllegalArgumentException("Case du monstre introuvable"));
                 if (m_donjon.getCarte().estAPortee(
                         casePersonnage.getX(), casePersonnage.getY(),
                         caseMonstre.getX(), caseMonstre.getY(),
@@ -800,12 +808,14 @@ public class Tours {
      */
     private List<Personnage> getPersonnagesAPortee(Monstre monstre) {
         List<Personnage> personnagesAPortee = new ArrayList<>();
-        Case caseMonstre = m_donjon.getCarte().getCase(monstre);
+        Case caseMonstre = m_donjon.getCarte().getCase(monstre)
+                .orElseThrow(() -> new IllegalArgumentException("Case du monstre introuvable"));
         int porteeMonstre = monstre.getPortee();
 
         for (Personnage personnage : m_donjon.getJoueurs()) {
             if (!personnage.estMort()) {
-                Case casePersonnage = m_donjon.getCarte().getCase(personnage);
+                Case casePersonnage = m_donjon.getCarte().getCase(personnage)
+                        .orElseThrow(() -> new IllegalArgumentException("Case du personnage introuvable"));
                 if (m_donjon.getCarte().estAPortee(
                         caseMonstre.getX(), caseMonstre.getY(),
                         casePersonnage.getX(), casePersonnage.getY(),

@@ -32,7 +32,8 @@ public class Affichage {
                 continue;
             }
             try {
-                Case caseJoueur = carteActuelle.getCase(joueur);
+                Case caseJoueur = carteActuelle.getCase(joueur)
+                        .orElseThrow(() -> new IllegalArgumentException("Case introuvable"));
                 Affichage.afficherConfirmation("[Joueur] " + joueur.getNom() + " est en (" + caseJoueur.getX() + ", " + caseJoueur.getY() + ")");
             } catch (IllegalArgumentException e) {
                 System.out.println("[Joueur] " + joueur.getNom() + " : Position introuvable.");
@@ -45,7 +46,8 @@ public class Affichage {
                 continue;
             }
             try {
-                Case caseMonstre = carteActuelle.getCase(monstre);
+                Case caseMonstre = carteActuelle.getCase(monstre)
+                        .orElseThrow(() -> new IllegalArgumentException("Case introuvable"));
                 System.out.println("[Monstre] " + monstre.getNom() + " est en (" + caseMonstre.getX() + ", " + caseMonstre.getY() + ")");
             } catch (IllegalArgumentException e) {
                 System.out.println("[Monstre] " + monstre.getNom() + " : Position introuvable.");
