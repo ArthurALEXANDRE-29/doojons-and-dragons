@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class sortArmeMagique extends Sort {
-    public sortArmeMagique() {
+public class SortArmeMagique extends Sort {
+    public SortArmeMagique() {
         super("Arme magique", "Le personnage détenteur du pouvoir peut choisir une arme détenue par un personnage (mais pas forcément équipée) à améliorer. " +
                 "L'arme gagne alors un bonus de 1 lors des jets d'attaque et de 1 lors des jets de dégâts " +
                 "(les bonus peuvent se cumuler).");

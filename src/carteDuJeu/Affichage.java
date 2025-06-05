@@ -85,7 +85,7 @@ public class Affichage {
             System.out.println("Inventaire vide.");
         } else {
             for (int i = 0; i < personnage.getInventaire().size(); i++) {
-                Equipement equip = personnage.getInventaire().get(i);
+                Equipement equip = personnage.getInventaire(i);
                 if (equip.estUneArme()) {
                     System.out.println((i + 1) + ". " + equip.toString());
                 } else if (equip.estUneArmure()) {

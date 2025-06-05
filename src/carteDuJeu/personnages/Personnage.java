@@ -140,6 +140,13 @@ public class Personnage implements ElementMobile {
         return m_inventaire;
     }
 
+    public Equipement getInventaire(int index) {
+        if (index < 0 || index >= m_inventaire.size()) {
+            return null;
+        }
+        return m_inventaire.get(index);
+    }
+
     public Arme getArmeEquipee() {
         return m_armeEquipee;
     }

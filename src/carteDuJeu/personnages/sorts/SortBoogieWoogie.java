@@ -6,8 +6,8 @@ import carteDuJeu.ElementMobile;
 import carteDuJeu.personnages.Personnage;
 import carteDuJeu.personnages.classes.Classe;
 
-public class sortBoogieWoogie extends Sort {
-    public sortBoogieWoogie() {
+public class SortBoogieWoogie extends Sort {
+    public SortBoogieWoogie() {
         super("Boogie Woogie", "Le personnage détenteur du sort peut choisir deux personnages " +
                 "(y compris lui-même), de deux monstres ou d'un personnage (y compris lui-même) " +
                 "et d'un monstre et échanger leur position dans le donjon.");

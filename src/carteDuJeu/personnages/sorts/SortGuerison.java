@@ -6,8 +6,8 @@ import carteDuJeu.ElementMobile;
 import carteDuJeu.personnages.Personnage;
 import carteDuJeu.personnages.classes.Classe;
 
-public class sortGuerison extends Sort {
-    public sortGuerison() {
+public class SortGuerison extends Sort {
+    public SortGuerison() {
         super("Guerison", "Rend entre 1 et 10 points de vie à la cible");
     }
 

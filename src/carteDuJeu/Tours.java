@@ -558,7 +558,7 @@ public class Tours {
      * Méthodes auxiliaires pour lancer les différents sorts
      */
     private boolean lancerSortArmeMagique(Personnage personnage) {
-        sortArmeMagique sort = new sortArmeMagique();
+        SortArmeMagique sort = new SortArmeMagique();
 
         // Demander au joueur de choisir une cible
         System.out.println("Choisissez un personnage pour améliorer ses armes :");
@@ -595,7 +595,7 @@ public class Tours {
     }
 
     private boolean lancerSortBoogieWoogie(Personnage personnage) {
-        sortBoogieWoogie sort = new sortBoogieWoogie();
+        SortBoogieWoogie sort = new SortBoogieWoogie();
 
         // Créer une liste de toutes les entités mobiles
         List<ElementMobile> entitesDisponibles = new ArrayList<>();
@@ -664,7 +664,7 @@ public class Tours {
     }
 
     private boolean lancerSortGuerison(Personnage personnage) {
-        sortGuerison sort = new sortGuerison();
+        SortGuerison sort = new SortGuerison();
 
         // Demander au joueur de choisir une cible
         System.out.println("Choisissez un personnage à soigner :");

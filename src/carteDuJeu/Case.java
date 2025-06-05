@@ -2,6 +2,7 @@ package carteDuJeu;
 
 import java.util.ArrayList;
 import java.util.List;
+import carteDuJeu.personnages.equipements.Equipement;
 
 public class Case {
     private int m_x;
@@ -118,7 +119,8 @@ public class Case {
                     return element.getSymbole();
                 }
             }
-            return m_contenu.get(0).getSymbole();
+            ElementCarte premierElement = m_contenu.get(0);
+            return premierElement.getSymbole(); // Retourne le symbole du premier élément non mobile
         } else {
             return " .  ";  /* Case vide */
         }
