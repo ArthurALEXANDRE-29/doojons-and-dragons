@@ -80,19 +80,18 @@ public class Affichage {
      * Affiche l'inventaire d'un personnage
      */
     public void afficherInventaire(Personnage personnage) {
-        System.out.println("\n--- Inventaire de " + personnage.getNom() + " ---");
+        System.out.println("\n----- Inventaire de " + personnage.getNom() + "-----");
         if (personnage.getInventaire().isEmpty()) {
             System.out.println("Inventaire vide.");
         } else {
             for (int i = 0; i < personnage.getInventaire().size(); i++) {
                 Equipement equip = personnage.getInventaire().get(i);
                 if (equip.estUneArme()) {
-                    System.out.println((i + 1) + ". " + equip.getNom() + " (Arme)");
+                    System.out.println((i + 1) + ". " + equip.toString());
                 } else if (equip.estUneArmure()) {
-                    System.out.println((i + 1) + ". " + equip.getNom() + " (Armure)");
+                    System.out.println((i + 1) + ". " + equip.toString());
                 }
             }
         }
-        System.out.println("----------------------------------------");
     }
 }

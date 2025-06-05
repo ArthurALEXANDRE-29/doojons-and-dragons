@@ -21,7 +21,7 @@ public abstract class Arme extends Equipement {
     }
 
     public int getDegats() {
-        return m_degats;
+        return m_degats + m_bonusDegats;
     }
 
     public int getPortee() {
@@ -36,7 +36,7 @@ public abstract class Arme extends Equipement {
     }
 
     public int getDes() {
-        return m_desMax;
+        return m_desMax + m_bonusAttaque;
     }
 
 
