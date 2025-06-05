@@ -121,7 +121,7 @@ public class Donjon {
         // Placement des obstacles sur la carte
 
         Random random = new Random();
-        m_carte.genererObstaclesAleatoires( random.nextDouble() * 0.2);
+        m_carte.genererObstaclesAleatoires( random.nextDouble() * 0.125); // 12.5% d'obstacles
         Affichage.afficherCarte(m_carte);
         // Vérification que des monstres ont été créés
         if (m_monstres.isEmpty()) {

@@ -8,14 +8,11 @@ import java.util.Random;
 /**
  * Représente une carte de jeu avec un système de coordonnées et des cases.
  * La carte utilise un système de coordonnées où (0,0) est en haut à gauche.
- *
- * @author Votre nom
- * @version 1.0
  */
 public class Carte {
     private final int m_largeur;
     private final int m_hauteur;
-    private Case[][] m_cases;
+    final Case[][] m_cases;
 
     /**
      * Constructeur de la carte.
@@ -215,7 +212,7 @@ public class Carte {
     public boolean deplacerElement(ElementMobile element, int xCible, int yCible) {
         // Trouver la case actuelle
         Optional<Case> caseActuelleOpt = getCase(element);
-        if (caseActuelleOpt.isPresent()) {
+        if (caseActuelleOpt.isEmpty()) {
             return false; // Élément pas sur la carte
         }
 
