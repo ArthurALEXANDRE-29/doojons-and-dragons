@@ -753,12 +753,26 @@ public class Tours {
         System.out.println("Choisissez un personnage à soigner :");
         List<Personnage> personnagesDisponibles = m_donjon.getJoueurs();
 
-        for (int i = 0; i < personnagesDisponibles.size(); i++) {
-            Personnage p = personnagesDisponibles.get(i);
+        // Créer une liste des personnages pouvant être soignés (vivants et pas à 100% de PV)
+        List<Personnage> personnagesSoignables = new ArrayList<>();
+
+        for (Personnage p : personnagesDisponibles) {
             if (!p.estMort() && p.getPointsDeVie() < p.getPointsDeVieMax()) {
-                System.out.println((i + 1) + ". " + p.getNom() +
-                        " (PV: " + p.getPointsDeVie() + "/" + p.getPointsDeVieMax() + ")");
+                personnagesSoignables.add(p);
             }
+        }
+
+        if (personnagesSoignables.isEmpty()) {
+            System.out.println("Aucun personnage ne peut être soigné (tous sont morts ou en pleine santé).");
+            return false;
+        }
+
+        // Afficher les options avec une indication spéciale pour le self-target
+        for (int i = 0; i < personnagesSoignables.size(); i++) {
+            Personnage p = personnagesSoignables.get(i);
+            String selfIndicator = p.equals(personnage) ? " (Vous-même)" : "";
+            System.out.println((i + 1) + ". " + p.getNom() + selfIndicator +
+                    " (PV: " + p.getPointsDeVie() + "/" + p.getPointsDeVieMax() + ")");
         }
 
         int choixCible = -1;
@@ -774,13 +788,21 @@ public class Tours {
             }
         }
 
-        if (choixCible < 0 || choixCible >= personnagesDisponibles.size() ||
-                personnagesDisponibles.get(choixCible).estMort()) {
+        if (choixCible < 0 || choixCible >= personnagesSoignables.size()) {
             System.out.println("Choix invalide.");
             return false;
         }
 
-        ElementMobile[] cibles = {personnagesDisponibles.get(choixCible)};
+        Personnage cibleChoisie = personnagesSoignables.get(choixCible);
+
+        // Message spécial pour le self-target
+        if (cibleChoisie.equals(personnage)) {
+            System.out.println(personnage.getNom() + " se soigne lui-même !");
+        } else {
+            System.out.println(personnage.getNom() + " soigne " + cibleChoisie.getNom() + " !");
+        }
+
+        ElementMobile[] cibles = {cibleChoisie};
         return sort.lancer(m_donjon.getCarte(), personnage, cibles);
     }
 
