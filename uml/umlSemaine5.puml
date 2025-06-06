@@ -39,30 +39,28 @@ package carteDuJeu{
     class Tours {
         - m_indexTourActuel : Integer
         - m_numeroTour : Integer
-        + << Create >> Tours( donjon : Donjon)
+        + <<Create>> Tours(donjon : Donjon)
         + commencerTours()
-        + jouerTour(entite : ElementMobile )
-        + jouerTourPersonnage(personnage : Personnage )
-        + jouerTourMonstre(monstre : Monstre )
-        + actionSEquiper(personnage : Personnage ) : Boolean
-        + actionSeDeplacer(entite : ElementMobile ) : Boolean
-        + actionAttaquer( personnage : Personnage) : Boolean
-        + actionAttaquerMonstre(monstre : Monstre ) : Boolean
-        + actionRamasserEquipement(personnage : Personnage ) : Boolean
-        + demanderCommentaire()
-        + getMonstresAPortee( personnage : Personnage ) : Monstre[*]
-        + getPersonnagesAPortee(monstre : Monstre ) : Personnage[*]
-        + estFinDePartie() : Boolean
-        + getNumeroTour() : Integer
-        + getEntiteActuelle() : ElementMobile
-        + actionMDJ( joueurs : Personnage[*])
-        + actionLancerSort(personnage : Personnage ) : Boolean
-        + lancerSortArmeMagique( personnage : Personnage) : Boolean
-        + lancerSortBoogieWoogie(personnage : Personnage ) : Boolean
-        + lancerSortGuerison( personnage : Personnage) : Boolean
-
-        - actionVoirInventaire( personnage : Personnage) : Boolean
+        + actionMDJ(joueurs : Personnage[*])
         + toString() : String
+
+        - jouerTour(entite : ElementMobile)
+        - jouerTourPersonnage(personnage : Personnage)
+        - jouerTourMonstre(monstre : Monstre)
+        - actionSEquiper(personnage : Personnage) : Boolean
+        - actionSeDeplacer(entite : ElementMobile) : Boolean
+        - actionVoirInventaire(personnage : Personnage) : Boolean
+        - actionAttaquer(personnage : Personnage) : Boolean
+        - actionAttaquerMonstre(monstre : Monstre) : Boolean
+        - actionLancerSort(personnage : Personnage) : Boolean
+        - lancerSortArmeMagique(personnage : Personnage) : Boolean
+        - lancerSortBoogieWoogie(personnage : Personnage) : Boolean
+        - lancerSortGuerison(personnage : Personnage) : Boolean
+        - actionRamasserEquipement(personnage : Personnage) : Boolean
+        - demanderCommentaire()
+        - estFinDePartie() : Boolean
+        - getPersonnagesAPortee(monstre : Monstre) : Personnage[*]
+        - getMonstresAPortee(personnage : Personnage) : Monstre[*]
     }
 
 class MaitreDuJeu {
@@ -538,6 +536,7 @@ Personnage o-> "\n 0..1 \n- m_armureEquipee" Armure : < portée par
 Personnage ..> Des : <<uses>>
 Personnage --> "\n 0..1 \n- m_race"  Race
 Personnage --> "\n 0..1 \n- m_classe" Classe
+
 
 SortArmeMagique ..> Arme : <<uses>>
 
