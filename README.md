@@ -9,7 +9,7 @@ Projet pédagogique en Java (POO / jeu) : mini RPG textuel mettant en oeuvre la 
 | Nom | GitHub |
 |-----|--------|
 | Arthur ALEXANDRE | [@ArthurALEXANDRE-29](https://github.com/ArthurALEXANDRE-29) |
-| (Autres contributeurs) |  |
+| Alexandru Vlaincu | [@Just-Alex67](https://github.com/Just-Alex67) |
 
 ---
 
@@ -36,48 +36,31 @@ Projet pédagogique en Java (POO / jeu) : mini RPG textuel mettant en oeuvre la 
 ## 🚀 Installation & Lancement (Version Simplifiée)
 
 Prérequis :
-- JDK 11+ installé
+- JDK 24 installé
 - Un terminal ou un IDE Java (IntelliJ IDEA, Eclipse, VS Code)
 
 1. Cloner le projet  
    ```bash
    git clone https://github.com/ArthurALEXANDRE-29/doojons-and-dragons.git
    ```
-2. Si le projet n'utilise pas de build tool (fichiers .java dans src/) :
-   - Compiler :
-     ```bash
-     javac -d out $(find src -name "*.java")
-     ```
-   - Lancer (adapter le nom du package / de la classe principale) :
-     ```bash
-     java -cp out com.monnom.paquetage.Main
-     ```
-3. Si Maven est utilisé :
+2. Lancer une partie
    ```bash
-   mvn package
-   java -jar target/nom-du-jar.jar
-   ```
-4. Si Gradle est utilisé :
-   ```bash
-   ./gradlew build
-   java -jar build/libs/nom-du-jar.jar
+   Ouvrir votre éditeur et lancer le fichier Main.java
    ```
 
 ---
 
-## 📁 Structure (suggestion / simplifiée)
+## 📁 Structure
 ```
 .
 ├── README.md
 ├── .gitignore
-├── src/                # sources Java
-│   └── main/ (ou package root)
-├── assets/              # captures d'écran
-│   ├── Attaquer.png
-│   ├── Tour_joueur.png
-│   └── Map.png
-├── data/               # fichiers de sauvegarde exemple
-└── build/ target/ out/ # sorties de build (générées)
+├── src/ 
+│   └── Main.java
+├── assets/  
+├── tests/
+├── UML /
+└── build/ target/ out/ 
 ```
 
 ---
@@ -111,7 +94,7 @@ Educational Java project (OOP / game): a small text-based RPG showcasing object-
 | Name | GitHub |
 |------|--------|
 | Arthur ALEXANDRE | [@ArthurALEXANDRE-29](https://github.com/ArthurALEXANDRE-29) |
-| (Other contributors) |  |
+| Alexandru Vlaincu | [@Just-Alex67](https://github.com/Just-Alex67) |
 
 ---
 
@@ -144,38 +127,24 @@ Requirements:
    ```bash
    git clone https://github.com/ArthurALEXANDRE-29/doojons-and-dragons.git
    ```
-2. If no build tool:
-   ```bash
-   javac -d out $(find src -name "*.java")
-   java -cp out com.my.package.Main
+2. Run the game
+    ```bash
+   execute Main.java in your IDE
    ```
-3. With Maven:
-   ```bash
-   mvn package
-   java -jar target/name-of-jar.jar
-   ```
-4. With Gradle:
-   ```bash
-   ./gradlew build
-   java -jar build/libs/name-of-jar.jar
-   ```
-
-Adjust commands to match the actual package and main class.
 
 ---
 
 ## 📁 Structure (simplified)
 ```
-Repository root
+.
 ├── README.md
 ├── .gitignore
-├── src/
-├── assets/
-│   ├── Attaquer.png
-│   ├── Tour_joueur.png
-│   └── Map.png
-├── data/
-└── build/ target/ out/
+├── src/ 
+│   └── Main.java
+├── assets/  
+├── tests/
+├── UML /
+└── build/ target/ out/ 
 ```
 
 ---
