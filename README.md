@@ -94,7 +94,7 @@ Educational Java project (OOP / game): a small text-based RPG showcasing object-
 | Name | GitHub |
 |------|--------|
 | Arthur ALEXANDRE | [@ArthurALEXANDRE-29](https://github.com/ArthurALEXANDRE-29) |
-| Alexandru Vlaincu | [@Just-Alex67](https://github.com/Just-Alex67) |
+| Alexandru Vlaicu | [@Just-Alex67](https://github.com/Just-Alex67) |
 
 ---
 
