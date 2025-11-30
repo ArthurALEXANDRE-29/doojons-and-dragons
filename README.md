@@ -9,7 +9,7 @@ Projet pédagogique en Java (POO / jeu) : mini RPG textuel mettant en oeuvre la 
 | Nom | GitHub |
 |-----|--------|
 | Arthur ALEXANDRE | [@ArthurALEXANDRE-29](https://github.com/ArthurALEXANDRE-29) |
-| Alexandru Vlaincu | [@Just-Alex67](https://github.com/Just-Alex67) |
+| Alexandru Vlaicu | [@Just-Alex67](https://github.com/Just-Alex67) |
 
 ---
 
